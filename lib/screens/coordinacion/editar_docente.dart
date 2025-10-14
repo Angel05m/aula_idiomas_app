@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
-class RegistrarDocente extends StatefulWidget {
-  const RegistrarDocente({super.key});
+class EditarDocente extends StatefulWidget {
+  const EditarDocente({super.key});
 
   @override
-  State<RegistrarDocente> createState() => _RegistrarDocenteState();
+  State<EditarDocente> createState() => _EditarDocenteState();
 }
 
-class _RegistrarDocenteState extends State<RegistrarDocente> {
+class _EditarDocenteState extends State<EditarDocente> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Registrar Docente',
+          'Editar Docente',
           style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.white,
@@ -41,7 +41,7 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
                   SizedBox(height: 5.0),
                   TextField(
                     decoration: InputDecoration(
-                      hintText: 'Ej: Jaruny Lupe',
+                      // hintText: 'Ej: Jaruny Lupe',
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
@@ -65,7 +65,7 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
                   SizedBox(height: 5.0),
                   TextField(
                     decoration: InputDecoration(
-                      hintText: 'Ej: Cárdenas',
+                      // hintText: 'Ej: Cárdenas',
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
@@ -89,7 +89,7 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
                   SizedBox(height: 5.0),
                   TextField(
                     decoration: InputDecoration(
-                      hintText: 'Ej: Tirado',
+                      // hintText: 'Ej: Tirado',
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
@@ -113,7 +113,7 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
                   SizedBox(height: 5.0),
                   TextField(
                     decoration: InputDecoration(
-                      hintText: 'Ej: jarunycardenas@gmail.com',
+                      // hintText: 'Ej: Tirado',
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
@@ -136,7 +136,7 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
                     ),
                     onPressed: () {},
                     child: Text(
-                      'Guardar',
+                      'Actualizar Información',
                       style: TextStyle(color: Colors.white, fontSize: 17),
                     ),
                   ),

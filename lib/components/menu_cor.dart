@@ -1,5 +1,5 @@
 import 'package:aula_idiomas_app/screens/coordinacion/inicio.dart';
-import 'package:aula_idiomas_app/screens/coordinacion/lista-docente.dart';
+import 'package:aula_idiomas_app/screens/coordinacion/lista_docente.dart';
 import 'package:flutter/material.dart';
 
 class MenuCoordinacion extends StatefulWidget {
@@ -39,7 +39,6 @@ class _MenuCoordinacionState extends State<MenuCoordinacion> {
         ),
         backgroundColor: Colors.white,
         actions: [
-          if (_selectedIndex == 0) // solo en la página de inicio
             Row(
               children: [
                 Icon(Icons.notifications, size: 33, color: Colors.black),
