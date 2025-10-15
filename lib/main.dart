@@ -1,4 +1,4 @@
-import 'package:aula_idiomas_app/components/menu-cor.dart';
+import 'package:aula_idiomas_app/components/menu_cor.dart';
 // import 'package:aula_idiomas_app/screens/coordinacion/inicio.dart';
 import 'package:aula_idiomas_app/screens/login.dart';
 import 'package:flutter/material.dart';
