@@ -29,16 +29,16 @@ class CardButton extends StatelessWidget {
           color: Colors.white,
         ),
         child: Padding(
-          padding: EdgeInsets.all(15.0),
+          padding: EdgeInsets.all(7.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Avatar e icono
               SizedBox(height: 30),
               CircleAvatar(
-                radius: 30,
+                radius: 20,
                 backgroundColor: iconBackground ?? Colors.teal[300],
-                child: Icon(icono, color: Colors.white, size: 30),
+                child: Icon(icono, color: Colors.white, size: 20),
               ),
               SizedBox(width: 10),
               // Informacion de la carta

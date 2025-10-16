@@ -33,7 +33,7 @@ class _EditarDocenteState extends State<EditarDocente> {
                   Text(
                     'Nombres:',
                     style: TextStyle(
-                      fontSize: 20.0,
+                      fontSize: 15.0,
                       fontWeight: FontWeight.normal,
                     ),
                     textAlign: TextAlign.start,
@@ -58,7 +58,7 @@ class _EditarDocenteState extends State<EditarDocente> {
                   Text(
                     'Apellido Paterno:',
                     style: TextStyle(
-                      fontSize: 20.0,
+                      fontSize: 15.0,
                       fontWeight: FontWeight.normal,
                     ),
                   ),
@@ -82,7 +82,7 @@ class _EditarDocenteState extends State<EditarDocente> {
                   Text(
                     'Apellido Materno:',
                     style: TextStyle(
-                      fontSize: 20.0,
+                      fontSize: 15.0,
                       fontWeight: FontWeight.normal,
                     ),
                   ),
@@ -106,7 +106,7 @@ class _EditarDocenteState extends State<EditarDocente> {
                   Text(
                     'Correo:',
                     style: TextStyle(
-                      fontSize: 20.0,
+                      fontSize: 15.0,
                       fontWeight: FontWeight.normal,
                     ),
                   ),
@@ -127,7 +127,6 @@ class _EditarDocenteState extends State<EditarDocente> {
                     ),
                   ),
                   SizedBox(height: 20.0),
-
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.teal,

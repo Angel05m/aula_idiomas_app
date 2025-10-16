@@ -1,30 +1,27 @@
 import 'package:flutter/material.dart';
 
-class EditarAlumno extends StatefulWidget {
-  const EditarAlumno({super.key});
+class EditarPerfilCordinador extends StatefulWidget {
+  const EditarPerfilCordinador({super.key});
 
   @override
-  State<EditarAlumno> createState() => _EditarAlumnoState();
+  State<EditarPerfilCordinador> createState() => _EditarPerfilCordinadorState();
 }
 
-class _EditarAlumnoState extends State<EditarAlumno> {
- String? _selectedOptionG;
-  final List<String> _optionsG = ['9', '8', '7'];
-
+class _EditarPerfilCordinadorState extends State<EditarPerfilCordinador> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Editar Alumno',
+          'Editar Perfil',
           style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.white,
         centerTitle: true,
       ),
-      resizeToAvoidBottomInset: true,
+      backgroundColor: Colors.grey[100],
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(15.0),
+        padding: EdgeInsets.all(10.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -107,7 +104,7 @@ class _EditarAlumnoState extends State<EditarAlumno> {
                   ),
                   SizedBox(height: 10.0),
                   Text(
-                    'Matricula:',
+                    'Correo:',
                     style: TextStyle(
                       fontSize: 15.0,
                       fontWeight: FontWeight.normal,
@@ -116,7 +113,7 @@ class _EditarAlumnoState extends State<EditarAlumno> {
                   SizedBox(height: 5.0),
                   TextField(
                     decoration: InputDecoration(
-                      // hintText: 'Ej: 202200412',
+                      // hintText: 'Ej: Tirado',
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
@@ -129,51 +126,6 @@ class _EditarAlumnoState extends State<EditarAlumno> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10.0),
-                  Text(
-                    'Grupo:',
-                    style: TextStyle(
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  DropdownButtonFormField<String>(
-                    isExpanded: true,
-                    value: _selectedOptionG,
-                    decoration: InputDecoration(
-                      hintText: 'Selecciona un Grupo',
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                        borderSide: BorderSide(width: 1.0, color: Colors.grey),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                        borderSide: BorderSide(color: Colors.teal, width: 3.0),
-                      ),
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 16,
-                      ),
-                    ),
-                    hint: Text('Selecciona Carrera'),
-                    onChanged: (String? newValueC) {
-                      setState(() {
-                        _selectedOptionG = newValueC;
-                      });
-                    },
-                    items: _optionsG.map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Text(value, overflow: TextOverflow.ellipsis),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-
                   SizedBox(height: 20.0),
 
                   ElevatedButton(
@@ -185,7 +137,7 @@ class _EditarAlumnoState extends State<EditarAlumno> {
                     onPressed: () {},
                     child: Text(
                       'Actualizar Información',
-                      style: TextStyle(color: Colors.white, fontSize: 17),
+                      style: TextStyle(color: Colors.white, fontSize: 15),
                     ),
                   ),
                 ],
