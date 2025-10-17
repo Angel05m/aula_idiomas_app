@@ -47,7 +47,7 @@ class AuthController extends GetxController {
           colorText: Colors.white,
         );
 
-        Get.offNamed('/coordinacion/inicio');
+        Get.offNamed('/alumno/inicio');
       } else {
         Get.snackbar(
           'Error de autenticación',
@@ -126,7 +126,7 @@ class AuthController extends GetxController {
 
         switch (user['rol']) {
           case 2:
-            Get.offAllNamed('/coordinacion/inicio');
+            Get.offAllNamed('/docente/inicio');
             break;
           case 3:
             Get.offAllNamed('/coordinacion/inicio');

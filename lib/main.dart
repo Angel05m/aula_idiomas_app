@@ -22,6 +22,11 @@ class MyApp extends StatelessWidget {
           name: '/coordinacion/inicio',
           page: () => const InicioCoordinacion(),
         ),
+        GetPage(name: '/alumno/inicio', page: () => const InicioCoordinacion()),
+        GetPage(
+          name: '/docente/inicio',
+          page: () => const InicioCoordinacion(),
+        ),
       ],
     );
   }
