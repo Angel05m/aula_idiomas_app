@@ -24,22 +24,36 @@ class _ListaGruposState extends State<ListaGrupos> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[100],
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Grupos',
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                  ),
-                  Text('Añade, edita y gestiona la información de los Grupos'),
-                ],
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Grupos',
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      'Añade, edita y gestiona la información de los Grupos',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w300,
+                        color: Colors.grey[700],
+                      ),
+                    ),
+                  ],
+                ),
               ),
+
               const SizedBox(height: 20.0),
               const InputBuscador(),
               const SizedBox(height: 13.0),
@@ -157,7 +171,8 @@ class _ListaGruposState extends State<ListaGrupos> {
                     grupo: '1 A ITIID 2025',
                     cuatri: 'Cuatrimestre: 1',
                     anio: 'Año escolar: 2025',
-                    carrera: 'Ingeniería en Tecnologías de la Información e Innovación Digital',
+                    carrera:
+                        'Ingeniería en Tecnologías de la Información e Innovación Digital',
                   ),
                 ],
               ),

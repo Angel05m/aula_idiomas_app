@@ -9,7 +9,7 @@ class RegistroAlumno extends StatefulWidget {
 
 class _RegistroAlumnoState extends State<RegistroAlumno> {
   String? _selectedOptionG;
-  List<String> _optionsG = ['9', '8', '7'];
+  final List<String> _optionsG = ['9', '8', '7'];
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class _RegistroAlumnoState extends State<RegistroAlumno> {
                   Text(
                     'Nombres:',
                     style: TextStyle(
-                      fontSize: 20.0,
+                      fontSize: 15.0,
                       fontWeight: FontWeight.normal,
                     ),
                     textAlign: TextAlign.start,
@@ -61,7 +61,7 @@ class _RegistroAlumnoState extends State<RegistroAlumno> {
                   Text(
                     'Apellido Paterno:',
                     style: TextStyle(
-                      fontSize: 20.0,
+                      fontSize: 15.0,
                       fontWeight: FontWeight.normal,
                     ),
                   ),
@@ -85,7 +85,7 @@ class _RegistroAlumnoState extends State<RegistroAlumno> {
                   Text(
                     'Apellido Materno:',
                     style: TextStyle(
-                      fontSize: 20.0,
+                      fontSize: 15.0,
                       fontWeight: FontWeight.normal,
                     ),
                   ),
@@ -109,14 +109,14 @@ class _RegistroAlumnoState extends State<RegistroAlumno> {
                   Text(
                     'Matricula:',
                     style: TextStyle(
-                      fontSize: 20.0,
+                      fontSize: 15.0,
                       fontWeight: FontWeight.normal,
                     ),
                   ),
                   SizedBox(height: 5.0),
                   TextField(
                     decoration: InputDecoration(
-                      hintText: 'Ej: 202200412',
+                      hintText: 'Ej: 212150412',
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
@@ -133,7 +133,7 @@ class _RegistroAlumnoState extends State<RegistroAlumno> {
                   Text(
                     'Grupo:',
                     style: TextStyle(
-                      fontSize: 20.0,
+                      fontSize: 15.0,
                       fontWeight: FontWeight.normal,
                     ),
                   ),
