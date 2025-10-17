@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthController extends GetxController {
   var isLoadingLogin = false.obs;
@@ -39,6 +40,11 @@ class AuthController extends GetxController {
       var data = jsonDecode(response.body);
 
       if (response.statusCode == 200 && data['success'] == true) {
+        final token = data['token'];
+
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('userToken', token);
+
         Get.snackbar(
           'Éxito',
           'Inicio de sesión exitoso',
@@ -114,6 +120,11 @@ class AuthController extends GetxController {
       if (response.statusCode == 200 &&
           data['success'] == true &&
           data['user'] != null) {
+        final token = data['token'];
+
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('userToken', token);
+
         final user = data['user'];
 
         Get.snackbar(
@@ -154,6 +165,50 @@ class AuthController extends GetxController {
       Get.snackbar(
         'Error',
         'Error al iniciar sesión con Google: $e',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
+
+  Future<void> logout(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('userToken');
+
+    try {
+      final response = await http.post(
+        Uri.parse('http://127.0.0.1:8000/api/logout'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
+      var data = json.decode(response.body);
+
+      if (response.statusCode == 200 && data['success'] == true) {
+        Get.snackbar(
+          'Éxito',
+          'Cerraste sesión exitosamente',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.teal,
+          colorText: Colors.white,
+        );
+
+        Get.offNamed('/login');
+      } else {
+        Get.snackbar(
+          'Error',
+          data['message'] ?? 'Ocurrió un error inesperado',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error de red',
+        'No se pudo conectar con el servidor: $e',
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.red,
         colorText: Colors.white,

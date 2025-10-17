@@ -27,7 +27,7 @@ class _InicioCoordinacionState extends State<InicioCoordinacion> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Bienvenido',
+                      'Bienvenido aa',
                       style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,

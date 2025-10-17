@@ -20,13 +20,10 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/login', page: () => const Login()),
         GetPage(
           name: '/coordinacion/inicio',
-          page: () => const InicioCoordinacion(),
+          page: () => const MenuCoordinacion(),
         ),
-        GetPage(name: '/alumno/inicio', page: () => const InicioCoordinacion()),
-        GetPage(
-          name: '/docente/inicio',
-          page: () => const InicioCoordinacion(),
-        ),
+        GetPage(name: '/alumno/inicio', page: () => const MenuCoordinacion()),
+        GetPage(name: '/docente/inicio', page: () => const MenuCoordinacion()),
       ],
     );
   }
