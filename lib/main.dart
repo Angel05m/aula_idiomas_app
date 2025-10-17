@@ -1,5 +1,5 @@
 import 'package:aula_idiomas_app/components/menu_cor.dart';
-// import 'package:aula_idiomas_app/screens/coordinacion/inicio.dart';
+import 'package:aula_idiomas_app/screens/coordinacion/inicio.dart';
 import 'package:aula_idiomas_app/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,16 +15,17 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Aula Idiomas',
       theme: ThemeData(primarySwatch: Colors.grey),
-      // home: MenuCoordinacion(),
       initialRoute: '/login',
       getPages: [
-        GetPage(
-          name: '/login', 
-          page: () => const Login()
-        ),
+        GetPage(name: '/login', page: () => const Login()),
         GetPage(
           name: '/coordinacion/inicio',
-          page: () => const MenuCoordinacion(),
+          page: () => const InicioCoordinacion(),
+        ),
+        GetPage(name: '/alumno/inicio', page: () => const InicioCoordinacion()),
+        GetPage(
+          name: '/docente/inicio',
+          page: () => const InicioCoordinacion(),
         ),
       ],
     );
