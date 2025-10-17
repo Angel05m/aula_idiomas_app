@@ -1,7 +1,11 @@
+import 'package:aula_idiomas_app/screens/alumno/perfil.dart';
 import 'package:aula_idiomas_app/screens/coordinacion/inicio.dart';
 import 'package:aula_idiomas_app/screens/coordinacion/lista_grupos.dart';
 import 'package:aula_idiomas_app/screens/coordinacion/lista_alumnos.dart';
 import 'package:aula_idiomas_app/screens/coordinacion/lista_docente.dart';
+import 'package:aula_idiomas_app/screens/coordinacion/perfil.dart';
+import 'package:aula_idiomas_app/screens/docente/perfil.dart';
+import 'package:aula_idiomas_app/screens/login.dart';
 import 'package:flutter/material.dart';
 
 class MenuCoordinacion extends StatefulWidget {
@@ -19,16 +23,15 @@ class _MenuCoordinacionState extends State<MenuCoordinacion> {
     ListaDocente(),
     ListaGrupos(),
     ListaAlumnos(),
-
   ];
 
-    final List<String> _titles = [
+  final List<String> _titles = [
     'Panel Coordinador',
     'Lista de Docentes',
     'Lista de Grupos',
     'Lista de Alumnos',
   ];
-  
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -46,14 +49,50 @@ class _MenuCoordinacionState extends State<MenuCoordinacion> {
         ),
         backgroundColor: Colors.white,
         actions: [
-            Row(
-              children: [
-                Icon(Icons.notifications, size: 33, color: Colors.black),
-                SizedBox(width: 10),
-                CircleAvatar(radius: 22),
-                SizedBox(width: 10),
-              ],
-            ),
+          Row(
+            children: [
+              Icon(Icons.notifications, size: 30, color: Colors.black),
+              SizedBox(width: 5),
+              PopupMenuButton<String>(
+                icon: Icon(Icons.more_vert, size: 30, color: Colors.black),
+                onSelected: (String resultado) {
+                  switch (resultado) {
+                    case 'Perfil':
+                      // Navegación
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => 
+                          PerfilDocente()
+                          // PerfilAlumno()
+                          // PerfilCoordinacion(),
+                        ),
+                      );
+                      break;
+                    case 'Cerrar sesión':
+                      // Navegacion
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Login(),
+                        ),
+                      );
+                      break;
+                  }
+                },
+                itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                  const PopupMenuItem<String>(
+                    value: 'Perfil',
+                    child: Text('Perfil'),
+                  ),
+                  const PopupMenuItem<String>(
+                    value: 'Cerrar sesión',
+                    child: Text('Cerrar sesión'),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ],
       ),
       body: _widgetOptions.elementAt(_selectedIndex),
@@ -71,12 +110,12 @@ class _MenuCoordinacionState extends State<MenuCoordinacion> {
             icon: Icon(Icons.person, size: 30),
             label: 'Docentes',
           ),
-            BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(Icons.groups, size: 30),
             label: 'Grupos',
           ),
-            BottomNavigationBarItem(
-            icon: Icon(Icons.school, size: 30,),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.school, size: 30),
             label: 'Alumnos',
           ),
         ],

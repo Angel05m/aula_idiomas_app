@@ -14,32 +14,46 @@ class _ListaAlumnosState extends State<ListaAlumnos> {
   String? _selectedOptionC;
   String? _selectedOptionP;
 
-  List<String> _optionsC = [
+  final List<String> _optionsC = [
     'Añade, edita y gestiona la información de los alumnos',
     'Option B',
     'Option C',
   ];
-  List<String> _optionsP = ['9', '8', '7'];
+  final List<String> _optionsP = ['9', '8', '7'];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[100],
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Alumnos',
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                  ),
-                  Text('Añade, edita y gestiona la información de los alumnos'),
-                ],
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Alumnos',
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      'Añade, edita y gestiona la información de los alumnos',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w300,
+                        color: Colors.grey[700],
+                      ),
+                    ),
+                  ],
+                ),
               ),
+
               const SizedBox(height: 20.0),
               const InputBuscador(),
               const SizedBox(height: 13.0),

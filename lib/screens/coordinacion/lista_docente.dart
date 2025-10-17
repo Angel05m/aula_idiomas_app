@@ -36,8 +36,7 @@ class _ListaDocenteState extends State<ListaDocente> {
                     Text(
                       'Añade, edita y gestiona la información de los docentes',
                       style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w100,
+                        fontWeight: FontWeight.w300,
                         color: Colors.grey[700],
                       ),
                     ),

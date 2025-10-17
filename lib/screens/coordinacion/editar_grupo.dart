@@ -43,7 +43,7 @@ class _EditarGrupoState extends State<EditarGrupo> {
                   Text(
                     'Nombres del grupo:',
                     style: TextStyle(
-                      fontSize: 20.0,
+                      fontSize: 15.0,
                       fontWeight: FontWeight.normal,
                     ),
                     textAlign: TextAlign.start,
@@ -70,7 +70,7 @@ class _EditarGrupoState extends State<EditarGrupo> {
                         vertical: 16,
                       ),
                     ),
-                    hint: Text(''),
+                    hint: Text('', style: TextStyle(fontSize: 15.0)),
                     onChanged: (String? newValuegrupo) {
                       setState(() {
                         _selectedOptionGrupo = newValuegrupo;
@@ -81,7 +81,7 @@ class _EditarGrupoState extends State<EditarGrupo> {
                         value: value,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Text(value, overflow: TextOverflow.ellipsis),
+                          child: Text(value, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 15.0)),
                         ),
                       );
                     }).toList(),
@@ -90,7 +90,7 @@ class _EditarGrupoState extends State<EditarGrupo> {
                   Text(
                     'Carrera:',
                     style: TextStyle(
-                      fontSize: 20.0,
+                      fontSize: 15.0,
                       fontWeight: FontWeight.normal,
                     ),
                   ),
@@ -116,7 +116,7 @@ class _EditarGrupoState extends State<EditarGrupo> {
                         vertical: 16,
                       ),
                     ),
-                    hint: Text(''),
+                    hint: Text('', style: TextStyle(fontSize: 15.0)),
                     onChanged: (String? newValuecarrera) {
                       setState(() {
                         _selectedOptionCarrera = newValuecarrera;
@@ -127,7 +127,7 @@ class _EditarGrupoState extends State<EditarGrupo> {
                         value: value,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Text(value, overflow: TextOverflow.ellipsis),
+                          child: Text(value, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 15.0)),
                         ),
                       );
                     }).toList(),
@@ -136,7 +136,7 @@ class _EditarGrupoState extends State<EditarGrupo> {
                   Text(
                     'Cuatrimestre:',
                     style: TextStyle(
-                      fontSize: 20.0,
+                      fontSize: 15.0,
                       fontWeight: FontWeight.normal,
                     ),
                   ),
@@ -162,7 +162,7 @@ class _EditarGrupoState extends State<EditarGrupo> {
                         vertical: 16,
                       ),
                     ),
-                    hint: Text(''),
+                    hint: Text('', style: TextStyle(fontSize: 15.0)),
                     onChanged: (String? newValuecuatri) {
                       setState(() {
                         _selectedOptionCarrera = newValuecuatri;
@@ -173,7 +173,7 @@ class _EditarGrupoState extends State<EditarGrupo> {
                         value: value,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Text(value, overflow: TextOverflow.ellipsis),
+                          child: Text(value, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 15.0)),
                         ),
                       );
                     }).toList(),
@@ -183,7 +183,7 @@ class _EditarGrupoState extends State<EditarGrupo> {
                   Text(
                     'Año:',
                     style: TextStyle(
-                      fontSize: 20.0,
+                      fontSize: 15.0,
                       fontWeight: FontWeight.normal,
                     ),
                   ),
