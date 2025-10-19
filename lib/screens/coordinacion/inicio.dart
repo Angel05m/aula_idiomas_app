@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:aula_idiomas_app/components/card-button.dart';
 // import 'package:aula_idiomas_app/screens/coordinacion/lista-docente.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+
 // import 'package:get/get.dart';
 
 class InicioCoordinacion extends StatefulWidget {
@@ -11,6 +15,19 @@ class InicioCoordinacion extends StatefulWidget {
 }
 
 class _InicioCoordinacionState extends State<InicioCoordinacion> {
+  File? _imagen;
+  final ImagePicker _pick = ImagePicker();
+
+  Future<void> _pickImagen(ImageSource) async {
+    final XFile? pickedFiel = await _pick.pickImage(source: ImageSource);
+
+    if (pickedFiel != null) {
+      setState(() {
+        _imagen = File(pickedFiel.path);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +44,7 @@ class _InicioCoordinacionState extends State<InicioCoordinacion> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Bienvenido aa',
+                      'Bienvenido a a',
                       style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
@@ -86,7 +103,24 @@ class _InicioCoordinacionState extends State<InicioCoordinacion> {
                   ),
                 ),
               ),
-              SizedBox(height: 15.0),
+              Column(
+                children: [
+                  CircleAvatar(
+                    radius: 40,
+                    child: _imagen != null
+                        ? Image.file(_imagen!)
+                        : Icon(Icons.person),
+                  ),
+                  TextButton(
+                    onPressed: () => _pickImagen(ImageSource.gallery),
+                    child: Icon(Icons.add_a_photo)
+                  ),
+                  ElevatedButton(
+                    onPressed: () => _pickImagen(ImageSource.camera),
+                    child: Text('Tomar una foto'),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
