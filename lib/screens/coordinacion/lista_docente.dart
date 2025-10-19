@@ -1,7 +1,8 @@
 import 'package:aula_idiomas_app/components/card_info_docente.dart';
-import 'package:aula_idiomas_app/components/input_buscador.dart';
+import 'package:aula_idiomas_app/controllers/LIstaDocenteController.dart';
 import 'package:aula_idiomas_app/screens/coordinacion/registrar_docente.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ListaDocente extends StatefulWidget {
   const ListaDocente({super.key});
@@ -11,75 +12,130 @@ class ListaDocente extends StatefulWidget {
 }
 
 class _ListaDocenteState extends State<ListaDocente> {
+  final listaDocenteController = Get.put(ListaDocenteController());
+  final ScrollController _scrollController = ScrollController();
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    listaDocenteController.fetchDocentes();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+              _scrollController.position.maxScrollExtent - 200 &&
+          !listaDocenteController.isLoadingMore.value &&
+          listaDocenteController.hasMore.value) {
+        listaDocenteController.fetchDocentes();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+      body: Obx(() {
+        if (listaDocenteController.isLoading.value &&
+            listaDocenteController.docentes.isEmpty) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        final docentes = listaDocenteController.docentes;
+
+        return RefreshIndicator(
+          onRefresh: () async {
+            await listaDocenteController.refreshDocentes();
+          },
+          child: ListView(
+            controller: _scrollController,
+            padding: const EdgeInsets.all(16.0),
             children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Docentes',
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      'Añade, edita y gestiona la información de los docentes',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w300,
-                        color: Colors.grey[700],
-                      ),
-                    ),
-                  ],
+              const SizedBox(height: 10),
+              const Text(
+                'Docentes',
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                'Añade, edita y gestiona la información de los docentes',
+                style: TextStyle(
+                  fontWeight: FontWeight.w300,
+                  color: Colors.grey[700],
                 ),
               ),
-              const SizedBox(height: 20.0),
-              const InputBuscador(),
-              const SizedBox(height: 13.0),
-              Column(
-                children: const [
-                  CardInfoDocente(
-                    nombre: 'Jaruny Cardenas Tirado',
-                    correo: 'jaruny@gmail.com',
+              const SizedBox(height: 20),
+
+              TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  hintText: 'Buscar docente por nombre o correo...',
+                  prefixIcon: const Icon(Icons.search, color: Colors.teal),
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    borderSide: const BorderSide(width: 1.0),
                   ),
-                  CardInfoDocente(
-                    nombre: 'Melissa Cardenas',
-                    correo: 'melissa@gmail.com',
-                  ),
-                  CardInfoDocente(
-                    nombre: 'Paty Scalante',
-                    correo: 'paty@gmail.com',
-                  ),
-                  CardInfoDocente(
-                    nombre: 'Roberto Rojas',
-                    correo: 'roberto.rojas@gmail.com',
-                  ),
-                ],
+                ),
+                onSubmitted: (value) {
+                  listaDocenteController.searchDocentes(value.trim());
+                },
               ),
+              const SizedBox(height: 20),
+
+              if (docentes.isEmpty)
+                const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(30),
+                    child: Text(
+                      'No se encontraron docentes.',
+                      style: TextStyle(color: Colors.grey, fontSize: 16),
+                    ),
+                  ),
+                )
+              else
+                ...docentes.map<Widget>((docente) {
+                  final nombreCompleto =
+                      '${docente['nombres'] ?? ''} ${docente['ap_paterno'] ?? ''} ${docente['ap_materno'] ?? ''}'
+                          .trim();
+
+                  return CardInfoDocente(
+                    nombre: nombreCompleto,
+                    correo: docente['email'] ?? 'Sin correo',
+                  );
+                }),
+              if (listaDocenteController.isLoadingMore.value)
+                const Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Center(child: CircularProgressIndicator()),
+                ),
+              const SizedBox(height: 80),
             ],
           ),
-        ),
-      ),
+        );
+      }),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => RegistrarDocente()));
+        onPressed: () async {
+          final result = await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const RegistrarDocente()),
+          );
+
+          if (result == true) {
+            await listaDocenteController.refreshDocentes();
+          }
         },
         backgroundColor: Colors.teal,
-        child: Icon(Icons.person_add, color: Colors.white),
+        child: const Icon(Icons.person_add, color: Colors.white),
         tooltip: 'Agregar nuevo docente',
         elevation: 5,
       ),
-      // Boton flotante
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }

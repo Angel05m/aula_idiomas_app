@@ -51,7 +51,7 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
                   TextField(
                     controller: nombresController,
                     decoration: InputDecoration(
-                      hintText: 'Ej: Jaruny Lupe',
+                      hintText: 'Ej: Jesús Guadalupe',
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
@@ -76,7 +76,7 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
                   TextField(
                     controller: apPaternoController,
                     decoration: InputDecoration(
-                      hintText: 'Ej: Cárdenas',
+                      hintText: 'Ej: López',
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
@@ -101,7 +101,7 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
                   TextField(
                     controller: apMaternoController,
                     decoration: InputDecoration(
-                      hintText: 'Ej: Tirado',
+                      hintText: 'Ej: Hernández',
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
@@ -126,7 +126,7 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
                   TextField(
                     controller: emailController,
                     decoration: InputDecoration(
-                      hintText: 'Ej: jarunycardenas@gmail.com',
+                      hintText: 'Ej: correo@utescuinapa.com',
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(

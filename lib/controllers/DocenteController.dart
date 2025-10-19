@@ -58,7 +58,7 @@ class Docentecontroller extends GetxController {
           colorText: Colors.white,
         );
 
-        Get.offNamed('/coordinacion/inicio');
+        Navigator.pop(Get.context!, true);
       } else {
         Get.snackbar(
           'Error al guardar',
