@@ -1,4 +1,6 @@
+import 'package:aula_idiomas_app/controllers/DocenteController.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class RegistrarDocente extends StatefulWidget {
   const RegistrarDocente({super.key});
@@ -8,6 +10,13 @@ class RegistrarDocente extends StatefulWidget {
 }
 
 class _RegistrarDocenteState extends State<RegistrarDocente> {
+  final docenteController = Get.put(Docentecontroller());
+
+  final nombresController = TextEditingController();
+  final apPaternoController = TextEditingController();
+  final apMaternoController = TextEditingController();
+  final emailController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,6 +49,7 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
                   ),
                   SizedBox(height: 5.0),
                   TextField(
+                    controller: nombresController,
                     decoration: InputDecoration(
                       hintText: 'Ej: Jaruny Lupe',
                       filled: true,
@@ -64,6 +74,7 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
                   ),
                   SizedBox(height: 5.0),
                   TextField(
+                    controller: apPaternoController,
                     decoration: InputDecoration(
                       hintText: 'Ej: Cárdenas',
                       filled: true,
@@ -88,6 +99,7 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
                   ),
                   SizedBox(height: 5.0),
                   TextField(
+                    controller: apMaternoController,
                     decoration: InputDecoration(
                       hintText: 'Ej: Tirado',
                       filled: true,
@@ -112,6 +124,7 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
                   ),
                   SizedBox(height: 5.0),
                   TextField(
+                    controller: emailController,
                     decoration: InputDecoration(
                       hintText: 'Ej: jarunycardenas@gmail.com',
                       filled: true,
@@ -134,7 +147,20 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
                       minimumSize: Size(double.infinity, 50),
                       elevation: 5.0,
                     ),
-                    onPressed: () {},
+                    onPressed: docenteController.isLoadingGuardar.value
+                        ? null
+                        : () {
+                            String nombres = nombresController.text.trim();
+                            String apPaterno = apPaternoController.text.trim();
+                            String apMaterno = apMaternoController.text.trim();
+                            String email = emailController.text.trim();
+                            docenteController.guardarDocente(
+                              nombres,
+                              apPaterno,
+                              apMaterno,
+                              email,
+                            );
+                          },
                     child: Text(
                       'Guardar',
                       style: TextStyle(color: Colors.white, fontSize: 17),

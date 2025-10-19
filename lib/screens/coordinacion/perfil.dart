@@ -1,19 +1,19 @@
+
+import 'package:aula_idiomas_app/controllers/UserController.dart';
 import 'package:aula_idiomas_app/screens/coordinacion/editar_perfil.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class PerfilCoordinacion extends StatefulWidget {
+class PerfilCoordinacion extends StatelessWidget {
   const PerfilCoordinacion({super.key});
 
   @override
-  State<PerfilCoordinacion> createState() => _PerfilCoordinacionState();
-}
-
-class _PerfilCoordinacionState extends State<PerfilCoordinacion> {
-  @override
   Widget build(BuildContext context) {
+    final authController = Get.put(UserController());
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Perfil Coordinador',
           style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
         ),
@@ -21,120 +21,93 @@ class _PerfilCoordinacionState extends State<PerfilCoordinacion> {
         centerTitle: true,
       ),
       backgroundColor: Colors.grey[100],
-      body: Padding(
-        padding: EdgeInsets.all(30.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Expanded(
-              flex: 1,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Column(
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: Colors.teal,
-                        radius: 50,
-                        child: Icon(
-                          Icons.person,
-                          size: 40,
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(height: 8.0),
-                      SizedBox(
-                        width: 100,
-                        height: 50,
-                        child: TextButton(
-                          onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => EditarPerfilCordinador(),
-                            ),
-                          ),
-                          child: Text(
-                            'Editar perfil',
-                            style: TextStyle(
-                              color: Colors.teal,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Información General',
-                        style: TextStyle(
-                          fontSize: 17.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Divider(),
-                      Row(
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: Text(
-                              'Nombre:',
-                              style: TextStyle(
-                                fontSize: 15.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 3,
-                            child: Text(
-                              'Jaruny Lupe Cardenas Tirado',
-                              style: TextStyle(
-                                fontSize: 15.0,
-                                fontWeight: FontWeight.w300,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Divider(),
-                      Row(
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: Text(
-                              'Correo:',
-                              style: TextStyle(
-                                fontSize: 15.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 3,
-                            child: Text(
-                              'jarunycl@gmail.com',
-                              style: TextStyle(
-                                fontSize: 15.0,
-                                fontWeight: FontWeight.w300,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Divider(),
-                    ],
-                  ),
-                ],
-              ),
+      body: Obx(() {
+        if (authController.isLoadingPerfil.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (authController.hasError.value) {
+          return const Center(
+            child: Text(
+              'Error al cargar el perfil.',
+              style: TextStyle(color: Colors.red),
             ),
-          ],
+          );
+        }
+
+        final user = authController.userData.value;
+        if (user == null) {
+          return const Center(child: Text('No hay datos del usuario.'));
+        }
+
+        return Padding(
+          padding: const EdgeInsets.all(30.0),
+          child: Column(
+            children: [
+              const CircleAvatar(
+                backgroundColor: Colors.teal,
+                radius: 50,
+                child: Icon(Icons.person, size: 40, color: Colors.white),
+              ),
+              const SizedBox(height: 8.0),
+              SizedBox(
+                width: 120,
+                height: 50,
+                child: TextButton(
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const EditarPerfilCordinador(),
+                    ),
+                  ),
+                  child: const Text(
+                    'Editar perfil',
+                    style: TextStyle(
+                      color: Colors.teal,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'Información General',
+                style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
+              ),
+              const Divider(),
+              infoRow(
+                'Nombre:',
+                '${user['nombres'] ?? ''} ${user['ap_paterno'] ?? ''} ${user['ap_materno'] ?? ''}'
+                    .trim(),
+              ),
+              const Divider(),
+              infoRow('Correo:', user['email'] ?? 'Sin correo'),
+              const Divider(),
+            ],
+          ),
+        );
+      }),
+    );
+  }
+
+  Widget infoRow(String label, String value) {
+    return Row(
+      children: [
+        Expanded(
+          flex: 1,
+          child: Text(
+            label,
+            style: const TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
+          ),
         ),
-      ),
+        Expanded(
+          flex: 3,
+          child: Text(
+            value,
+            style: const TextStyle(fontSize: 15.0, fontWeight: FontWeight.w300),
+          ),
+        ),
+      ],
     );
   }
 }

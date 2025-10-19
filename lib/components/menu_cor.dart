@@ -66,7 +66,7 @@ class _MenuCoordinacionState extends State<MenuCoordinacion> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => PerfilDocente(),
+                          builder: (context) => PerfilCoordinacion(),
                           // PerfilAlumno()
                           // PerfilCoordinacion(),
                         ),

@@ -10,6 +10,14 @@ class AuthController extends GetxController {
   var isLoadingLogin = false.obs;
   var isLoadingGoogle = false.obs;
 
+  var hasError = false.obs;
+  var userData = Rxn<Map<String, dynamic>>();
+
+  @override
+  void onInit() {
+    super.onInit();
+  }
+
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     clientId: kIsWeb
         ? '226147543177-r63get0uoqjpkk6t8k6p8jbmds9jq7fa.apps.googleusercontent.com'
