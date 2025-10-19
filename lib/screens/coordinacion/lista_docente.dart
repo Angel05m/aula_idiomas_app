@@ -1,5 +1,6 @@
 import 'package:aula_idiomas_app/components/card_info_docente.dart';
 import 'package:aula_idiomas_app/controllers/LIstaDocenteController.dart';
+import 'package:aula_idiomas_app/screens/coordinacion/editar_docente.dart';
 import 'package:aula_idiomas_app/screens/coordinacion/registrar_docente.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -106,6 +107,7 @@ class _ListaDocenteState extends State<ListaDocente> {
                           .trim();
 
                   return CardInfoDocente(
+                    idDocente: docente['pk_usuario'],
                     nombre: nombreCompleto,
                     correo: docente['email'] ?? 'Sin correo',
                   );
@@ -139,4 +141,5 @@ class _ListaDocenteState extends State<ListaDocente> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
+
 }
