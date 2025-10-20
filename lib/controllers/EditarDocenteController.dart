@@ -73,7 +73,7 @@ class EditarDocenteController extends GetxController {
 
       final response = await http.put(
         Uri.parse(
-            'http://127.0.0.1:8000/api/coordinacion/docente-editar/$idDocente'), // Cambia según tu emulador/dispositivo
+            'http://127.0.0.1:8000/api/coordinacion/docente-editar/$idDocente'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',

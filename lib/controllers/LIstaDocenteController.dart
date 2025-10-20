@@ -52,7 +52,6 @@ class ListaDocenteController extends GetxController {
         final List<dynamic> nuevosDocentes = data['data'] ?? [];
         final pagination = data['pagination'] ?? {};
 
-        // Actualizamos datos de paginación
         currentPage.value = pagination['current_page'] ?? 1;
         lastPage.value = pagination['last_page'] ?? 1;
 
