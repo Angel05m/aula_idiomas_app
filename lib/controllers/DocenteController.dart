@@ -14,6 +14,7 @@ class DocenteController extends GetxController {
     String apPaterno,
     String apMaterno,
     String email,
+    context
   ) async {
     if (nombres.isEmpty || apPaterno.isEmpty || email.isEmpty) {
       Get.snackbar(
@@ -52,12 +53,11 @@ class DocenteController extends GetxController {
       var data = jsonDecode(response.body);
 
       if (response.statusCode == 200 && data['success'] == true) {
-        Get.snackbar(
-          'Éxito',
-          'Docente guardado exitosamente',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.teal,
-          colorText: Colors.white,
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Docente guardado exitosamente'),
+            backgroundColor: Colors.teal,
+          ),
         );
 
         Navigator.pop(Get.context!, true);
@@ -83,7 +83,7 @@ class DocenteController extends GetxController {
     }
   }
 
-  Future<void> deshabilitarDocente(int idDocente) async {
+  Future<void> deshabilitarDocente(int idDocente, context) async {
     var isLoading = false.obs;
     try {
       isLoading.value = true;
@@ -101,13 +101,11 @@ class DocenteController extends GetxController {
       final data = jsonDecode(response.body);
 
       if (response.statusCode == 200 && data['success'] == true) {
-        Get.snackbar(
-          'Éxito',
-          'Docente deshabilitado correctamente',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.orange,
-          colorText: Colors.white,
-          duration: Duration(seconds: 2),
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Docente deshabilitado exitosamente'),
+            backgroundColor: Colors.orange,
+          ),
         );
         listaDocentecontroller.refreshDocentes();
       } else {
@@ -132,7 +130,7 @@ class DocenteController extends GetxController {
     }
   }
 
-  Future<void> habilitarDocente(int idDocente) async {
+  Future<void> habilitarDocente(int idDocente, context) async {
     var isLoading = false.obs;
     try {
       isLoading.value = true;
@@ -150,13 +148,11 @@ class DocenteController extends GetxController {
       final data = jsonDecode(response.body);
 
       if (response.statusCode == 200 && data['success'] == true) {
-        Get.snackbar(
-          'Éxito',
-          'Docente habilitado correctamente',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-          duration: Duration(seconds: 2),
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Docente habilitado exitosamente'),
+            backgroundColor: Colors.teal,
+          ),
         );
         listaDocentecontroller.refreshDocentes();
       } else {

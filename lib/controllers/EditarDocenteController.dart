@@ -63,7 +63,8 @@ class EditarDocenteController extends GetxController {
       String nombres,
       String apPaterno,
       String apMaterno,
-      String email) async {
+      String email,
+      context) async {
     try {
       isLoading.value = true;
 
@@ -89,14 +90,12 @@ class EditarDocenteController extends GetxController {
 
       if (response.statusCode == 200 && data['success'] == true) {
 
-        Get.snackbar(
-          'Éxito',
-          'Docente editado exitosamente',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.teal,
-          colorText: Colors.white,
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Datos actualizados correctamente.'),
+            backgroundColor: Colors.teal,
+          ),
         );
-
         Navigator.pop(Get.context!, true);
 
       } else {

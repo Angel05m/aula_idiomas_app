@@ -25,7 +25,7 @@ class AuthController extends GetxController {
     scopes: ['email'],
   );
 
-  Future<void> login(String matricula, String password) async {
+  Future<void> login(String matricula, String password, context) async {
     if (matricula.isEmpty || password.isEmpty) {
       Get.snackbar(
         'Campos requeridos',
@@ -53,12 +53,11 @@ class AuthController extends GetxController {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('userToken', token);
 
-        Get.snackbar(
-          'Éxito',
-          'Inicio de sesión exitoso',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.teal,
-          colorText: Colors.white,
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Bienvenido/a!'),
+            backgroundColor: Colors.teal,
+          ),
         );
 
         Get.offNamed('/alumno/inicio');
@@ -84,7 +83,7 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> loginWithGoogle() async {
+  Future<void> loginWithGoogle(BuildContext context) async {
     try {
       isLoadingGoogle.value = true;
 
@@ -135,12 +134,11 @@ class AuthController extends GetxController {
 
         final user = data['user'];
 
-        Get.snackbar(
-          'Éxito',
-          'Bienvenido ${user['nombre']}',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.teal,
-          colorText: Colors.white,
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Bienvenido/a!'),
+            backgroundColor: Colors.teal,
+          ),
         );
 
         switch (user['rol']) {
@@ -195,12 +193,11 @@ class AuthController extends GetxController {
       var data = json.decode(response.body);
 
       if (response.statusCode == 200 && data['success'] == true) {
-        Get.snackbar(
-          'Éxito',
-          'Cerraste sesión exitosamente',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.teal,
-          colorText: Colors.white,
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('¡Vuelve pronto!'),
+            backgroundColor: Colors.teal,
+          ),
         );
 
         Get.offNamed('/login');

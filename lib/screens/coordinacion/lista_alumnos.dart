@@ -1,7 +1,9 @@
 import 'package:aula_idiomas_app/components/card_info_alumno.dart';
 import 'package:aula_idiomas_app/components/input_buscador.dart';
+import 'package:aula_idiomas_app/controllers/AlumnosController.dart';
 import 'package:aula_idiomas_app/screens/coordinacion/registro_alumno.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ListaAlumnos extends StatefulWidget {
   const ListaAlumnos({super.key});
@@ -11,205 +13,166 @@ class ListaAlumnos extends StatefulWidget {
 }
 
 class _ListaAlumnosState extends State<ListaAlumnos> {
-  String? _selectedOptionC;
-  String? _selectedOptionP;
+  final AlumnosController controller = Get.put(AlumnosController());
 
-  final List<String> _optionsC = [
-    'Añade, edita y gestiona la información de los alumnos',
-    'Option B',
-    'Option C',
-  ];
-  final List<String> _optionsP = ['9', '8', '7'];
+  int? _selectedOptionC; 
+  String? _selectedOptionP; 
+  String? _search;
+
+  final List<String> _optionsP = ['10', '9', '8', '7', '6'];
+
+  @override
+  void initState() {
+    super.initState();
+    controller.fetchAlumnos();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Alumnos',
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      'Añade, edita y gestiona la información de los alumnos',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w300,
-                        color: Colors.grey[700],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 20.0),
-              const InputBuscador(),
-              const SizedBox(height: 13.0),
-              // Input de seleccion
-              Row(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Flexible(
-                    flex: 2,
-                    child: DropdownButtonFormField<String>(
-                      elevation: 3,
-                      borderRadius: BorderRadius.circular(12.0),
-                      isExpanded: true,
+                  const Text('Alumnos', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
+                  Text(
+                    'Añade, edita y gestiona la información de los alumnos',
+                    style: TextStyle(fontWeight: FontWeight.w300, color: Colors.grey[700]),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20.0),
+
+            InputBuscador(
+              onChanged: (String? value) {
+                _search = value;
+                controller.refresh(
+                  search: _search,
+                  carrera: _selectedOptionC?.toString(),
+                  promedio: _selectedOptionP,
+                );
+              },
+            ),
+            const SizedBox(height: 13.0),
+
+            Row(
+              children: [
+                // Carrera
+                Flexible(
+                  flex: 2,
+                  child: Obx(() {
+                    final carrerasMap = controller.todasCarreras;
+                    return DropdownButtonFormField<int?>(
                       value: _selectedOptionC,
-                      decoration: InputDecoration(
-                        hintText: 'Selecciona Carrera',
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                          borderSide: BorderSide(
-                            width: 1.0,
-                            color: Colors.grey,
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                          borderSide: BorderSide(
-                            color: Colors.grey.shade300,
-                            width: 1.0,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                          borderSide: BorderSide(
-                            color: Colors.teal,
-                            width: 3.0,
-                          ),
-                        ),
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 8,
-                        ),
-                      ),
-                      hint: Text('Selecciona Carrera'),
-                      onChanged: (String? newValueC) {
-                        setState(() {
-                          _selectedOptionC = newValueC;
-                        });
-                      },
-                      items: _optionsC.map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value, overflow: TextOverflow.ellipsis),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  Flexible(
-                    flex: 1,
-                    child: DropdownButtonFormField<String>(
-                      elevation: 3,
-                      borderRadius: BorderRadius.circular(12.0),
+                      hint: const Text('Selecciona Carrera'),
                       isExpanded: true,
-                      value: _selectedOptionP,
-                      decoration: InputDecoration(
-                        hintText: 'Promedio',
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                          borderSide: BorderSide(
-                            width: 1.0,
-                            color: Colors.grey,
-                          ),
+                      items: [
+                        const DropdownMenuItem<int?>(
+                          value: null,
+                          child: Text('Todos'),
                         ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                          borderSide: BorderSide(
-                            color: Colors.grey.shade300,
-                            width: 1.0,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                          borderSide: BorderSide(
-                            color: Colors.teal,
-                            width: 3.0,
-                          ),
-                        ),
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 8,
-                        ),
-                      ),
-                      hint: Text('Promedio'),
-                      onChanged: (String? newValueP) {
-                        setState(() {
-                          _selectedOptionP = newValueP;
-                        });
-                      },
-                      items: _optionsP.map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value, overflow: TextOverflow.ellipsis),
+                        ...carrerasMap.entries.map((entry) => DropdownMenuItem<int?>(
+                              value: entry.key,
+                              child: Text(entry.value, overflow: TextOverflow.ellipsis),
+                            )),
+                      ],
+                      onChanged: (int? value) {
+                        setState(() => _selectedOptionC = value);
+                        controller.refresh(
+                          search: _search,
+                          carrera: _selectedOptionC?.toString(),
+                          promedio: _selectedOptionP,
                         );
-                      }).toList(),
-                    ),
-                  ),
-                ],
-              ),
+                      },
+                    );
+                  }),
+                ),
 
-              const SizedBox(height: 13.0),
-              Column(
-                children: [
-                  CardInfoAlumno(
-                    nombreA: 'Angel Ariel Salazar Medina',
-                    matricula: '202200412',
-                    promedio: 0,
-                    carrera:
-                        'Ingeniería en Agricultura Sustentable y Protegida',
+                const SizedBox(width: 10),
+
+                Flexible(
+                  flex: 1,
+                  child: DropdownButtonFormField<String?>(
+                    value: _selectedOptionP,
+                    hint: const Text('Promedio'),
+                    isExpanded: true,
+                    items: [
+                      const DropdownMenuItem<String?>(
+                        value: null,
+                        child: Text('Todos'),
+                      ),
+                      ..._optionsP.map((value) => DropdownMenuItem<String?>(
+                            value: value,
+                            child: Text(value, overflow: TextOverflow.ellipsis),
+                          )),
+                    ],
+                    onChanged: (String? value) {
+                      setState(() => _selectedOptionP = value);
+                      controller.refresh(
+                        search: _search,
+                        carrera: _selectedOptionC?.toString(),
+                        promedio: _selectedOptionP,
+                      );
+                    },
                   ),
-                  SizedBox(height: 10.0),
-                  CardInfoAlumno(
-                    nombreA: 'Jesus Alejandro Orozco Medina',
-                    matricula: '202200412',
-                    promedio: 0,
-                    carrera:
-                        'Ingeniería en Agricultura Sustentable y Protegida',
-                  ),
-                  SizedBox(height: 10.0),
-                  CardInfoAlumno(
-                    nombreA: 'Jaruny Guadalupe Cardenas Tirado',
-                    matricula: '202200412',
-                    promedio: 0,
-                    carrera: 'Ingeniería en Mantenimiento Industrial',
-                  ),
-                ],
-              ),
-            ],
-          ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 13.0),
+
+            Expanded(
+              child: Obx(() {
+                if (controller.isLoading.value) {
+                  return const Center(child: CircularProgressIndicator(color: Colors.teal));
+                }
+
+                if (controller.alumnos.isEmpty) {
+                  return const Center(child: Text('No hay alumnos registrados'));
+                }
+
+                return ListView.separated(
+                  itemCount: controller.alumnos.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 10),
+                  itemBuilder: (_, index) {
+                    final alumno = controller.alumnos[index];
+                    final usuario = alumno['usuario'] ?? {};
+                    final grupos = alumno['grupos'] ?? [];
+                    final carrera = grupos.isNotEmpty
+                        ? grupos[0]['grupo']['carrera']['nombre']
+                        : 'Sin Carrera';
+
+                    return CardInfoAlumno(
+                      nombreA:
+                          '${usuario['nombres'] ?? ''} ${usuario['ap_paterno'] ?? ''} ${usuario['ap_materno'] ?? ''}',
+                      matricula: usuario['matricula'] ?? '',
+                      promedio: alumno['promedio'] ?? 0,
+                      carrera: carrera,
+                    );
+                  },
+                );
+              }),
+            ),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => RegistroAlumno()),
+            MaterialPageRoute(builder: (_) => const RegistroAlumno()),
           );
         },
         backgroundColor: Colors.teal,
-        child: Icon(Icons.add_circle, color: Colors.white),
-        tooltip: 'Agregar nuevo docente',
-        elevation: 5,
+        child: const Icon(Icons.add_circle, color: Colors.white),
+        tooltip: 'Agregar nuevo alumno',
       ),
-      // Boton flotante
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }

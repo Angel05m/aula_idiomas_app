@@ -105,9 +105,9 @@ class CardInfoDocente extends StatelessWidget {
                     ),
                     onPressed: () {
                       if (isActive) {
-                        docentecontroller.deshabilitarDocente(idDocente);
+                        docentecontroller.deshabilitarDocente(idDocente, context);
                       } else {
-                        docentecontroller.habilitarDocente(idDocente);
+                        docentecontroller.habilitarDocente(idDocente, context);
                       }
                     },
                   ),
