@@ -1,3 +1,4 @@
+// import 'dart:typed_data';
 import 'package:aula_idiomas_app/controllers/DocenteController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -29,6 +30,7 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
         centerTitle: true,
       ),
       resizeToAvoidBottomInset: true,
+      backgroundColor: Colors.grey.shade100,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(15.0),
         child: Column(
@@ -38,11 +40,12 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
               padding: EdgeInsets.all(10.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: [                
+                  const SizedBox(height: 10),
                   Text(
                     'Nombres:',
                     style: TextStyle(
-                      fontSize: 20.0,
+                      fontSize: 15.0,
                       fontWeight: FontWeight.normal,
                     ),
                     textAlign: TextAlign.start,
@@ -68,7 +71,7 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
                   Text(
                     'Apellido Paterno:',
                     style: TextStyle(
-                      fontSize: 20.0,
+                      fontSize: 15.0,
                       fontWeight: FontWeight.normal,
                     ),
                   ),
@@ -93,7 +96,7 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
                   Text(
                     'Apellido Materno:',
                     style: TextStyle(
-                      fontSize: 20.0,
+                      fontSize: 15.0,
                       fontWeight: FontWeight.normal,
                     ),
                   ),
@@ -118,7 +121,7 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
                   Text(
                     'Correo:',
                     style: TextStyle(
-                      fontSize: 20.0,
+                      fontSize: 15.0,
                       fontWeight: FontWeight.normal,
                     ),
                   ),

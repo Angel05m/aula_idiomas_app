@@ -11,6 +11,7 @@ class EditarDocente extends StatefulWidget {
 }
 
 class _EditarDocenteState extends State<EditarDocente> {
+  
   final controller = Get.put(EditarDocenteController());
 
   final nombresController = TextEditingController();
@@ -41,6 +42,7 @@ class _EditarDocenteState extends State<EditarDocente> {
         backgroundColor: Colors.white,
         centerTitle: true,
       ),
+      backgroundColor: Colors.grey.shade100,
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
@@ -113,4 +115,5 @@ class _EditarDocenteState extends State<EditarDocente> {
       ),
     );
   }
+
 }

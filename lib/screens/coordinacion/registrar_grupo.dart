@@ -29,6 +29,7 @@ class _RegistrarGrupoState extends State<RegistrarGrupo> {
         backgroundColor: Colors.white,
         centerTitle: true,
       ),
+      backgroundColor: Colors.grey.shade100,
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(15.0),

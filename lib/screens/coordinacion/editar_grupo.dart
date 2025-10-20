@@ -8,15 +8,14 @@ class EditarGrupo extends StatefulWidget {
 }
 
 class _EditarGrupoState extends State<EditarGrupo> {
+  // Seccion para las opciones del select
   String? _selectedOptionGrupo;
   String? _selectedOptionCarrera;
   String? _selectedOptionCuatri;
 
-
   final List<String> _optionsGrupo = ['A', 'B', 'C'];
   final List<String> _optionsCarrera = ['Turismo', 'IDGS', 'Mecatronica'];
   final List<String> _optionsCuatri = ['1', '2', '3'];
-
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +28,7 @@ class _EditarGrupoState extends State<EditarGrupo> {
         backgroundColor: Colors.white,
         centerTitle: true,
       ),
+      backgroundColor: Colors.grey.shade100,
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(15.0),
@@ -81,7 +81,11 @@ class _EditarGrupoState extends State<EditarGrupo> {
                         value: value,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Text(value, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 15.0)),
+                          child: Text(
+                            value,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontSize: 15.0),
+                          ),
                         ),
                       );
                     }).toList(),
@@ -127,7 +131,11 @@ class _EditarGrupoState extends State<EditarGrupo> {
                         value: value,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Text(value, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 15.0)),
+                          child: Text(
+                            value,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontSize: 15.0),
+                          ),
                         ),
                       );
                     }).toList(),
@@ -173,12 +181,15 @@ class _EditarGrupoState extends State<EditarGrupo> {
                         value: value,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Text(value, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 15.0)),
+                          child: Text(
+                            value,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontSize: 15.0),
+                          ),
                         ),
                       );
                     }).toList(),
                   ),
-
                   SizedBox(height: 10.0),
                   Text(
                     'Año:',

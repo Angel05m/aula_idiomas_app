@@ -8,9 +8,10 @@ class EditarPerfilDocente extends StatefulWidget {
 }
 
 class _EditarPerfilDocenteState extends State<EditarPerfilDocente> {
+
   @override
   Widget build(BuildContext context) {
-     return Scaffold(
+    return Scaffold(
       appBar: AppBar(
         title: Text(
           'Editar Perfil',
@@ -30,6 +31,7 @@ class _EditarPerfilDocenteState extends State<EditarPerfilDocente> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  SizedBox(height: 10.0),
                   Text(
                     'Nombres:',
                     style: TextStyle(
@@ -148,4 +150,5 @@ class _EditarPerfilDocenteState extends State<EditarPerfilDocente> {
       ),
     );
   }
+
 }
