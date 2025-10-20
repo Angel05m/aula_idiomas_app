@@ -1,7 +1,12 @@
 import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/foundation.dart';
+import 'dart:convert';
+import 'package:aula_idiomas_app/controllers/UserController.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EditarPerfilCordinador extends StatefulWidget {
   const EditarPerfilCordinador({super.key});
@@ -14,7 +19,6 @@ class _EditarPerfilCordinadorState extends State<EditarPerfilCordinador> {
   // Variables para la seleccion en galeria y web
   File? _imagen;
   Uint8List? _imagenWeb;
-  final ImagePicker _pick = ImagePicker();
 
   Future<void> _pickImagen(imageSource) async {
     final XFile? pickedFiel = await _pick.pickImage(source: imageSource);
@@ -30,14 +34,94 @@ class _EditarPerfilCordinadorState extends State<EditarPerfilCordinador> {
           _imagen = File(pickedFiel.path);
         });
       }
+  final userController = Get.put(UserController());
+
+  final nombresController = TextEditingController();
+  final apMaternoController = TextEditingController();
+  final correoController = TextEditingController();
+
+  var isUpdating = false.obs;
+
+  @override
+  void dispose() {
+    nombresController.dispose();
+    apPaternoController.dispose();
+    apMaternoController.dispose();
+    correoController.dispose();
+    super.dispose();
+  }
+
+  Future<void> updatePerfil() async {
+    final nombres = nombresController.text.trim();
+    final apPaterno = apPaternoController.text.trim();
+    final apMaterno = apMaternoController.text.trim();
+    final email = correoController.text.trim();
+
+    if (nombres.isEmpty || apPaterno.isEmpty || apMaterno.isEmpty || email.isEmpty) {
+      Get.snackbar(
+        'Error',
+        'Todos los campos son obligatorios',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      return;
+    }
+
+    try {
+      isUpdating.value = true;
+
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('userToken') ?? '';
+
+      final userId = userController.userData.value?['pk_usuario'];
+
+      final response = await http.put(
+        Uri.parse('http://127.0.0.1:8000/api/perfil-editar/$userId'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'nombres': nombres,
+          'ap_paterno': apPaterno,
+          'ap_materno': apMaterno,
+          'email': email,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        Get.snackbar(
+          'Éxito',
+          'Perfil actualizado correctamente',
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+        userController.loadPerfil();
+      } else {
+        final data = jsonDecode(response.body);
+        Get.snackbar(
+          'Error',
+          data['message'] ?? 'No se pudo actualizar el perfil',
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Ocurrió un error al actualizar el perfil',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    } finally {
+      isUpdating.value = false;
     }
   }
 
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Editar Perfil',
           style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
         ),
@@ -45,156 +129,73 @@ class _EditarPerfilCordinadorState extends State<EditarPerfilCordinador> {
         centerTitle: true,
       ),
       backgroundColor: Colors.grey[100],
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.all(10.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: Column(
-                      // mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        CircleAvatar(
-                          radius: 50,
-                          backgroundColor: Colors.teal,
-                          child: imagenUsuario(),
-                        ),
-                        // { Boton para agregar una imagen }
-                        TextButton(
-                          onPressed: () async {
-                            await _pickImagen(ImageSource.gallery);
-                          },
-                          child: const Text(
-                            'Agregar imagen',
-                            style: TextStyle(color: Colors.teal, fontSize: 15),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 10.0),
-                  Text(
-                    'Nombres:',
-                    style: TextStyle(
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.normal,
-                    ),
-                    textAlign: TextAlign.start,
-                  ),
-                  SizedBox(height: 5.0),
-                  TextField(
-                    decoration: InputDecoration(
-                      // hintText: 'Ej: Jaruny Lupe',
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                        borderSide: BorderSide(width: 1.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                        borderSide: BorderSide(color: Colors.teal, width: 3.0),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 10.0),
-                  Text(
-                    'Apellido Paterno:',
-                    style: TextStyle(
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  SizedBox(height: 5.0),
-                  TextField(
-                    decoration: InputDecoration(
-                      // hintText: 'Ej: Cárdenas',
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                        borderSide: BorderSide(width: 1.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                        borderSide: BorderSide(color: Colors.teal, width: 3.0),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 10.0),
-                  Text(
-                    'Apellido Materno:',
-                    style: TextStyle(
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  SizedBox(height: 5.0),
-                  TextField(
-                    decoration: InputDecoration(
-                      // hintText: 'Ej: Tirado',
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                        borderSide: BorderSide(width: 1.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                        borderSide: BorderSide(color: Colors.teal, width: 3.0),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 10.0),
-                  Text(
-                    'Correo:',
-                    style: TextStyle(
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  SizedBox(height: 5.0),
-                  TextField(
-                    decoration: InputDecoration(
-                      // hintText: 'Ej: Tirado',
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                        borderSide: BorderSide(width: 1.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                        borderSide: BorderSide(color: Colors.teal, width: 3.0),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20.0),
+      body: Obx(() {
+        if (userController.isLoadingPerfil.value) {
+          return const Center(child: CircularProgressIndicator(color: Colors.teal));
+        }
 
-                  ElevatedButton(
+        if (userController.hasError.value) {
+          return const Center(child: Text('Ocurrió un error al cargar los datos'));
+        }
+
+        final data = userController.userData.value;
+        if (data != null) {
+          if (nombresController.text.isEmpty) nombresController.text = data['nombres'] ?? '';
+          if (apPaternoController.text.isEmpty) apPaternoController.text = data['ap_paterno'] ?? '';
+          if (apMaternoController.text.isEmpty) apMaternoController.text = data['ap_materno'] ?? '';
+          if (correoController.text.isEmpty) correoController.text = data['email'] ?? '';
+        }
+
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildTextField('Nombres', nombresController),
+              const SizedBox(height: 10),
+              _buildTextField('Apellido Paterno', apPaternoController),
+              const SizedBox(height: 10),
+              _buildTextField('Apellido Materno', apMaternoController),
+              const SizedBox(height: 10),
+              _buildTextField('Correo', correoController, isEmail: true),
+              const SizedBox(height: 20),
+              Obx(() => ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.teal,
-                      minimumSize: Size(double.infinity, 50),
-                      elevation: 5.0,
+                      minimumSize: const Size(double.infinity, 50),
                     ),
-                    onPressed: () {},
-                    child: Text(
-                      'Actualizar Información',
-                      style: TextStyle(color: Colors.white, fontSize: 15),
-                    ),
-                  ),
-                ],
-              ),
+                    onPressed: isUpdating.value ? null : updatePerfil,
+                    child: isUpdating.value
+                        ? const CircularProgressIndicator(color: Colors.white)
+                        : const Text('Actualizar Información', style: TextStyle(color: Colors.white, fontSize: 15)),
+                  )),
+            ],
+          ),
+        );
+      }),
+    );
+  }
+
+  Widget _buildTextField(String label, TextEditingController controller, {bool isEmail = false}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: const TextStyle(fontSize: 15)),
+        const SizedBox(height: 5),
+        TextField(
+          controller: controller,
+          keyboardType: isEmail ? TextInputType.emailAddress : TextInputType.text,
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Colors.teal, width: 3),
             ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 

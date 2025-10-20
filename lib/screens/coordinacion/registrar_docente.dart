@@ -1,8 +1,10 @@
 import 'dart:io';
 // import 'dart:typed_data';
-import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/foundation.dart';
+import 'package:aula_idiomas_app/controllers/DocenteController.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class RegistrarDocente extends StatefulWidget {
   const RegistrarDocente({super.key});
@@ -35,6 +37,12 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
       }
     }
   }
+  final docenteController = Get.put(DocenteController());
+
+  final nombresController = TextEditingController();
+  final apPaternoController = TextEditingController();
+  final apMaternoController = TextEditingController();
+  final emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -94,8 +102,9 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
                   ),
                   SizedBox(height: 5.0),
                   TextField(
+                    controller: nombresController,
                     decoration: InputDecoration(
-                      hintText: 'Ej: Jaruny Lupe',
+                      hintText: 'Ej: Jesús Guadalupe',
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
@@ -118,8 +127,9 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
                   ),
                   SizedBox(height: 5.0),
                   TextField(
+                    controller: apPaternoController,
                     decoration: InputDecoration(
-                      hintText: 'Ej: Cárdenas',
+                      hintText: 'Ej: López',
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
@@ -142,8 +152,9 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
                   ),
                   SizedBox(height: 5.0),
                   TextField(
+                    controller: apMaternoController,
                     decoration: InputDecoration(
-                      hintText: 'Ej: Tirado',
+                      hintText: 'Ej: Hernández',
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
@@ -166,8 +177,9 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
                   ),
                   SizedBox(height: 5.0),
                   TextField(
+                    controller: emailController,
                     decoration: InputDecoration(
-                      hintText: 'Ej: jarunycardenas@gmail.com',
+                      hintText: 'Ej: correo@utescuinapa.com',
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
@@ -188,7 +200,21 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
                       minimumSize: Size(double.infinity, 50),
                       elevation: 5.0,
                     ),
-                    onPressed: () {},
+                    onPressed: docenteController.isLoadingGuardar.value
+                        ? null
+                        : () {
+                            String nombres = nombresController.text.trim();
+                            String apPaterno = apPaternoController.text.trim();
+                            String apMaterno = apMaternoController.text.trim();
+                            String email = emailController.text.trim();
+                            docenteController.guardarDocente(
+                              nombres,
+                              apPaterno,
+                              apMaterno,
+                              email,
+                              context
+                            );
+                          },
                     child: Text(
                       'Guardar',
                       style: TextStyle(color: Colors.white, fontSize: 17),

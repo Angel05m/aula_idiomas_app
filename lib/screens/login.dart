@@ -133,7 +133,7 @@ class _LoginState extends State<Login> {
                                     .trim();
                                 String password = passwordController.text
                                     .trim();
-                                authController.login(matricula, password);
+                                authController.login(matricula, password, context);
                               },
                         child: authController.isLoadingLogin.value
                             ? SizedBox(
@@ -181,8 +181,10 @@ class _LoginState extends State<Login> {
                                 ),
                               ),
                         onPressed: authController.isLoadingGoogle.value
-                            ? null
-                            : authController.loginWithGoogle,
+                          ? null
+                          : () {
+                              authController.loginWithGoogle(context);
+                            },
                       ),
                     ],
                   );

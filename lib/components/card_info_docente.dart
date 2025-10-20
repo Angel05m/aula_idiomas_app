@@ -1,18 +1,28 @@
+import 'package:aula_idiomas_app/controllers/DocenteController.dart';
+import 'package:aula_idiomas_app/controllers/ListaDocenteController.dart';
 import 'package:aula_idiomas_app/screens/coordinacion/editar_docente.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CardInfoDocente extends StatelessWidget {
+  final int idDocente; 
   final String nombre;
   final String correo;
+  final bool isActive; 
 
   const CardInfoDocente({
     super.key,
+    required this.idDocente,
     required this.nombre,
     required this.correo,
+    required this.isActive,
   });
 
   @override
   Widget build(BuildContext context) {
+    final listaDocenteController = Get.find<ListaDocenteController>();
+    final docentecontroller = Get.find<DocenteController>();
+
     return Card(
       elevation: 5,
       margin: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 0),
@@ -24,7 +34,6 @@ class CardInfoDocente extends StatelessWidget {
         padding: const EdgeInsets.all(12.0),
         child: Row(
           children: [
-            // Avatar
             CircleAvatar(
               radius: 30,
               backgroundColor: Colors.teal[300],
@@ -32,7 +41,6 @@ class CardInfoDocente extends StatelessWidget {
             ),
             const SizedBox(width: 10),
 
-            // Información del docente
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -59,32 +67,49 @@ class CardInfoDocente extends StatelessWidget {
                 ],
               ),
             ),
+
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // Botón Editar
                 SizedBox(
                   width: 40,
                   height: 35,
                   child: IconButton(
                     padding: EdgeInsets.zero,
                     icon: const Icon(Icons.edit, color: Colors.teal, size: 25),
-                    onPressed: () {
-                      Navigator.push(
+                    onPressed: () async {
+                      final result = await Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => EditarDocente(),
+                          builder: (context) => EditarDocente(idDocente: idDocente),
                         ),
                       );
+
+                      if (result == true) {
+                        listaDocenteController.refreshDocentes();
+                      }
                     },
                   ),
                 ),
+
                 SizedBox(
                   width: 40,
                   height: 35,
                   child: IconButton(
                     padding: EdgeInsets.zero,
-                    icon: const Icon(Icons.delete, color: Colors.red, size: 25),
-                    onPressed: () {},
+                    icon: Icon(
+                      isActive ? Icons.delete : Icons.arrow_circle_up,
+                      color: isActive ? Colors.orange : Colors.green,
+                      size: 25,
+                    ),
+                    onPressed: () {
+                      if (isActive) {
+                        docentecontroller.deshabilitarDocente(idDocente, context);
+                      } else {
+                        docentecontroller.habilitarDocente(idDocente, context);
+                      }
+                    },
                   ),
                 ),
               ],
