@@ -4,9 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:io';
-import 'package:image_picker/image_picker.dart';
-import 'package:flutter/foundation.dart';
 
 class Grupo {
   final int id;
@@ -25,11 +22,19 @@ class Grupo {
 
   factory Grupo.fromJson(Map<String, dynamic> json) {
     return Grupo(
-      id: int.tryParse(json['id']?.toString() ?? json['pk_grupo']?.toString() ?? '0') ?? 0,
+      id:
+          int.tryParse(
+            json['id']?.toString() ?? json['pk_grupo']?.toString() ?? '0',
+          ) ??
+          0,
       nombre: json['nombre'] ?? '',
       abreviaturaCarrera: json['carrera']?['abreviatura'],
-      numCuatrimestre: int.tryParse(json['cuatrimestre']?['num_cuatri']?.toString() ?? ''),
-      anio: int.tryParse(json['año']?.toString() ?? json['anio']?.toString() ?? ''),
+      numCuatrimestre: int.tryParse(
+        json['cuatrimestre']?['num_cuatri']?.toString() ?? '',
+      ),
+      anio: int.tryParse(
+        json['año']?.toString() ?? json['anio']?.toString() ?? '',
+      ),
     );
   }
 }
@@ -42,7 +47,6 @@ class RegistroAlumno extends StatefulWidget {
 }
 
 class _RegistroAlumnoState extends State<RegistroAlumno> {
-
   final TextEditingController _nombreController = TextEditingController();
   final TextEditingController _apPaternoController = TextEditingController();
   final TextEditingController _apMaternoController = TextEditingController();
@@ -51,7 +55,6 @@ class _RegistroAlumnoState extends State<RegistroAlumno> {
   String? _selectedGrupo;
   late Future<List<Grupo>> _gruposFuture;
   final alumnoController = Get.put(AlumnosController());
-
 
   @override
   void initState() {
@@ -67,10 +70,7 @@ class _RegistroAlumnoState extends State<RegistroAlumno> {
 
     final response = await http.get(
       Uri.parse('http://127.0.0.1:8000/api/coordinacion/formulario-alumno'),
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
+      headers: {'Accept': 'application/json', 'Authorization': 'Bearer $token'},
     );
 
     if (response.statusCode == 200) {
@@ -109,10 +109,7 @@ class _RegistroAlumnoState extends State<RegistroAlumno> {
 
     final response = await http.post(
       Uri.parse('http://127.0.0.1:8000/api/coordinacion/alumno/guardar'),
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
+      headers: {'Accept': 'application/json', 'Authorization': 'Bearer $token'},
       body: body,
     );
 
@@ -145,28 +142,6 @@ class _RegistroAlumnoState extends State<RegistroAlumno> {
     }
   }
 
-  // Variables para la seleccion en galeria y web
-  File? _imagen;
-  Uint8List? _imagenWeb;
-  final ImagePicker _pick = ImagePicker();
-
-  Future<void> _pickImagen(imageSource) async {
-    final XFile? pickedFiel = await _pick.pickImage(source: imageSource);
-    // Funciones para seleccion de web o movil
-    if (pickedFiel != null) {
-      if (kIsWeb) {
-        final bytesWeb = await pickedFiel.readAsBytes();
-        setState(() {
-          _imagenWeb = bytesWeb;
-        });
-      } else {
-        setState(() {
-          _imagen = File(pickedFiel.path);
-        });
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -178,8 +153,8 @@ class _RegistroAlumnoState extends State<RegistroAlumno> {
         backgroundColor: Colors.white,
         centerTitle: true,
       ),
-      //       backgroundColor: Colors.grey.shade100,
-      // resizeToAvoidBottomInset: true,
+      backgroundColor: Colors.grey.shade100,
+      resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(15.0),
         child: Column(
@@ -187,7 +162,11 @@ class _RegistroAlumnoState extends State<RegistroAlumno> {
           children: [
             campoTexto('Nombres:', _nombreController, 'Ej: Juan Carlos'),
             campoTexto('Apellido Paterno:', _apPaternoController, 'Ej: López'),
-            campoTexto('Apellido Materno:', _apMaternoController, 'Ej: Hernández'),
+            campoTexto(
+              'Apellido Materno:',
+              _apMaternoController,
+              'Ej: Hernández',
+            ),
             campoTexto('Matrícula:', _matriculaController, 'Ej: 202500001'),
 
             const SizedBox(height: 10.0),
@@ -223,11 +202,17 @@ class _RegistroAlumnoState extends State<RegistroAlumno> {
                     fillColor: Colors.white,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12.0),
-                      borderSide: const BorderSide(width: 1.0, color: Colors.grey),
+                      borderSide: const BorderSide(
+                        width: 1.0,
+                        color: Colors.grey,
+                      ),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12.0),
-                      borderSide: const BorderSide(color: Colors.teal, width: 3.0),
+                      borderSide: const BorderSide(
+                        color: Colors.teal,
+                        width: 3.0,
+                      ),
                     ),
                   ),
                   onChanged: (String? newValue) {
@@ -268,7 +253,11 @@ class _RegistroAlumnoState extends State<RegistroAlumno> {
     );
   }
 
-  Widget campoTexto(String label, TextEditingController controller, String hint) {
+  Widget campoTexto(
+    String label,
+    TextEditingController controller,
+    String hint,
+  ) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10.0),
       child: Column(

@@ -1,7 +1,4 @@
-import 'dart:io';
 // import 'dart:typed_data';
-import 'package:image_picker/image_picker.dart';
-import 'package:flutter/foundation.dart';
 import 'package:aula_idiomas_app/controllers/DocenteController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,29 +11,6 @@ class RegistrarDocente extends StatefulWidget {
 }
 
 class _RegistrarDocenteState extends State<RegistrarDocente> {
-  // Variables para la seleccion en galeria y web
-  //Variable para android
-  File? _imagen;
-  //Variable para web
-  Uint8List? _imagenWeb;
-  final ImagePicker _pick = ImagePicker();
-
-  Future<void> _pickImagen(imageSource) async {
-    final XFile? pickedFiel = await _pick.pickImage(source: imageSource);
-    // Funciones para seleccion de web o movil
-    if (pickedFiel != null) {
-      if (kIsWeb) {
-        final bytesWeb = await pickedFiel.readAsBytes();
-        setState(() {
-          _imagenWeb = bytesWeb;
-        });
-      } else {
-        setState(() {
-          _imagen = File(pickedFiel.path);
-        });
-      }
-    }
-  }
   final docenteController = Get.put(DocenteController());
 
   final nombresController = TextEditingController();
@@ -66,31 +40,7 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
               padding: EdgeInsets.all(10.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Apartado para mostrar la imagen seleccionada
-                  Center(
-                    child: Column(
-                      // mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        CircleAvatar(
-                          radius: 50,
-                          backgroundColor: Colors.teal,
-                          child: imagenUsuario()
-                        ),
-                        // { Boton para agregar una imagen }
-                        TextButton(
-                          onPressed: () async {
-                            await _pickImagen(ImageSource.gallery);
-                          },
-                          child: const Text(
-                            'Agregar imagen',
-                            style: TextStyle(color: Colors.teal, fontSize: 15),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                children: [                
                   const SizedBox(height: 10),
                   Text(
                     'Nombres:',
@@ -227,27 +177,5 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
         ),
       ),
     );
-  }
-
-  Widget imagenUsuario() {
-    return _imagen != null
-        ? ClipOval(
-            child: Image.file(
-              _imagen!,
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
-            ),
-          )
-        : _imagenWeb != null
-        ? ClipOval(
-            child: Image.memory(
-              _imagenWeb!,
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
-            ),
-          )
-        : const Icon(Icons.person, size: 40, color: Colors.white);
   }
 }

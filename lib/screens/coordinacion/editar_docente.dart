@@ -1,6 +1,3 @@
-import 'dart:io';
-import 'package:image_picker/image_picker.dart';
-import 'package:flutter/foundation.dart';
 import 'package:aula_idiomas_app/controllers/EditarDocenteController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,28 +11,7 @@ class EditarDocente extends StatefulWidget {
 }
 
 class _EditarDocenteState extends State<EditarDocente> {
-  // Variables para la seleccion en galeria y web
-  //Variable para android
-  File? _imagen;
-  //Variable para web
-  Uint8List? _imagenWeb;
-  final ImagePicker _pick = ImagePicker();
-
-  Future<void> _pickImagen(imageSource) async {
-    final XFile? pickedFiel = await _pick.pickImage(source: imageSource);
-    // Funciones para seleccion de web o movil
-    if (pickedFiel != null) {
-      if (kIsWeb) {
-        final bytesWeb = await pickedFiel.readAsBytes();
-        setState(() {
-          _imagenWeb = bytesWeb;
-        });
-      } else {
-        setState(() {
-          _imagen = File(pickedFiel.path);
-        });
-      }
-    }
+  
   final controller = Get.put(EditarDocenteController());
 
   final nombresController = TextEditingController();
@@ -66,6 +42,7 @@ class _EditarDocenteState extends State<EditarDocente> {
         backgroundColor: Colors.white,
         centerTitle: true,
       ),
+      backgroundColor: Colors.grey.shade100,
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
@@ -139,26 +116,4 @@ class _EditarDocenteState extends State<EditarDocente> {
     );
   }
 
-  // Apartado para mostrar la imagen seleccionada
-  Widget imagenUsuario() {
-    return _imagen != null
-        ? ClipOval(
-            child: Image.file(
-              _imagen!,
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
-            ),
-          )
-        : _imagenWeb != null
-        ? ClipOval(
-            child: Image.memory(
-              _imagenWeb!,
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
-            ),
-          )
-        : const Icon(Icons.person, size: 40, color: Colors.white);
-  }
 }

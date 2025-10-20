@@ -1,6 +1,3 @@
-import 'dart:io';
-import 'package:image_picker/image_picker.dart';
-import 'package:flutter/foundation.dart';
 import 'dart:convert';
 import 'package:aula_idiomas_app/controllers/UserController.dart';
 import 'package:flutter/material.dart';
@@ -16,27 +13,10 @@ class EditarPerfilCordinador extends StatefulWidget {
 }
 
 class _EditarPerfilCordinadorState extends State<EditarPerfilCordinador> {
-  // Variables para la seleccion en galeria y web
-  File? _imagen;
-  Uint8List? _imagenWeb;
-
-  Future<void> _pickImagen(imageSource) async {
-    final XFile? pickedFiel = await _pick.pickImage(source: imageSource);
-    // Funciones para seleccion de web o movil
-    if (pickedFiel != null) {
-      if (kIsWeb) {
-        final bytesWeb = await pickedFiel.readAsBytes();
-        setState(() {
-          _imagenWeb = bytesWeb;
-        });
-      } else {
-        setState(() {
-          _imagen = File(pickedFiel.path);
-        });
-      }
   final userController = Get.put(UserController());
 
   final nombresController = TextEditingController();
+  final apPaternoController = TextEditingController();
   final apMaternoController = TextEditingController();
   final correoController = TextEditingController();
 
@@ -118,6 +98,7 @@ class _EditarPerfilCordinadorState extends State<EditarPerfilCordinador> {
     }
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -197,28 +178,5 @@ class _EditarPerfilCordinadorState extends State<EditarPerfilCordinador> {
         ),
       ],
     );
-  }
-
-  // Seleccion de usuario
-  Widget imagenUsuario() {
-    return _imagen != null
-        ? ClipOval(
-            child: Image.file(
-              _imagen!,
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
-            ),
-          )
-        : _imagenWeb != null
-        ? ClipOval(
-            child: Image.memory(
-              _imagenWeb!,
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
-            ),
-          )
-        : const Icon(Icons.person, size: 40, color: Colors.white);
   }
 }
