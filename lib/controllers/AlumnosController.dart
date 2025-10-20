@@ -88,4 +88,98 @@ class AlumnosController extends GetxController {
   void refresh({String? search, String? carrera, String? promedio}) {
     fetchAlumnos(search: search, carrera: carrera, promedio: promedio, page: 1);
   }
+
+  Future<void> deshabilitarAlumno(int idAlumno, context) async {
+    var isLoading = false.obs;
+    try {
+      isLoading.value = true;
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('userToken') ?? '';
+
+      final response = await http.delete(
+        Uri.parse('http://127.0.0.1:8000/api/coordinacion/alumno/eliminar/$idAlumno'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200 && data['success'] == true) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Alumno deshabilitado exitosamente'),
+            backgroundColor: Colors.orange,
+          ),
+        );
+        refresh();
+      } else {
+        Get.snackbar(
+          'Error',
+          data['message'] ?? 'Ocurrió un error',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error de red',
+        'No se pudo conectar con el servidor: $e',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> habilitarAlumno(int idAlumno, context) async {
+    var isLoading = false.obs;
+    try {
+      isLoading.value = true;
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('userToken') ?? '';
+
+      final response = await http.put(
+        Uri.parse('http://127.0.0.1:8000/api/coordinacion/alumno/restaurar/$idAlumno'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200 && data['success'] == true) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Alumno habilitado exitosamente'),
+            backgroundColor: Colors.teal,
+          ),
+        );
+        refresh();
+      } else {
+        Get.snackbar(
+          'Error',
+          data['message'] ?? 'Ocurrió un error',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error de red',
+        'No se pudo conectar con el servidor: $e',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
 }

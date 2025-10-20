@@ -64,7 +64,6 @@ class _ListaAlumnosState extends State<ListaAlumnos> {
 
             Row(
               children: [
-                // Carrera
                 Flexible(
                   flex: 2,
                   child: Obx(() {
@@ -148,12 +147,16 @@ class _ListaAlumnosState extends State<ListaAlumnos> {
                         ? grupos[0]['grupo']['carrera']['nombre']
                         : 'Sin Carrera';
 
+                    final bool isActive = usuario['deleted_at'] == null;
+
                     return CardInfoAlumno(
+                      idAlumno: usuario['pk_usuario'],
                       nombreA:
                           '${usuario['nombres'] ?? ''} ${usuario['ap_paterno'] ?? ''} ${usuario['ap_materno'] ?? ''}',
                       matricula: usuario['matricula'] ?? '',
                       promedio: alumno['promedio'] ?? 0,
                       carrera: carrera,
+                      isActive: isActive,
                     );
                   },
                 );
