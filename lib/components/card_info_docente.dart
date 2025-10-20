@@ -1,5 +1,5 @@
-
-import 'package:aula_idiomas_app/controllers/LIstaDocenteController.dart';
+import 'package:aula_idiomas_app/controllers/DocenteController.dart';
+import 'package:aula_idiomas_app/controllers/ListaDocenteController.dart';
 import 'package:aula_idiomas_app/screens/coordinacion/editar_docente.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,16 +8,21 @@ class CardInfoDocente extends StatelessWidget {
   final int idDocente; 
   final String nombre;
   final String correo;
+  final bool isActive; 
 
   const CardInfoDocente({
     super.key,
     required this.idDocente,
     required this.nombre,
     required this.correo,
+    required this.isActive,
   });
 
   @override
   Widget build(BuildContext context) {
+    final listaDocenteController = Get.find<ListaDocenteController>();
+    final docentecontroller = Get.find<DocenteController>();
+
     return Card(
       elevation: 5,
       margin: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 0),
@@ -62,9 +67,11 @@ class CardInfoDocente extends StatelessWidget {
                 ],
               ),
             ),
+
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // Botón Editar
                 SizedBox(
                   width: 40,
                   height: 35,
@@ -80,18 +87,29 @@ class CardInfoDocente extends StatelessWidget {
                       );
 
                       if (result == true) {
-                        Get.find<ListaDocenteController>().refreshDocentes();
+                        listaDocenteController.refreshDocentes();
                       }
                     },
                   ),
                 ),
+
                 SizedBox(
                   width: 40,
                   height: 35,
                   child: IconButton(
                     padding: EdgeInsets.zero,
-                    icon: const Icon(Icons.delete, color: Colors.red, size: 25),
-                    onPressed: () {},
+                    icon: Icon(
+                      isActive ? Icons.delete : Icons.arrow_circle_up,
+                      color: isActive ? Colors.orange : Colors.green,
+                      size: 25,
+                    ),
+                    onPressed: () {
+                      if (isActive) {
+                        docentecontroller.deshabilitarDocente(idDocente);
+                      } else {
+                        docentecontroller.habilitarDocente(idDocente);
+                      }
+                    },
                   ),
                 ),
               ],

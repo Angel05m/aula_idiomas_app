@@ -1,5 +1,6 @@
 import 'package:aula_idiomas_app/components/card_info_docente.dart';
-import 'package:aula_idiomas_app/controllers/LIstaDocenteController.dart';
+import 'package:aula_idiomas_app/controllers/DocenteController.dart';
+import 'package:aula_idiomas_app/controllers/ListaDocenteController.dart';
 import 'package:aula_idiomas_app/screens/coordinacion/editar_docente.dart';
 import 'package:aula_idiomas_app/screens/coordinacion/registrar_docente.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ class ListaDocente extends StatefulWidget {
 
 class _ListaDocenteState extends State<ListaDocente> {
   final listaDocenteController = Get.put(ListaDocenteController());
+  final docenteController = Get.put(DocenteController());
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _searchController = TextEditingController();
 
@@ -106,12 +108,16 @@ class _ListaDocenteState extends State<ListaDocente> {
                       '${docente['nombres'] ?? ''} ${docente['ap_paterno'] ?? ''} ${docente['ap_materno'] ?? ''}'
                           .trim();
 
+                  final bool isActive = docente['deleted_at'] == null;
+
                   return CardInfoDocente(
                     idDocente: docente['pk_usuario'],
                     nombre: nombreCompleto,
                     correo: docente['email'] ?? 'Sin correo',
+                    isActive: isActive,
                   );
-                }),
+                }).toList(),
+
               if (listaDocenteController.isLoadingMore.value)
                 const Padding(
                   padding: EdgeInsets.all(16.0),
@@ -141,5 +147,4 @@ class _ListaDocenteState extends State<ListaDocente> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
-
 }

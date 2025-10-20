@@ -10,7 +10,7 @@ class RegistrarDocente extends StatefulWidget {
 }
 
 class _RegistrarDocenteState extends State<RegistrarDocente> {
-  final docenteController = Get.put(Docentecontroller());
+  final docenteController = Get.put(DocenteController());
 
   final nombresController = TextEditingController();
   final apPaternoController = TextEditingController();
