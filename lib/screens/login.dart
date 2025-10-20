@@ -57,6 +57,13 @@ class _LoginState extends State<Login> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
                       ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        borderSide: BorderSide(
+                          color: Colors.grey.shade300,
+                          width: 1.0,
+                        ),
+                      ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
                         borderSide: BorderSide(color: Colors.teal, width: 3.0),
@@ -77,6 +84,13 @@ class _LoginState extends State<Login> {
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        borderSide: BorderSide(
+                          color: Colors.grey.shade300,
+                          width: 1.0,
+                        ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),

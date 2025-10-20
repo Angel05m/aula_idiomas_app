@@ -1,4 +1,8 @@
+import 'dart:io';
+// import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:flutter/foundation.dart';
 
 class RegistrarDocente extends StatefulWidget {
   const RegistrarDocente({super.key});
@@ -8,6 +12,30 @@ class RegistrarDocente extends StatefulWidget {
 }
 
 class _RegistrarDocenteState extends State<RegistrarDocente> {
+  // Variables para la seleccion en galeria y web
+  //Variable para android
+  File? _imagen;
+  //Variable para web
+  Uint8List? _imagenWeb;
+  final ImagePicker _pick = ImagePicker();
+
+  Future<void> _pickImagen(imageSource) async {
+    final XFile? pickedFiel = await _pick.pickImage(source: imageSource);
+    // Funciones para seleccion de web o movil
+    if (pickedFiel != null) {
+      if (kIsWeb) {
+        final bytesWeb = await pickedFiel.readAsBytes();
+        setState(() {
+          _imagenWeb = bytesWeb;
+        });
+      } else {
+        setState(() {
+          _imagen = File(pickedFiel.path);
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,6 +48,7 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
         centerTitle: true,
       ),
       resizeToAvoidBottomInset: true,
+      backgroundColor: Colors.grey.shade100,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(15.0),
         child: Column(
@@ -30,10 +59,35 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Apartado para mostrar la imagen seleccionada
+                  Center(
+                    child: Column(
+                      // mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CircleAvatar(
+                          radius: 50,
+                          backgroundColor: Colors.teal,
+                          child: imagenUsuario()
+                        ),
+                        // { Boton para agregar una imagen }
+                        TextButton(
+                          onPressed: () async {
+                            await _pickImagen(ImageSource.gallery);
+                          },
+                          child: const Text(
+                            'Agregar imagen',
+                            style: TextStyle(color: Colors.teal, fontSize: 15),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10),
                   Text(
                     'Nombres:',
                     style: TextStyle(
-                      fontSize: 20.0,
+                      fontSize: 15.0,
                       fontWeight: FontWeight.normal,
                     ),
                     textAlign: TextAlign.start,
@@ -58,7 +112,7 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
                   Text(
                     'Apellido Paterno:',
                     style: TextStyle(
-                      fontSize: 20.0,
+                      fontSize: 15.0,
                       fontWeight: FontWeight.normal,
                     ),
                   ),
@@ -82,7 +136,7 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
                   Text(
                     'Apellido Materno:',
                     style: TextStyle(
-                      fontSize: 20.0,
+                      fontSize: 15.0,
                       fontWeight: FontWeight.normal,
                     ),
                   ),
@@ -106,7 +160,7 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
                   Text(
                     'Correo:',
                     style: TextStyle(
-                      fontSize: 20.0,
+                      fontSize: 15.0,
                       fontWeight: FontWeight.normal,
                     ),
                   ),
@@ -147,5 +201,27 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
         ),
       ),
     );
+  }
+
+  Widget imagenUsuario() {
+    return _imagen != null
+        ? ClipOval(
+            child: Image.file(
+              _imagen!,
+              width: 100,
+              height: 100,
+              fit: BoxFit.cover,
+            ),
+          )
+        : _imagenWeb != null
+        ? ClipOval(
+            child: Image.memory(
+              _imagenWeb!,
+              width: 100,
+              height: 100,
+              fit: BoxFit.cover,
+            ),
+          )
+        : const Icon(Icons.person, size: 40, color: Colors.white);
   }
 }

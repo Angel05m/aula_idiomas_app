@@ -1,4 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:flutter/foundation.dart';
 
 class EditarPerfilCordinador extends StatefulWidget {
   const EditarPerfilCordinador({super.key});
@@ -8,6 +11,28 @@ class EditarPerfilCordinador extends StatefulWidget {
 }
 
 class _EditarPerfilCordinadorState extends State<EditarPerfilCordinador> {
+  // Variables para la seleccion en galeria y web
+  File? _imagen;
+  Uint8List? _imagenWeb;
+  final ImagePicker _pick = ImagePicker();
+
+  Future<void> _pickImagen(imageSource) async {
+    final XFile? pickedFiel = await _pick.pickImage(source: imageSource);
+    // Funciones para seleccion de web o movil
+    if (pickedFiel != null) {
+      if (kIsWeb) {
+        final bytesWeb = await pickedFiel.readAsBytes();
+        setState(() {
+          _imagenWeb = bytesWeb;
+        });
+      } else {
+        setState(() {
+          _imagen = File(pickedFiel.path);
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,6 +55,30 @@ class _EditarPerfilCordinadorState extends State<EditarPerfilCordinador> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Center(
+                    child: Column(
+                      // mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CircleAvatar(
+                          radius: 50,
+                          backgroundColor: Colors.teal,
+                          child: imagenUsuario(),
+                        ),
+                        // { Boton para agregar una imagen }
+                        TextButton(
+                          onPressed: () async {
+                            await _pickImagen(ImageSource.gallery);
+                          },
+                          child: const Text(
+                            'Agregar imagen',
+                            style: TextStyle(color: Colors.teal, fontSize: 15),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 10.0),
                   Text(
                     'Nombres:',
                     style: TextStyle(
@@ -147,5 +196,28 @@ class _EditarPerfilCordinadorState extends State<EditarPerfilCordinador> {
         ),
       ),
     );
+  }
+
+  // Seleccion de usuario
+  Widget imagenUsuario() {
+    return _imagen != null
+        ? ClipOval(
+            child: Image.file(
+              _imagen!,
+              width: 100,
+              height: 100,
+              fit: BoxFit.cover,
+            ),
+          )
+        : _imagenWeb != null
+        ? ClipOval(
+            child: Image.memory(
+              _imagenWeb!,
+              width: 100,
+              height: 100,
+              fit: BoxFit.cover,
+            ),
+          )
+        : const Icon(Icons.person, size: 40, color: Colors.white);
   }
 }
