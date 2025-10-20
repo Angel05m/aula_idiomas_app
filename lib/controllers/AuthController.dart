@@ -4,10 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthController extends GetxController {
   var isLoadingLogin = false.obs;
   var isLoadingGoogle = false.obs;
+
+  var hasError = false.obs;
+  var userData = Rxn<Map<String, dynamic>>();
+
+  @override
+  void onInit() {
+    super.onInit();
+  }
 
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     clientId: kIsWeb
@@ -16,7 +25,7 @@ class AuthController extends GetxController {
     scopes: ['email'],
   );
 
-  Future<void> login(String matricula, String password) async {
+  Future<void> login(String matricula, String password, context) async {
     if (matricula.isEmpty || password.isEmpty) {
       Get.snackbar(
         'Campos requeridos',
@@ -39,12 +48,16 @@ class AuthController extends GetxController {
       var data = jsonDecode(response.body);
 
       if (response.statusCode == 200 && data['success'] == true) {
-        Get.snackbar(
-          'Éxito',
-          'Inicio de sesión exitoso',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.teal,
-          colorText: Colors.white,
+        final token = data['token'];
+
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('userToken', token);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Bienvenido/a!'),
+            backgroundColor: Colors.teal,
+          ),
         );
 
         Get.offNamed('/alumno/inicio');
@@ -70,7 +83,7 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> loginWithGoogle() async {
+  Future<void> loginWithGoogle(BuildContext context) async {
     try {
       isLoadingGoogle.value = true;
 
@@ -114,14 +127,18 @@ class AuthController extends GetxController {
       if (response.statusCode == 200 &&
           data['success'] == true &&
           data['user'] != null) {
+        final token = data['token'];
+
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('userToken', token);
+
         final user = data['user'];
 
-        Get.snackbar(
-          'Éxito',
-          'Bienvenido ${user['nombre']}',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.teal,
-          colorText: Colors.white,
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Bienvenido/a!'),
+            backgroundColor: Colors.teal,
+          ),
         );
 
         switch (user['rol']) {
@@ -154,6 +171,49 @@ class AuthController extends GetxController {
       Get.snackbar(
         'Error',
         'Error al iniciar sesión con Google: $e',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
+
+  Future<void> logout(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('userToken');
+
+    try {
+      final response = await http.post(
+        Uri.parse('http://127.0.0.1:8000/api/logout'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
+      var data = json.decode(response.body);
+
+      if (response.statusCode == 200 && data['success'] == true) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('¡Vuelve pronto!'),
+            backgroundColor: Colors.teal,
+          ),
+        );
+
+        Get.offNamed('/login');
+      } else {
+        Get.snackbar(
+          'Error',
+          data['message'] ?? 'Ocurrió un error inesperado',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error de red',
+        'No se pudo conectar con el servidor: $e',
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.red,
         colorText: Colors.white,

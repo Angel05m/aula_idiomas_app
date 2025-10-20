@@ -1,22 +1,31 @@
+import 'package:aula_idiomas_app/controllers/AlumnosController.dart';
 import 'package:aula_idiomas_app/screens/coordinacion/editar_alumno.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CardInfoAlumno extends StatelessWidget {
+  final int idAlumno; 
   final String nombreA;
   final String matricula;
   final double promedio;
   final String carrera;
+  final bool isActive; 
 
   const CardInfoAlumno({
     super.key,
+    required this.idAlumno,
     required this.nombreA,
     required this.matricula,
     required this.promedio,
     required this.carrera,
+    required this.isActive,
   });
+  
 
   @override
   Widget build(BuildContext context) {
+    final alumnoController = Get.find<AlumnosController>();
+
     return Card(
       elevation: 3.0,
       margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 0),
@@ -98,22 +107,18 @@ class CardInfoAlumno extends StatelessWidget {
                   height: 35,
                   child: IconButton(
                     padding: EdgeInsets.zero,
-                    icon: const Icon(Icons.edit, color: Colors.teal, size: 25),
+                    icon: Icon(
+                      isActive ? Icons.delete : Icons.arrow_circle_up,
+                      color: isActive ? Colors.orange : Colors.green,
+                      size: 25,
+                    ),
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => EditarAlumno()),
-                      );
+                      if (isActive) {
+                        alumnoController.deshabilitarAlumno(idAlumno, context);
+                      } else {
+                        alumnoController.habilitarAlumno(idAlumno, context);
+                      }
                     },
-                  ),
-                ),
-                SizedBox(
-                  width: 40,
-                  height: 35,
-                  child: IconButton(
-                    padding: EdgeInsets.zero,
-                    icon: const Icon(Icons.delete, color: Colors.red, size: 25),
-                    onPressed: () {},
                   ),
                 ),
               ],

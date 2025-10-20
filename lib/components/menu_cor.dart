@@ -7,6 +7,8 @@ import 'package:aula_idiomas_app/screens/coordinacion/perfil.dart';
 import 'package:aula_idiomas_app/screens/docente/perfil.dart';
 import 'package:aula_idiomas_app/screens/login.dart';
 import 'package:flutter/material.dart';
+import 'package:aula_idiomas_app/controllers/AuthController.dart';
+import 'package:get/get.dart';
 
 class MenuCoordinacion extends StatefulWidget {
   const MenuCoordinacion({super.key});
@@ -38,6 +40,8 @@ class _MenuCoordinacionState extends State<MenuCoordinacion> {
     });
   }
 
+  final authController = Get.put(AuthController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,21 +66,14 @@ class _MenuCoordinacionState extends State<MenuCoordinacion> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => 
-                          PerfilDocente()
+                          builder: (context) => PerfilCoordinacion(),
                           // PerfilAlumno()
                           // PerfilCoordinacion(),
                         ),
                       );
                       break;
                     case 'Cerrar sesión':
-                      // Navegacion
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Login(),
-                        ),
-                      );
+                      authController.logout(context);
                       break;
                   }
                 },
