@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:aula_idiomas_app/controllers/AlumnosController.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -45,6 +47,8 @@ class _RegistroAlumnoState extends State<RegistroAlumno> {
 
   String? _selectedGrupo;
   late Future<List<Grupo>> _gruposFuture;
+  final alumnoController = Get.put(AlumnosController());
+
 
   @override
   void initState() {
@@ -118,6 +122,7 @@ class _RegistroAlumnoState extends State<RegistroAlumno> {
             backgroundColor: Colors.teal,
           ),
         );
+        alumnoController.refresh();
         Navigator.pop(context, true);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
