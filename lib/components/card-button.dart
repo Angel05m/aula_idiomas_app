@@ -5,7 +5,7 @@ class CardButton extends StatelessWidget {
   final int valor;
   final IconData icono;
   final Color? iconBackground;
-   final VoidCallback? onTap;
+  final VoidCallback? onTap;
 
   const CardButton({
     super.key,
@@ -13,7 +13,7 @@ class CardButton extends StatelessWidget {
     required this.valor,
     required this.icono,
     this.iconBackground,
-    this.onTap
+    this.onTap,
   });
 
   @override
@@ -33,22 +33,25 @@ class CardButton extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Avatar e icono
-              SizedBox(height: 30),
-              CircleAvatar(
-                radius: 20,
-                backgroundColor: iconBackground ?? Colors.teal[300],
-                child: Icon(icono, color: Colors.white, size: 20),
+              Center(
+                child: CircleAvatar(
+                  radius: 25,
+                  backgroundColor: iconBackground ?? Colors.teal[300],
+                  child: Icon(icono, color: Colors.white, size: 20),
+                ),
               ),
-              SizedBox(width: 10),
+              SizedBox(width: 10.0),
               // Informacion de la carta
-              Padding(
-                padding: EdgeInsets.only(top: 10),
+              Expanded(
+                flex: 4,
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       titulo,
+                      softWrap: true,
+                      overflow: TextOverflow.visible,
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
@@ -56,7 +59,7 @@ class CardButton extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      valor.toString(),
+                      '$valor%',
                       style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,

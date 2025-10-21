@@ -1,4 +1,7 @@
+import 'package:aula_idiomas_app/components/menu_al.dart';
+import 'package:aula_idiomas_app/components/menu_doc.dart';
 import 'package:aula_idiomas_app/controllers/AuthController.dart';
+import 'package:aula_idiomas_app/screens/docente/inicio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -133,7 +136,11 @@ class _LoginState extends State<Login> {
                                     .trim();
                                 String password = passwordController.text
                                     .trim();
-                                authController.login(matricula, password, context);
+                                authController.login(
+                                  matricula,
+                                  password,
+                                  context,
+                                );
                               },
                         child: authController.isLoadingLogin.value
                             ? SizedBox(
@@ -181,10 +188,10 @@ class _LoginState extends State<Login> {
                                 ),
                               ),
                         onPressed: authController.isLoadingGoogle.value
-                          ? null
-                          : () {
-                              authController.loginWithGoogle(context);
-                            },
+                            ? null
+                            : () {
+                                authController.loginWithGoogle(context);
+                              },
                       ),
                     ],
                   );
