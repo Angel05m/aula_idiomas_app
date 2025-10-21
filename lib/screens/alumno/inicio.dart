@@ -49,7 +49,8 @@ class _InicioAlumnosState extends State<InicioAlumnos> {
                     child: CardButton(
                       titulo: 'General',
                       valor: 2,
-                      icono: Icons.local_activity,
+                      icono: Icons.assessment,
+                      iconBackground: Colors.blueAccent.shade200,
                     ),
                   ),
                   Expanded(
@@ -57,7 +58,7 @@ class _InicioAlumnosState extends State<InicioAlumnos> {
                     child: CardButton(
                       titulo: 'Escritura',
                       valor: 3,
-                      icono: Icons.time_to_leave,
+                      icono: Icons.border_color,
                       iconBackground: Colors.green
                     ),
                   ),
@@ -70,7 +71,8 @@ class _InicioAlumnosState extends State<InicioAlumnos> {
                     child: CardButton(
                       titulo: 'Compresión',
                       valor: 10,
-                      icono: Icons.local_activity,
+                      icono: Icons.hearing,
+                      iconBackground: Colors.purple.shade300,
                     ),
                   ),
                   Expanded(
@@ -78,7 +80,8 @@ class _InicioAlumnosState extends State<InicioAlumnos> {
                     child: CardButton(
                       titulo: 'Hablado',
                       valor: 3,
-                      icono: Icons.time_to_leave,
+                      icono: Icons.queue_music,
+                      iconBackground: Colors.amber,
                     ),
                   ),
                 ],
