@@ -52,6 +52,7 @@ class AuthController extends GetxController {
 
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('userToken', token);
+        await prefs.setInt('userId', data['user']['id']);
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(

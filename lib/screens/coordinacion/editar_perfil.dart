@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:aula_idiomas_app/controllers/UserController.dart';
+import 'package:aula_idiomas_app/controllers/LoadPerfilController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -13,7 +13,7 @@ class EditarPerfilCordinador extends StatefulWidget {
 }
 
 class _EditarPerfilCordinadorState extends State<EditarPerfilCordinador> {
-  final userController = Get.put(UserController());
+  final loadPerfilController = Get.put(LoadPerfilController());
 
   final nombresController = TextEditingController();
   final apPaternoController = TextEditingController();
@@ -53,7 +53,7 @@ class _EditarPerfilCordinadorState extends State<EditarPerfilCordinador> {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('userToken') ?? '';
 
-      final userId = userController.userData.value?['pk_usuario'];
+      final userId = loadPerfilController.userData.value?['pk_usuario'];
 
       final response = await http.put(
         Uri.parse('http://127.0.0.1:8000/api/perfil-editar/$userId'),
@@ -76,7 +76,7 @@ class _EditarPerfilCordinadorState extends State<EditarPerfilCordinador> {
           backgroundColor: Colors.green,
           colorText: Colors.white,
         );
-        userController.loadPerfil();
+        loadPerfilController.loadPerfil();
       } else {
         final data = jsonDecode(response.body);
         Get.snackbar(
@@ -111,15 +111,15 @@ class _EditarPerfilCordinadorState extends State<EditarPerfilCordinador> {
       ),
       backgroundColor: Colors.grey[100],
       body: Obx(() {
-        if (userController.isLoadingPerfil.value) {
+        if (loadPerfilController.isLoadingPerfil.value) {
           return const Center(child: CircularProgressIndicator(color: Colors.teal));
         }
 
-        if (userController.hasError.value) {
+        if (loadPerfilController.hasError.value) {
           return const Center(child: Text('Ocurrió un error al cargar los datos'));
         }
 
-        final data = userController.userData.value;
+        final data = loadPerfilController.userData.value;
         if (data != null) {
           if (nombresController.text.isEmpty) nombresController.text = data['nombres'] ?? '';
           if (apPaternoController.text.isEmpty) apPaternoController.text = data['ap_paterno'] ?? '';

@@ -1,8 +1,10 @@
+import 'package:aula_idiomas_app/controllers/AuthController.dart';
 import 'package:aula_idiomas_app/screens/alumno/inicio.dart';
 import 'package:aula_idiomas_app/screens/alumno/mis_actividades.dart';
 import 'package:aula_idiomas_app/screens/alumno/perfil.dart';
 import 'package:aula_idiomas_app/screens/alumno/progreso.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class MenuAlumno extends StatefulWidget {
   const MenuAlumno({super.key});
@@ -27,6 +29,8 @@ class _MenuAlumnoState extends State<MenuAlumno> {
       _selectedIndex = index;
     });
   }
+
+  final authController = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +63,7 @@ class _MenuAlumnoState extends State<MenuAlumno> {
                       );
                       break;
                     case 'Cerrar sesión':
-                      // authController.logout(context);
+                      authController.logout(context);
                       break;
                   }
                 },
