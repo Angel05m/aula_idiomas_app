@@ -59,7 +59,7 @@ class CardButton extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '$valor%',
+                      '$valor',
                       style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,

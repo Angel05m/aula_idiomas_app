@@ -90,11 +90,11 @@ class _MenuAlumnoState extends State<MenuAlumno> {
             label: 'Inicio',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.local_activity, size: 30),
+            icon: Icon(Icons.assignment, size: 30),
             label: 'Mis Actividades',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.psychology_rounded, size: 30),
+            icon: Icon(Icons.short_text, size: 30),
             label: 'Progreso',
           ),
         ],

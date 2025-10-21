@@ -98,7 +98,7 @@ class _MenuDocenteState extends State<MenuDocente> {
             label: 'Mi grupos',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.groups, size: 30),
+            icon: Icon(Icons.assignment, size: 30),
             label: 'Actividades',
           ),
         ],
