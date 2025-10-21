@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-class UserController extends GetxController {
+class LoadPerfilController extends GetxController {
   var isLoadingPerfil = false.obs;
   var hasError = false.obs;
   var userData = Rxn<Map<String, dynamic>>();

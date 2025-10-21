@@ -1,5 +1,5 @@
 
-import 'package:aula_idiomas_app/controllers/UserController.dart';
+import 'package:aula_idiomas_app/controllers/LoadPerfilController.dart';
 import 'package:aula_idiomas_app/screens/coordinacion/editar_perfil.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,7 +9,7 @@ class PerfilCoordinacion extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authController = Get.put(UserController());
+    final loadPerfilController = Get.put(LoadPerfilController());
 
     return Scaffold(
       appBar: AppBar(
@@ -22,11 +22,11 @@ class PerfilCoordinacion extends StatelessWidget {
       ),
       backgroundColor: Colors.grey[100],
       body: Obx(() {
-        if (authController.isLoadingPerfil.value) {
+        if (loadPerfilController.isLoadingPerfil.value) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        if (authController.hasError.value) {
+        if (loadPerfilController.hasError.value) {
           return const Center(
             child: Text(
               'Error al cargar el perfil.',
@@ -35,7 +35,7 @@ class PerfilCoordinacion extends StatelessWidget {
           );
         }
 
-        final user = authController.userData.value;
+        final user = loadPerfilController.userData.value;
         if (user == null) {
           return const Center(child: Text('No hay datos del usuario.'));
         }
