@@ -49,7 +49,8 @@ class _InicioDocenteState extends State<InicioDocente> {
                     child: CardButton(
                       titulo: 'Actividades',
                       valor: 2,
-                      icono: Icons.local_activity,
+                      icono: Icons.assignment,
+                      iconBackground: Colors.lightGreen,
                     ),
                   ),
                   Expanded(
@@ -57,8 +58,8 @@ class _InicioDocenteState extends State<InicioDocente> {
                     child: CardButton(
                       titulo: 'Actividades Pendientes',
                       valor: 3,
-                      icono: Icons.time_to_leave,
-                      iconBackground: Colors.green
+                      icono: Icons.access_time,
+                      iconBackground: Colors.red.shade300
                     ),
                   ),
                 ],
@@ -68,17 +69,19 @@ class _InicioDocenteState extends State<InicioDocente> {
                   Expanded(
                     flex: 1,
                     child: CardButton(
-                      titulo: 'Actividades',
+                      titulo: 'Actividades Revisadas',
                       valor: 2,
-                      icono: Icons.local_activity,
+                      icono: Icons.done,
+                      iconBackground: Colors.blueAccent,
                     ),
                   ),
                   Expanded(
                     flex: 1,
                     child: CardButton(
-                      titulo: 'Actividades Pendientes',
+                      titulo: 'Total Actividades',
                       valor: 3,
-                      icono: Icons.time_to_leave,
+                      icono: Icons.assignment_turned_in,
+                      iconBackground: Colors.deepOrangeAccent.shade400,
                     ),
                   ),
                 ],
