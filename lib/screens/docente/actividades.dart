@@ -1,3 +1,4 @@
+import 'package:aula_idiomas_app/components/card_actividad_docente.dart';
 import 'package:aula_idiomas_app/screens/docente/registrar_actividad.dart';
 import 'package:flutter/material.dart';
 
@@ -24,31 +25,43 @@ class _ActividadesDocenteState extends State<ActividadesDocente> {
             Text('Añade, edita y gestiona las actividades'),
             const SizedBox(height: 20),
 
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Buscar actividad...',
-                  prefixIcon: const Icon(Icons.search, color: Colors.teal),
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                    borderSide: const BorderSide(width: 1.0, color: Colors.grey),
-                  ),
+            TextField(
+              decoration: InputDecoration(
+                hintText: 'Buscar actividad...',
+                prefixIcon: const Icon(Icons.search, color: Colors.teal),
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                  borderSide: const BorderSide(width: 1.0, color: Colors.grey),
                 ),
-                onSubmitted: (value) {
-                  // listaDocenteController.searchDocentes(value.trim());
-                },
               ),
-              const SizedBox(height: 20),
+              onSubmitted: (value) {
+                // listaDocenteController.searchDocentes(value.trim());
+              },
+            ),
+            const SizedBox(height: 20),
+            Column(
+              children: [
+                CardActividadDocente(
+                  tituloActividad: 'Past Simple vs Past Continuos',
+                  codigo: 'COD-001',
+                  fecha: '20/10/2025',
+                  tipo: 'Pregunta de Opcion multiple',
+                  descripcion: 'Este es u ejemplo de descripción de una actividad creada',
+                ),
+              ],
+            ),
           ],
-
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final result = await Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const CrearActividadDocente()),
+            MaterialPageRoute(
+              builder: (context) => const CrearActividadDocente(),
+            ),
           );
 
           if (result == true) {
