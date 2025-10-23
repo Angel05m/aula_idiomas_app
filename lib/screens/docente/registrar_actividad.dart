@@ -10,6 +10,25 @@ class CrearActividadDocente extends StatefulWidget {
 class _CrearActividadDocenteState extends State<CrearActividadDocente> {
   // LISTA DE FORMULARIO DINAICO
   List<Widget> preguntas = [];
+  // INPUT SELECTOR LISTADO TIPO DE PREGUNTA
+  String? _selectedOptionTipoPregunta;
+  final List<String> _optionsTipoPregunta = [
+    'Opción multipke',
+    'Abierta',
+    'Verdadero o Falso',
+  ];
+  // INPUT SELECTOR LISTADO OPCION CORRECTA
+  String? _selectedOptionRespuestaCorrecta;
+  final List<String> _optionsRespuestaCorrecta = [
+    'Respuesta A',
+    'Respues B',
+    'Respuesta C',
+    'Respuesta D',
+  ];
+
+  // INPUT SELECTOR PREGUNTA VERDADERO/FALSO
+  String? _selectedOptionVerdaderoFalso;
+  final List<String> _optionsVerdaderoFalso = ['Verdadero', 'Falso'];
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +75,44 @@ class _CrearActividadDocenteState extends State<CrearActividadDocente> {
                         borderSide: BorderSide(color: Colors.teal, width: 3.0),
                       ),
                     ),
+                  ),
+                  SizedBox(height: 10),
+                  // SELECTOR DE TIPO DE PREGUNTA
+                  DropdownButtonFormField<String>(
+                    isExpanded: true,
+                    value: _selectedOptionTipoPregunta,
+                    decoration: InputDecoration(
+                      hintText: 'Selecciona tipo pregunta',
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        borderSide: BorderSide(width: 1.0, color: Colors.grey),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        borderSide: BorderSide(color: Colors.teal, width: 3.0),
+                      ),
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 16,
+                      ),
+                    ),
+                    hint: Text('Selecciona un Grupo'),
+                    onChanged: (String? newValueTipoPregunta) {
+                      setState(() {
+                        _selectedOptionTipoPregunta = newValueTipoPregunta;
+                      });
+                    },
+                    items: _optionsTipoPregunta.map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Text(value, overflow: TextOverflow.ellipsis),
+                        ),
+                      );
+                    }).toList(),
                   ),
                   SizedBox(height: 10),
                   Text('Descripción:'),
@@ -121,6 +178,20 @@ class _CrearActividadDocenteState extends State<CrearActividadDocente> {
                     ),
                   )
                 : Column(children: preguntas),
+            SizedBox(height: 10.0,),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.teal,
+                minimumSize: Size(double.infinity, 50),
+                elevation: 3.0,
+              ),
+              onPressed: () {},
+              child: Text(
+                'Guardar Actividad',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            SizedBox(height: 7.0,),
           ],
         ),
       ),
@@ -140,7 +211,7 @@ class _CrearActividadDocenteState extends State<CrearActividadDocente> {
       context: context,
       builder: (BuildContext context) {
         return Container(
-          height: 250,
+          height: 350,
           color: Colors.white,
           padding: EdgeInsets.all(12),
           child: Column(
@@ -166,7 +237,7 @@ class _CrearActividadDocenteState extends State<CrearActividadDocente> {
                 title: Text('Opción múltiple'),
                 onTap: () {
                   setState(() {
-                    preguntas.add(_PreguntaOpcionMultiple(preguntas.length));
+                    preguntas.add(_preguntaOpcionMultiple(preguntas.length));
                   });
                   // CERRAR EL MODAL
                   Navigator.pop(context);
@@ -181,7 +252,17 @@ class _CrearActividadDocenteState extends State<CrearActividadDocente> {
                     preguntas.add(_preguntaAbierta(preguntas.length));
                   });
                   Navigator.pop(context);
-                  // Aquí puedes agregar otros tipos de preguntas en el futuro
+                },
+              ),
+              Divider(),
+              ListTile(
+                leading: Icon(Icons.done, color: Colors.deepPurple),
+                title: Text('Verdadero o Falso'),
+                onTap: () {
+                  setState(() {
+                    preguntas.add(_preguntaVerdaderoFalso(preguntas.length));
+                  });
+                  Navigator.pop(context);
                 },
               ),
             ],
@@ -192,7 +273,7 @@ class _CrearActividadDocenteState extends State<CrearActividadDocente> {
   }
 
   // METODO QUE GENERE UNA PREGUNTA DE TIPO OPCIONAL
-  Widget _PreguntaOpcionMultiple(int index) {
+  Widget _preguntaOpcionMultiple(int index) {
     return Container(
       margin: EdgeInsets.only(bottom: 15.0),
       padding: EdgeInsets.all(10.0),
@@ -355,22 +436,42 @@ class _CrearActividadDocenteState extends State<CrearActividadDocente> {
             children: [
               Expanded(
                 // INPUT DE OPCION CORRECTA
-                child: TextField(
-                  cursorColor: Colors.teal,
+                child: DropdownButtonFormField<String>(
+                  isExpanded: true,
+                  value: _selectedOptionRespuestaCorrecta,
                   decoration: InputDecoration(
-                    labelText: 'Opción correcta',
-                    labelStyle: TextStyle(fontSize: 14.0),
-                    hintText: 'Ej: Respuesta A',
-                    hintStyle: TextStyle(fontSize: 14.0),
-                    floatingLabelStyle: TextStyle(color: Colors.teal),
+                    hintText: 'Selecciona la respuesta correcta',
+                    filled: true,
+                    fillColor: Colors.white,
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(12.0),
+                      borderSide: BorderSide(width: 1.0, color: Colors.grey),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12.0),
                       borderSide: BorderSide(color: Colors.teal, width: 3.0),
                     ),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 16,
+                    ),
                   ),
+                  hint: Text('Selecciona la respuesta correcta'),
+                  onChanged: (String? newValueRespuestaCorrecta) {
+                    setState(() {
+                      _selectedOptionRespuestaCorrecta =
+                          newValueRespuestaCorrecta;
+                    });
+                  },
+                  items: _optionsRespuestaCorrecta.map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text(value, overflow: TextOverflow.ellipsis),
+                      ),
+                    );
+                  }).toList(),
                 ),
               ),
               SizedBox(width: 8),
@@ -400,7 +501,6 @@ class _CrearActividadDocenteState extends State<CrearActividadDocente> {
       ),
     );
   }
-
 
   // FORMULARIO DE PREGUNTA ABIERTA
   Widget _preguntaAbierta(int index) {
@@ -489,6 +589,122 @@ class _CrearActividadDocenteState extends State<CrearActividadDocente> {
                 borderSide: BorderSide(color: Colors.teal, width: 3.0),
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // FORMULARIO DE PREGUNTA VERDADERO O FALSO
+  Widget _preguntaVerdaderoFalso(int index) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 15.0),
+      padding: EdgeInsets.all(10.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10.0),
+        border: Border.all(width: 1, color: Colors.grey.shade300),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                flex: 5,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // ENCABEZADO
+                    Text(
+                      'Pregunta ${index + 1}',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      'Verdadero o Falso',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
+
+              // BOTON PARA ELIMINAR PREGUNTA
+              Expanded(
+                flex: 1,
+                child: IconButton(
+                  onPressed: () {
+                    if (index >= 0 && index < preguntas.length) {
+                      setState(() {
+                        preguntas.removeAt(index);
+                      });
+                    }
+                  },
+                  icon: Icon(Icons.close, color: Colors.red.shade400),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 10),
+          Text('Descripción de la pregunta:'),
+          SizedBox(height: 5),
+          // INPUT DE DESCRIPCION
+          TextField(
+            cursorColor: Colors.teal,
+            maxLines: 4,
+            decoration: InputDecoration(
+              hintText: 'Ej: Describir la actividad',
+              hintStyle: TextStyle(fontSize: 14.0),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12.0),
+                borderSide: BorderSide(color: Colors.teal, width: 3.0),
+              ),
+            ),
+          ),
+
+          SizedBox(height: 10),
+          Text('Opcion correcta:'),
+          SizedBox(height: 5),
+          // INPUT SELECTOR DE VERDAD O FALSO
+          DropdownButtonFormField<String>(
+            isExpanded: true,
+            value: _selectedOptionVerdaderoFalso,
+            decoration: InputDecoration(
+              hintText: 'Selecciona una opción',
+              filled: true,
+              fillColor: Colors.white,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12.0),
+                borderSide: BorderSide(width: 1.0, color: Colors.grey),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12.0),
+                borderSide: BorderSide(color: Colors.teal, width: 3.0),
+              ),
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 16,
+              ),
+            ),
+            hint: Text('Selecciona una opción'),
+            onChanged: (String? newValueVerdaderoFalso) {
+              setState(() {
+                _selectedOptionVerdaderoFalso = newValueVerdaderoFalso;
+              });
+            },
+            items: _optionsVerdaderoFalso.map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Text(value, overflow: TextOverflow.ellipsis),
+                ),
+              );
+            }).toList(),
           ),
         ],
       ),
