@@ -12,10 +12,10 @@ class _CrearActividadDocenteState extends State<CrearActividadDocente> {
   List<Widget> preguntas = [];
   // INPUT SELECTOR LISTADO TIPO DE PREGUNTA
   String? _selectedOptionTipoPregunta;
-  final List<String> _optionsTipoPregunta = [
-    'Opción multipke',
-    'Abierta',
-    'Verdadero o Falso',
+  final List<String> _optionsTipoActividad = [
+    'Preguntas',
+    'Carga de PDF',
+    'Auditiva y Oral',
   ];
   // INPUT SELECTOR LISTADO OPCION CORRECTA
   String? _selectedOptionRespuestaCorrecta;
@@ -98,13 +98,13 @@ class _CrearActividadDocenteState extends State<CrearActividadDocente> {
                         vertical: 16,
                       ),
                     ),
-                    hint: Text('Selecciona un Grupo'),
+                    hint: Text('Tipo de actividad'),
                     onChanged: (String? newValueTipoPregunta) {
                       setState(() {
                         _selectedOptionTipoPregunta = newValueTipoPregunta;
                       });
                     },
-                    items: _optionsTipoPregunta.map((String value) {
+                    items: _optionsTipoActividad.map((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
                         child: Padding(
