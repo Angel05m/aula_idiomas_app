@@ -132,6 +132,7 @@ class AuthController extends GetxController {
 
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('userToken', token);
+        await prefs.setInt('userId', data['user']['id']);
 
         final user = data['user'];
 
