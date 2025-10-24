@@ -1,3 +1,4 @@
+import 'package:aula_idiomas_app/screens/docente/aignar_actividad.dart';
 import 'package:flutter/material.dart';
 
 class CardActividadDocente extends StatelessWidget {
@@ -142,7 +143,7 @@ class CardActividadDocente extends StatelessWidget {
                   // Botón para asignar actividad (opcional)
                   TextButton(
                     onPressed: () {
-                      // Lógica de asignar actividad
+                      AsignarActividadDocente();
                     },
                     child: const Icon(Icons.add_circle, size: 20),
                   ),
