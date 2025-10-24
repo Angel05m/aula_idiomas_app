@@ -1,6 +1,8 @@
 import 'package:aula_idiomas_app/components/card_actividad_docente.dart';
+import 'package:aula_idiomas_app/controllers/ListaActividadesController.dart';
 import 'package:aula_idiomas_app/screens/docente/registrar_actividad.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ActividadesDocente extends StatefulWidget {
   const ActividadesDocente({super.key});
@@ -10,21 +12,37 @@ class ActividadesDocente extends StatefulWidget {
 }
 
 class _ActividadesDocenteState extends State<ActividadesDocente> {
+  final controller = Get.put(ListaActividadesController());
+  String? _search;
+  String? _tipo;
+
+  final List<String> _tipos = ['preguntas', 'pdf', 'auditiva'];
+
+  @override
+  void initState() {
+    super.initState();
+    controller.fetchActividades();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       body: Padding(
-        padding: EdgeInsets.all(10.0),
-        child: ListView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
           children: [
-            Text(
-              'Actividades',
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Text('Actividades', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
+                  Text('Añade, edita y gestiona las actividades'),
+                ],
+              ),
             ),
-            Text('Añade, edita y gestiona las actividades'),
             const SizedBox(height: 20),
-
             TextField(
               decoration: InputDecoration(
                 hintText: 'Buscar actividad...',
@@ -36,21 +54,80 @@ class _ActividadesDocenteState extends State<ActividadesDocente> {
                   borderSide: const BorderSide(width: 1.0, color: Colors.grey),
                 ),
               ),
-              onSubmitted: (value) {
-                // listaDocenteController.searchDocentes(value.trim());
+              onChanged: (value) {
+                _search = value.trim();
+                controller.refresh(search: _search, tipo: _tipo);
               },
             ),
-            const SizedBox(height: 20),
-            Column(
-              children: [
-                CardActividadDocente(
-                  tituloActividad: 'Past Simple vs Past Continuos',
-                  codigo: 'COD-001',
-                  fecha: '20/10/2025',
-                  tipo: 'Pregunta de Opcion multiple',
-                  descripcion: 'Este es u ejemplo de descripción de una actividad creada',
+            const SizedBox(height: 13),
+
+            DropdownButtonFormField<String?>(
+              value: _tipo,
+              hint: const Text('Filtrar por tipo'),
+              isExpanded: true,
+              items: [
+                const DropdownMenuItem<String?>(
+                  value: null,
+                  child: Text('Todos'),
                 ),
+                ..._tipos.map((value) => DropdownMenuItem<String?>(
+                      value: value,
+                      child: Text(
+                        value == 'preguntas'
+                            ? 'Preguntas'
+                            : value == 'pdf'
+                                ? 'Carga de PDF'
+                                : 'Auditiva y Oral',
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    )),
               ],
+              onChanged: (value) {
+                setState(() => _tipo = value);
+                controller.refresh(search: _search, tipo: _tipo);
+              },
+            ),
+            const SizedBox(height: 13),
+
+            Expanded(
+              child: Obx(() {
+                if (controller.isLoading.value) {
+                  return const Center(child: CircularProgressIndicator(color: Colors.teal));
+                }
+
+                if (controller.actividades.isEmpty) {
+                  return const Center(child: Text('No hay actividades registradas'));
+                }
+
+                return ListView.separated(
+                  itemCount: controller.actividades.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 10),
+                  itemBuilder: (_, index) {
+                    final actividad = controller.actividades[index];
+                    final bool isActive = actividad['deleted_at'] == null;
+
+                    return CardActividadDocente(
+                      tituloActividad: actividad['nom_actividad'] ?? '',
+                      codigo: actividad['cod_actividad'] ?? '',
+                      fecha: actividad['fecha_formateada'] ?? '',
+                      tipo: actividad['tipo'] == 'preguntas'
+                          ? 'Preguntas'
+                          : actividad['tipo'] == 'pdf'
+                              ? 'Carga de PDF'
+                              : 'Auditiva y Oral',
+                      descripcion: actividad['descripcion'] ?? '',
+                      isActive: isActive,
+                      onToggleActive: () async {
+                        if (isActive) {
+                          await controller.deshabilitarActividad(actividad['pk_actividad'], context);
+                        } else {
+                          await controller.habilitarActividad(actividad['pk_actividad'], context);
+                        }
+                      },
+                    );
+                  },
+                );
+              }),
             ),
           ],
         ),
@@ -65,13 +142,12 @@ class _ActividadesDocenteState extends State<ActividadesDocente> {
           );
 
           if (result == true) {
-            // await listaDocenteController.refreshDocentes();
+            controller.refresh(search: _search, tipo: _tipo);
           }
         },
         backgroundColor: Colors.teal,
         child: const Icon(Icons.assignment_add, color: Colors.white),
         tooltip: 'Crear nueva actividad',
-        elevation: 5,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
