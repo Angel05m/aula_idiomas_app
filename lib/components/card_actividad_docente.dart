@@ -7,6 +7,8 @@ class CardActividadDocente extends StatelessWidget {
   final String fecha;
   final String tipo;
   final String descripcion;
+  final bool isActive;
+  final VoidCallback? onToggleActive;
 
   const CardActividadDocente({
     super.key,
@@ -15,13 +17,15 @@ class CardActividadDocente extends StatelessWidget {
     required this.fecha,
     required this.tipo,
     required this.descripcion,
+    required this.isActive,
+    this.onToggleActive,
   });
 
   @override
   Widget build(BuildContext context) {
     return Card(
       elevation: 3.0,
-      margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 0),
+      margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       color: Colors.white,
       child: Container(
@@ -33,43 +37,36 @@ class CardActividadDocente extends StatelessWidget {
             Expanded(
               flex: 5,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     tituloActividad,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                   Row(
                     children: [
                       Expanded(
                         child: Row(
                           children: [
-                            Expanded(
-                              flex: 1,
-                              child: Text(
-                                'Codigo:',
-                                style: TextStyle(
-                                  fontSize: 12.0,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.teal,
-                                ),
+                            const Text(
+                              'Codigo:',
+                              style: TextStyle(
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.teal,
                               ),
                             ),
-                            SizedBox(width: 2),
-                            Expanded(
-                              flex: 2,
-                              child: Text(
-                                codigo,
-                                style: TextStyle(
-                                  fontSize: 12.0,
-                                  fontWeight: FontWeight.w300,
-                                  color: Colors.teal,
-                                ),
+                            const SizedBox(width: 4),
+                            Text(
+                              codigo,
+                              style: const TextStyle(
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w300,
+                                color: Colors.teal,
                               ),
                             ),
                           ],
@@ -78,26 +75,21 @@ class CardActividadDocente extends StatelessWidget {
                       Expanded(
                         child: Row(
                           children: [
-                            Expanded(
-                              flex: 1,
-                              child: Text(
-                                'Fecha:',
-                                style: TextStyle(
-                                  fontSize: 12.0,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.teal,
-                                ),
+                            const Text(
+                              'Fecha:',
+                              style: TextStyle(
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.teal,
                               ),
                             ),
-                            Expanded(
-                              flex: 2,
-                              child: Text(
-                                fecha,
-                                style: TextStyle(
-                                  fontSize: 12.0,
-                                  fontWeight: FontWeight.w300,
-                                  color: Colors.teal,
-                                ),
+                            const SizedBox(width: 4),
+                            Text(
+                              fecha,
+                              style: const TextStyle(
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w300,
+                                color: Colors.teal,
                               ),
                             ),
                           ],
@@ -105,34 +97,28 @@ class CardActividadDocente extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 5.0),
+                  const SizedBox(height: 5.0),
                   Row(
                     children: [
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          'Tipo:',
-                          style: TextStyle(
-                            fontSize: 12.0,
-                            fontWeight: FontWeight.w500,
-                          ),
+                      const Text(
+                        'Tipo:',
+                        style: TextStyle(
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                      Expanded(
-                        flex: 6,
-                        child: Text(
-                          tipo,
-                          style: TextStyle(
-                            fontSize: 12.0,
-                            fontWeight: FontWeight.w300,
-                          ),
+                      const SizedBox(width: 4),
+                      Text(
+                        tipo,
+                        style: const TextStyle(
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.w300,
                         ),
                       ),
                     ],
                   ),
-
-                  SizedBox(height: 5.0),
-                  Text(
+                  const SizedBox(height: 5.0),
+                  const Text(
                     'Descripcion:',
                     style: TextStyle(
                       fontSize: 12.0,
@@ -141,7 +127,7 @@ class CardActividadDocente extends StatelessWidget {
                   ),
                   Text(
                     descripcion,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 12.0,
                       fontWeight: FontWeight.w300,
                     ),
@@ -154,27 +140,25 @@ class CardActividadDocente extends StatelessWidget {
               flex: 1,
               child: Column(
                 children: [
+                  // Botón para asignar actividad (opcional)
                   TextButton(
-                    style: ButtonStyle(),
                     onPressed: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => AsignarActividadDocente(),
-                      //   ),
-                      // );
+                      AsignarActividadDocente();
                     },
-                    child: Icon(Icons.add_circle, size: 20),
+                    child: const Icon(Icons.add_circle, size: 20),
+                  ),
+                  // Botón para editar actividad
+                  TextButton(
+                    onPressed: () {
+                      // Lógica de editar actividad
+                    },
+                    child: const Icon(Icons.edit, color: Colors.teal, size: 20),
                   ),
                   TextButton(
-                    onPressed: () {},
-                    child: Icon(Icons.edit, color: Colors.teal, size: 20),
-                  ),
-                  TextButton(
-                    onPressed: () {},
+                    onPressed: onToggleActive,
                     child: Icon(
-                      Icons.delete,
-                      color: Colors.orange.shade300,
+                      isActive ? Icons.block : Icons.check_circle,
+                      color: isActive ? Colors.orange.shade300 : Colors.teal,
                       size: 20,
                     ),
                   ),
