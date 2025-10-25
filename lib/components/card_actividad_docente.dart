@@ -2,6 +2,7 @@ import 'package:aula_idiomas_app/screens/docente/aignar_actividad.dart';
 import 'package:flutter/material.dart';
 
 class CardActividadDocente extends StatelessWidget {
+  final int pk_actividad;
   final String tituloActividad;
   final String codigo;
   final String fecha;
@@ -11,6 +12,7 @@ class CardActividadDocente extends StatelessWidget {
   final VoidCallback? onToggleActive;
 
   const CardActividadDocente({
+    required this.pk_actividad,
     super.key,
     required this.tituloActividad,
     required this.codigo,
@@ -140,14 +142,19 @@ class CardActividadDocente extends StatelessWidget {
               flex: 1,
               child: Column(
                 children: [
-                  // Botón para asignar actividad (opcional)
                   TextButton(
                     onPressed: () {
-                      AsignarActividadDocente();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AsignarActividadDocente(
+                            pk_actividad: pk_actividad.toString(), 
+                          ),
+                        ),
+                      );
                     },
                     child: const Icon(Icons.add_circle, size: 20),
                   ),
-                  // Botón para editar actividad
                   TextButton(
                     onPressed: () {
                       // Lógica de editar actividad

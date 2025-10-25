@@ -107,6 +107,7 @@ class _ActividadesDocenteState extends State<ActividadesDocente> {
                     final bool isActive = actividad['deleted_at'] == null;
 
                     return CardActividadDocente(
+                      pk_actividad: actividad['pk_actividad'],
                       tituloActividad: actividad['nom_actividad'] ?? '',
                       codigo: actividad['cod_actividad'] ?? '',
                       fecha: actividad['fecha_formateada'] ?? '',
