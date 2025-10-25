@@ -10,6 +10,8 @@ class AsignarActividadDocente extends StatefulWidget {
 }
 
 class _AsignarActividadDocenteState extends State<AsignarActividadDocente> {
+  DateTime? selectedDate;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,6 +30,7 @@ class _AsignarActividadDocenteState extends State<AsignarActividadDocente> {
         child: Column(
           children: [
             Container(
+              padding: EdgeInsets.all(12.0),
               decoration: BoxDecoration(color: Colors.white),
               child: Column(
                 children: [
@@ -69,7 +72,20 @@ class _AsignarActividadDocenteState extends State<AsignarActividadDocente> {
                       ),
                     ),
                   ),
-                  DateTimeFormField(firstDate: DateTime(2000), lastDate: DateTime(2100),)
+                  DateTimeFormField(
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2100),
+                    mode: DateTimeFieldPickerMode.date,
+                    decoration: const InputDecoration(
+                      labelText: 'Selecciona una fecha',
+                      hintStyle: TextStyle(fontSize: 14.0),
+                    ),
+                    onChanged: (DateTime? value) {
+                      setState(() {
+                        selectedDate = value;
+                      });
+                    },
+                  ),
                 ],
               ),
             ),
