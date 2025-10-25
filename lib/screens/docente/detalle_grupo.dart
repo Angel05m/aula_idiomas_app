@@ -1,4 +1,5 @@
 import 'package:aula_idiomas_app/screens/docente/detalle_actividad.dart';
+import 'package:aula_idiomas_app/screens/docente/detalle_alumno.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -110,6 +111,16 @@ class _DetalleGrupoScreenState extends State<DetalleGrupoScreen>
                         title: Text(
                             '${alumno['nombres'] ?? '-'} ${alumno['ap_paterno'] ?? '-'} ${alumno['ap_materno'] ?? '-'}'),
                         subtitle: Text('Matrícula: ${alumno['matricula'] ?? '-'}'),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DetalleAlumno(
+                                pkAlumno: grupoData!['alumnos'][index]['pk_alumno'],
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     );
                   },
