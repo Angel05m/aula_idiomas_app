@@ -1,3 +1,4 @@
+import 'package:aula_idiomas_app/screens/docente/detalle_actividad.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -129,6 +130,17 @@ class _DetalleGrupoScreenState extends State<DetalleGrupoScreen>
                         leading: const Icon(Icons.event, color: Colors.teal),
                         title: Text(act['nom_actividad'] ?? 'Sin título'),
                         subtitle: Text('Tipo: ${act['tipo'] ?? '-'}\nInicio: $fechaInicio\nFin: $fechaFin'),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DetalleActividad(
+                                pkActividad: act['pk_actividad'],
+                                nombreActividad: act['nom_actividad'],
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     );
                   },
