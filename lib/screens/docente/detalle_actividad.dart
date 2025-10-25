@@ -1,3 +1,4 @@
+import 'package:aula_idiomas_app/screens/docente/detalle_entrega_alumno.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -104,7 +105,15 @@ class _DetalleActividadState extends State<DetalleActividad> {
                                   'Fecha de entrega: ${_formatearFecha(entrega['respuestas'] != null && entrega['respuestas'].isNotEmpty ? entrega['respuestas'][0]['created_at'] : null)}',
                                 ),
                                 onTap: () {
-
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => DetalleEntregaAlumno(
+                                        nombreAlumno: entrega['nombre_completo'] ?? 'Alumno desconocido',
+                                        respuestas: entrega['respuestas'] ?? [],
+                                      ),
+                                    ),
+                                  );
                                 },
                               ),
                             );
