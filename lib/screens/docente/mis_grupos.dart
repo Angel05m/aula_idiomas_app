@@ -1,6 +1,7 @@
 import 'package:aula_idiomas_app/components/card_info_grupo_docente.dart';
 import 'package:aula_idiomas_app/components/input_buscador.dart';
 import 'package:aula_idiomas_app/controllers/GrupoDocenteController.dart';
+import 'package:aula_idiomas_app/screens/docente/detalle_grupo.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -76,6 +77,7 @@ class _MisGruposDocenteState extends State<MisGruposDocente> {
                         ),
                       );
                     }
+
                     return Column(
                       children: controller.grupos.map((g) {
                         return CardInfoGrupoDocente(
@@ -85,6 +87,14 @@ class _MisGruposDocenteState extends State<MisGruposDocente> {
                           anio: 'Año escolar: ${g.grupo.anio}',
                           carrera: g.grupo.carrera.nombre,
                           materia: g.materia.nombre,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => DetalleGrupoScreen(pkGrupo: g.grupo.pkGrupo),
+                              ),
+                            );
+                          },
                         );
                       }).toList(),
                     );

@@ -124,14 +124,14 @@ class _AsignarActividadDocenteState extends State<AsignarActividadDocente> {
         checkColor: Colors.white,
         value: isSelected,
         title: Text(
-          grupo['nombre'],
+          "${grupo['fk_cuatrimestre']} ${grupo['nombre']} ${grupo['carrera']['abreviatura']} ${grupo['año']}",
           style: const TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.teal,
           ),
         ),
         subtitle: Text(
-          "Año: ${grupo['año']}",
+          "${grupo['carrera']['nombre']}",
           style: const TextStyle(color: Colors.teal),
         ),
         onChanged: (val) {
