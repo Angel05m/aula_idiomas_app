@@ -14,25 +14,24 @@ class ListaGrupos extends StatefulWidget {
 }
 
 class _ListaGruposState extends State<ListaGrupos> {
-  // String? _selectedOptionC;
-  // String? _selectedOptionCT;
+  late ListaGruposController listaGruposController;
 
-  // final List<String> _optionsC = [
-  //   'Añade, edita y gestiona la información de los alumnos',
-  //   'Option B',
-  //   'Option C',
-  // ];
-  // final List<String> _optionsCT = ['1', '2', '3', '4', '5', '6', '7', '8'];
+  @override
+  void initState() {
+    super.initState();
+    listaGruposController = ListaGruposController();
+    listaGruposController.fetchGrupos();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => ListaGruposController()..fetchGrupos(),
+    return ChangeNotifierProvider.value(
+      value: listaGruposController,
       child: Scaffold(
         backgroundColor: Colors.grey[100],
         body: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -41,7 +40,7 @@ class _ListaGruposState extends State<ListaGrupos> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'Grupos',
                         style: TextStyle(
                           fontSize: 30,
@@ -58,8 +57,8 @@ class _ListaGruposState extends State<ListaGrupos> {
                     ],
                   ),
                 ),
-
                 const SizedBox(height: 20.0),
+
                 Consumer<ListaGruposController>(
                   builder: (context, controller, _) {
                     return InputBuscador(
@@ -67,16 +66,16 @@ class _ListaGruposState extends State<ListaGrupos> {
                     );
                   },
                 ),
+
                 const SizedBox(height: 13.0),
+
                 Consumer<ListaGruposController>(
                   builder: (context, controller, _) {
                     if (controller.isLoading) {
-                      return Padding(
-                        padding: const EdgeInsets.all(40.0),
+                      return const Padding(
+                        padding: EdgeInsets.all(40.0),
                         child: Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.teal,
-                          ),
+                          child: CircularProgressIndicator(color: Colors.teal),
                         ),
                       );
                     }
@@ -96,7 +95,8 @@ class _ListaGruposState extends State<ListaGrupos> {
                         final isDisabled = g.deletedAt != null;
 
                         return CardInfoGrupo(
-                          grupo: '${g.fkCuatrimestre}${g.nombre}${g.carrera.abreviatura} ${g.anio}',
+                          grupo:
+                              '${g.fkCuatrimestre}${g.nombre}${g.carrera.abreviatura} ${g.anio}',
                           cuatri: 'Cuatrimestre: ${g.fkCuatrimestre}',
                           anio: 'Año escolar: ${g.anio}',
                           carrera: g.carrera.nombre,
@@ -105,40 +105,52 @@ class _ListaGruposState extends State<ListaGrupos> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => DetalleGrupoScreen(pkGrupo: g.pkGrupo),
+                                builder: (_) =>
+                                    DetalleGrupoScreen(pkGrupo: g.pkGrupo),
                               ),
                             );
                           },
                           onToggleStatus: () async {
-                            await controller.toggleGrupoStatus(g.pkGrupo, isDisabled, context);
+                            await controller.toggleGrupoStatus(
+                              g.pkGrupo,
+                              isDisabled,
+                              context,
+                            );
                           },
                         );
                       }).toList(),
                     );
-
-
                   },
                 ),
+
                 const SizedBox(height: 13.0),
               ],
             ),
           ),
         ),
+
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
+          onPressed: () async {
+            final result = await Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => RegistrarGrupo()),
+              MaterialPageRoute(
+                builder: (context) => RegistrarGrupo(
+                  listaGruposController: listaGruposController,
+                ),
+              ),
             );
+            
+            if (result == true) {
+              await listaGruposController.fetchGrupos();
+            }
           },
           backgroundColor: Colors.teal,
-          child: Icon(Icons.group_add, color: Colors.white),
+          child: const Icon(Icons.group_add, color: Colors.white),
           tooltip: 'Agregar nuevo grupo',
           elevation: 5,
         ),
-        // Boton flotante
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      )
-      );
+      ),
+    );
   }
 }
