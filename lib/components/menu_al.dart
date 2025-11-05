@@ -22,7 +22,7 @@ class _MenuAlumnoState extends State<MenuAlumno> {
     ProgresoAlumno(),
   ];
 
-  final List<String> _titles = ['Panal Alumno', 'Mis Actividades', 'Progreso'];
+  final List<String> _titles = ['Panel Alumno', 'Mis Actividades', 'Progreso'];
 
   void _onItemTapped(int index) {
     setState(() {
