@@ -133,7 +133,7 @@ class _ListaGruposState extends State<ListaGrupos> {
           },
           backgroundColor: Colors.teal,
           child: Icon(Icons.group_add, color: Colors.white),
-          tooltip: 'Agregar nuevo docente',
+          tooltip: 'Agregar nuevo grupo',
           elevation: 5,
         ),
         // Boton flotante
