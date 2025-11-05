@@ -30,7 +30,7 @@ class ListaGruposController extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        final List<dynamic> list = data['data']['data']; // 👈 cambio aquí
+        final List<dynamic> list = data['data']['data'];
         _grupos = list.map((e) => Grupo.fromJson(e)).toList();
         _filteredGrupos = _grupos;
       } else {
@@ -56,4 +56,43 @@ class ListaGruposController extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  Future<void> toggleGrupoStatus(int id, bool isDisabled, BuildContext context) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('userToken') ?? '';
+
+      final url = Uri.parse(
+        'http://127.0.0.1:8000/api/coordinacion/grupo/$id/${isDisabled ? 'habilitar' : 'deshabilitar'}',
+      );
+
+      final response = await http.put(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      );
+
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Estatus actualizado exitosamente'),
+            backgroundColor: Colors.teal,
+          ),
+        );
+        await fetchGrupos();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Error al cambiar el estado del grupo'),
+            backgroundColor: Color.fromARGB(255, 150, 7, 0),
+          ),
+        );
+      }
+    } catch (e) {
+      debugPrint('Error toggleGrupoStatus: $e');
+    }
+  }
+
 }

@@ -26,6 +26,7 @@ class Grupo {
   final String anio;
   final int fkCuatrimestre;
   final Carrera carrera;
+  final String? deletedAt;
 
   Grupo({
     required this.pkGrupo,
@@ -33,6 +34,7 @@ class Grupo {
     required this.anio,
     required this.fkCuatrimestre,
     required this.carrera,
+    this.deletedAt,
   });
 
   factory Grupo.fromJson(Map<String, dynamic> json) {
@@ -42,6 +44,7 @@ class Grupo {
       anio: json['año'], 
       fkCuatrimestre: json['fk_cuatrimestre'],
       carrera: Carrera.fromJson(json['carrera']),
+      deletedAt: json['deleted_at'],
     );
   }
 }

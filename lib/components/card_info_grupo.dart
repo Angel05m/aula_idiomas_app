@@ -7,6 +7,8 @@ class CardInfoGrupo extends StatelessWidget {
   final String carrera;
   final String? materia;
   final VoidCallback? onTap; 
+  final VoidCallback? onToggleStatus;
+  final bool isDisabled;
 
   const CardInfoGrupo({
     super.key,
@@ -16,6 +18,8 @@ class CardInfoGrupo extends StatelessWidget {
     required this.carrera,
     this.materia,
     this.onTap, 
+    this.onToggleStatus,
+    this.isDisabled = false,
   });
 
   @override
@@ -24,7 +28,7 @@ class CardInfoGrupo extends StatelessWidget {
       borderRadius: BorderRadius.circular(14),
       onTap: onTap,
       child: Card(
-        color: Colors.white,
+        color: isDisabled ? Colors.grey[200] : Colors.white,
         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(14),
@@ -116,6 +120,20 @@ class CardInfoGrupo extends StatelessWidget {
                       ),
                     ],
                   ],
+                ),
+              ),
+              const SizedBox(height: 12),
+              Align(
+                alignment: Alignment.center,
+                child: IconButton(
+                  onPressed: onToggleStatus,
+                  icon: Icon(
+                    isDisabled ? Icons.arrow_circle_up_outlined : Icons.arrow_circle_down_outlined,
+                    color: isDisabled ? Colors.green[600] : Colors.red[600],
+                    size: 26,
+                  ),
+                  tooltip:
+                      isDisabled ? 'Habilitar grupo' : 'Deshabilitar grupo',
                 ),
               ),
             ],

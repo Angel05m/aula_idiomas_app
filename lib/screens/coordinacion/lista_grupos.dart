@@ -93,11 +93,14 @@ class _ListaGruposState extends State<ListaGrupos> {
 
                     return Column(
                       children: controller.grupos.map((g) {
+                        final isDisabled = g.deletedAt != null;
+
                         return CardInfoGrupo(
                           grupo: '${g.fkCuatrimestre}${g.nombre}${g.carrera.abreviatura} ${g.anio}',
                           cuatri: 'Cuatrimestre: ${g.fkCuatrimestre}',
                           anio: 'Año escolar: ${g.anio}',
                           carrera: g.carrera.nombre,
+                          isDisabled: isDisabled,
                           onTap: () {
                             Navigator.push(
                               context,
@@ -106,9 +109,13 @@ class _ListaGruposState extends State<ListaGrupos> {
                               ),
                             );
                           },
+                          onToggleStatus: () async {
+                            await controller.toggleGrupoStatus(g.pkGrupo, isDisabled, context);
+                          },
                         );
                       }).toList(),
                     );
+
 
                   },
                 ),
