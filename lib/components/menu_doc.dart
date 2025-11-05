@@ -23,7 +23,7 @@ class _MenuDocenteState extends State<MenuDocente> {
   ];
 
   final List<String> _titles = [
-    'Panal Docente',
+    'Panel Docente',
     'Mis Grupos',
     'Lista de Actividades',
   ];
