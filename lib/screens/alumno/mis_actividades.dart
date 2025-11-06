@@ -127,7 +127,7 @@ class _MisActividadesAlumnoState extends State<MisActividadesAlumno> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => DetalleEntregaAlumno(actividad: act),
+                            builder: (context) => DetalleEntregaAlumno(fkActividad: act['pk_actividad']),
                           ),
                         );
                       } else {
