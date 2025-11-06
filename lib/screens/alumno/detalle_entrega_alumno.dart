@@ -1,43 +1,178 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class DetalleEntregaAlumno extends StatelessWidget {
-  final Map<String, dynamic> actividad;
+class DetalleEntregaAlumno extends StatefulWidget {
+  final int fkActividad;
 
   const DetalleEntregaAlumno({
     super.key,
-    required this.actividad,
+    required this.fkActividad,
   });
 
   @override
+  State<DetalleEntregaAlumno> createState() => _DetalleEntregaAlumnoState();
+}
+
+class _DetalleEntregaAlumnoState extends State<DetalleEntregaAlumno> {
+  Map<String, dynamic>? entrega;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchEntrega();
+  }
+
+  Future<void> fetchEntrega() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('userToken') ?? '';
+    final userId = prefs.getInt('userId');
+    final url = Uri.parse(
+      'http://127.0.0.1:8000/api/alumno/entrega/${widget.fkActividad}/$userId',
+    );
+
+    final response = await http.get(
+      url,
+      headers: {
+        "Accept": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      if (data['success']) {
+        setState(() {
+          entrega = data['data'];
+          isLoading = false;
+        });
+      }
+    } else {
+      setState(() => isLoading = false);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final entrega = actividad['entrega'] ?? {};
+    final calificacion = entrega?['calificacion'];
+    final comentarios = entrega?['comentarios'] ?? 'Ninguno';
+    final fechaEntrega = entrega?['fecha_entrega'] ?? '-';
+
+    IconData getEstadoIcon() {
+      if (calificacion == null) return Icons.hourglass_bottom_rounded;
+      if (calificacion >= 80) return Icons.emoji_events_rounded;
+      if (calificacion >= 60) return Icons.check_circle_rounded;
+      return Icons.error_rounded;
+    }
+
+    Color getEstadoColor() {
+      if (calificacion == null) return Colors.grey;
+      if (calificacion >= 80) return Colors.teal;
+      if (calificacion >= 60) return Colors.orange;
+      return Colors.redAccent;
+    }
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text("Detalle de entrega"),
+        backgroundColor: Colors.white,
+        elevation: 2,
+        centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              actividad['nom_actividad'] ?? 'Sin nombre',
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.teal,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Text("Calificación: ${entrega['calificacion'] ?? 'Sin calificar'}"),
-            const SizedBox(height: 10),
-            Text("Comentarios: ${entrega['comentarios'] ?? 'Ninguno'}"),
-            const SizedBox(height: 20),
-            Text("Fecha de entrega: ${entrega['fecha_entrega'] ?? '-'}"),
-          ],
-        ),
-      ),
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator(color: Colors.teal))
+          : entrega == null
+              ? const Center(
+                  child: Text(
+                    "No se encontró información de la entrega.",
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
+                )
+              : SingleChildScrollView(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      Card(
+                        elevation: 5,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        shadowColor: Colors.teal.withOpacity(0.2),
+                        child: Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Column(
+                            children: [
+                              Icon(
+                                getEstadoIcon(),
+                                size: 64,
+                                color: getEstadoColor(),
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                calificacion == null
+                                    ? "Pendiente de calificación"
+                                    : "Calificación: $calificacion",
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  color: getEstadoColor(),
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                              Divider(color: Colors.grey.shade300),
+                              const SizedBox(height: 10),
+                              ListTile(
+                                leading: const Icon(Icons.calendar_today_rounded,
+                                    color: Colors.teal),
+                                title: const Text(
+                                  "Fecha de entrega",
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                                subtitle: Text(
+                                  fechaEntrega,
+                                  style: const TextStyle(color: Colors.black54),
+                                ),
+                              ),
+                              ListTile(
+                                leading: const Icon(Icons.comment_rounded,
+                                    color: Colors.teal),
+                                title: const Text(
+                                  "Comentarios del docente",
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                                subtitle: Text(
+                                  comentarios,
+                                  style: const TextStyle(color: Colors.black54),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                      ElevatedButton.icon(
+                        onPressed: () => Navigator.pop(context),
+                        icon: const Icon(Icons.arrow_back_rounded),
+                        label: const Text("Regresar"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.teal,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 14,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          elevation: 3,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
     );
   }
 }
