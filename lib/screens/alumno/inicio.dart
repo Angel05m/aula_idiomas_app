@@ -16,6 +16,10 @@ class _InicioAlumnosState extends State<InicioAlumnos> {
   bool cargando = true;
   List grupos = [];
 
+  int totalPendientes = 0;
+  int totalEntregadas = 0;
+  int totalNoEntregadas = 0;
+
   @override
   void initState() {
     super.initState();
@@ -40,7 +44,6 @@ class _InicioAlumnosState extends State<InicioAlumnos> {
 
       if (res.statusCode == 200) {
         final data = jsonDecode(res.body);
-
         final gruposData = List<Map<String, dynamic>>.from(data['grupos'] ?? []);
 
         gruposData.sort((a, b) {
@@ -49,8 +52,23 @@ class _InicioAlumnosState extends State<InicioAlumnos> {
           return eliminadoA ? 1 : (eliminadoB ? -1 : 0);
         });
 
+        int pendientes = 0;
+        int entregadas = 0;
+        int noEntregadas = 0;
+
+        for (var g in gruposData) {
+          final resumen = g['resumen_actividades'] ?? {};
+          pendientes += ((resumen['pendientes'] ?? 0) as num).toInt();
+          entregadas += ((resumen['entregadas'] ?? 0) as num).toInt();
+          noEntregadas += ((resumen['no_entregadas'] ?? 0) as num).toInt();
+        }
+
+
         setState(() {
           grupos = gruposData;
+          totalPendientes = pendientes;
+          totalEntregadas = entregadas;
+          totalNoEntregadas = noEntregadas;
           cargando = false;
         });
       } else {
@@ -71,6 +89,7 @@ class _InicioAlumnosState extends State<InicioAlumnos> {
     final grupo = grupoData['grupo'];
     final carrera = grupo?['carrera'];
     final eliminado = grupoData['deleted_at'] != null;
+    final resumen = grupoData['resumen_actividades'] ?? {};
 
     String nombreGrupo = 'Sin nombre';
     if (grupo != null) {
@@ -108,11 +127,26 @@ class _InicioAlumnosState extends State<InicioAlumnos> {
               color: eliminado ? Colors.grey[700] : Colors.black,
             ),
           ),
-          subtitle: Text(
-            eliminado ? 'Grupo anterior' : 'Grupo actual',
-            style: TextStyle(
-              color: eliminado ? Colors.grey[600] : Colors.teal,
-            ),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                eliminado ? 'Grupo anterior' : 'Grupo actual',
+                style: TextStyle(
+                  color: eliminado ? Colors.grey[600] : Colors.teal,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'Pendientes: ${resumen['pendientes'] ?? 0} | '
+                'Entregadas: ${resumen['entregadas'] ?? 0} | '
+                'No entregadas: ${resumen['no_entregadas'] ?? 0}',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.grey[600],
+                ),
+              ),
+            ],
           ),
           trailing: eliminado
               ? null
@@ -158,19 +192,10 @@ class _InicioAlumnosState extends State<InicioAlumnos> {
                       Expanded(
                         flex: 1,
                         child: CardButton(
-                          titulo: 'General',
-                          valor: 2,
-                          icono: Icons.assessment,
-                          iconBackground: Colors.blueAccent.shade200,
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: CardButton(
-                          titulo: 'Escritura',
-                          valor: 3,
-                          icono: Icons.border_color,
-                          iconBackground: Colors.green,
+                          titulo: 'Pendientes',
+                          valor: totalPendientes,
+                          icono: Icons.timelapse,
+                          iconBackground: Colors.orange,
                         ),
                       ),
                     ],
@@ -180,19 +205,19 @@ class _InicioAlumnosState extends State<InicioAlumnos> {
                       Expanded(
                         flex: 1,
                         child: CardButton(
-                          titulo: 'Comprensión',
-                          valor: 10,
-                          icono: Icons.hearing,
-                          iconBackground: Colors.purple.shade300,
+                          titulo: 'Finalizadas',
+                          valor: totalEntregadas,
+                          icono: Icons.check,
+                          iconBackground: Colors.green,
                         ),
                       ),
                       Expanded(
                         flex: 1,
                         child: CardButton(
-                          titulo: 'Hablado',
-                          valor: 3,
-                          icono: Icons.queue_music,
-                          iconBackground: Colors.amber,
+                          titulo: 'No entregadas',
+                          valor: totalNoEntregadas,
+                          icono: Icons.timer_off,
+                          iconBackground: Colors.red,
                         ),
                       ),
                     ],
@@ -207,7 +232,6 @@ class _InicioAlumnosState extends State<InicioAlumnos> {
                     ),
                   ),
                   const SizedBox(height: 10),
-
                   grupos.isEmpty
                       ? const Center(
                           child: Text(
