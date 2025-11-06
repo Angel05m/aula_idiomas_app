@@ -95,6 +95,7 @@ class _ListaGruposState extends State<ListaGrupos> {
                         final isDisabled = g.deletedAt != null;
 
                         return CardInfoGrupo(
+                          pk_grupo: g.pkGrupo,
                           grupo:
                               '${g.fkCuatrimestre}${g.nombre}${g.carrera.abreviatura} ${g.anio}',
                           cuatri: 'Cuatrimestre: ${g.fkCuatrimestre}',
