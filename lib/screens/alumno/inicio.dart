@@ -1,5 +1,9 @@
 import 'package:aula_idiomas_app/components/card-button.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'detalle_grupo_alumno.dart';
 
 class InicioAlumnos extends StatefulWidget {
   const InicioAlumnos({super.key});
@@ -9,87 +13,214 @@ class InicioAlumnos extends StatefulWidget {
 }
 
 class _InicioAlumnosState extends State<InicioAlumnos> {
+  bool cargando = true;
+  List grupos = [];
+
+  @override
+  void initState() {
+    super.initState();
+    obtenerGrupos();
+  }
+
+  Future<void> obtenerGrupos() async {
+    setState(() => cargando = true);
+
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('userToken') ?? '';
+    final userId = prefs.getInt('userId') ?? 0;
+
+    try {
+      final res = await http.get(
+        Uri.parse('http://127.0.0.1:8000/api/alumno/inicio/$userId'),
+        headers: {
+          "Accept": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      );
+
+      if (res.statusCode == 200) {
+        final data = jsonDecode(res.body);
+
+        final gruposData = List<Map<String, dynamic>>.from(data['grupos'] ?? []);
+
+        gruposData.sort((a, b) {
+          final eliminadoA = a['deleted_at'] != null;
+          final eliminadoB = b['deleted_at'] != null;
+          return eliminadoA ? 1 : (eliminadoB ? -1 : 0);
+        });
+
+        setState(() {
+          grupos = gruposData;
+          cargando = false;
+        });
+      } else {
+        setState(() => cargando = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error al obtener grupos (${res.statusCode})')),
+        );
+      }
+    } catch (e) {
+      setState(() => cargando = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error de conexión: $e')),
+      );
+    }
+  }
+
+  Widget buildCardGrupo(Map grupoData) {
+    final grupo = grupoData['grupo'];
+    final carrera = grupo?['carrera'];
+    final eliminado = grupoData['deleted_at'] != null;
+
+    String nombreGrupo = 'Sin nombre';
+    if (grupo != null) {
+      nombreGrupo =
+          "${grupo['fk_cuatrimestre']}${grupo['nombre']}${carrera?['abreviatura'] ?? ''} ${grupo['año']}";
+    }
+
+    return GestureDetector(
+      onTap: eliminado
+          ? null
+          : () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DetalleGrupoAlumno(
+                    grupo: grupo,
+                  ),
+                ),
+              );
+            },
+      child: Card(
+        elevation: 3,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        color: eliminado ? Colors.grey[300] : Colors.white,
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+        child: ListTile(
+          leading: CircleAvatar(
+            backgroundColor: eliminado ? Colors.grey : Colors.teal,
+            child: const Icon(Icons.group, color: Colors.white),
+          ),
+          title: Text(
+            nombreGrupo,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: eliminado ? Colors.grey[700] : Colors.black,
+            ),
+          ),
+          subtitle: Text(
+            eliminado ? 'Grupo anterior' : 'Grupo actual',
+            style: TextStyle(
+              color: eliminado ? Colors.grey[600] : Colors.teal,
+            ),
+          ),
+          trailing: eliminado
+              ? null
+              : const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.teal),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(15.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Bienvenido/a',
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      'Docente, Melissa Sas Perez',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w300,
-                        color: Colors.grey[700],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 15.0),
-              Row(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: CardButton(
-                      titulo: 'General',
-                      valor: 2,
-                      icono: Icons.assessment,
-                      iconBackground: Colors.blueAccent.shade200,
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: CardButton(
-                      titulo: 'Escritura',
-                      valor: 3,
-                      icono: Icons.border_color,
-                      iconBackground: Colors.green
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: CardButton(
-                      titulo: 'Compresión',
-                      valor: 10,
-                      icono: Icons.hearing,
-                      iconBackground: Colors.purple.shade300,
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: CardButton(
-                      titulo: 'Hablado',
-                      valor: 3,
-                      icono: Icons.queue_music,
-                      iconBackground: Colors.amber,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        iconTheme: const IconThemeData(color: Colors.black),
+        elevation: 1,
       ),
+      body: cargando
+          ? const Center(child: CircularProgressIndicator(color: Colors.teal))
+          : SingleChildScrollView(
+              padding: const EdgeInsets.all(15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Bienvenido/a',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Text(
+                    'Alumno, ¡a seguir aprendiendo!',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w300,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  const SizedBox(height: 15.0),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: CardButton(
+                          titulo: 'General',
+                          valor: 2,
+                          icono: Icons.assessment,
+                          iconBackground: Colors.blueAccent.shade200,
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: CardButton(
+                          titulo: 'Escritura',
+                          valor: 3,
+                          icono: Icons.border_color,
+                          iconBackground: Colors.green,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: CardButton(
+                          titulo: 'Comprensión',
+                          valor: 10,
+                          icono: Icons.hearing,
+                          iconBackground: Colors.purple.shade300,
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: CardButton(
+                          titulo: 'Hablado',
+                          valor: 3,
+                          icono: Icons.queue_music,
+                          iconBackground: Colors.amber,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 25),
+                  const Text(
+                    "Mis grupos:",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+
+                  grupos.isEmpty
+                      ? const Center(
+                          child: Text(
+                            "No se encontraron grupos asignados.",
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        )
+                      : Column(
+                          children: grupos.map((g) => buildCardGrupo(g)).toList(),
+                        ),
+                ],
+              ),
+            ),
     );
   }
 }
