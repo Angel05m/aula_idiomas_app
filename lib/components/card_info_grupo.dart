@@ -1,6 +1,8 @@
+import 'package:aula_idiomas_app/screens/coordinacion/aignar_grupo_alumno.dart';
 import 'package:flutter/material.dart';
 
 class CardInfoGrupo extends StatelessWidget {
+  final int pk_grupo;
   final String grupo;
   final String cuatri;
   final String anio;
@@ -11,6 +13,7 @@ class CardInfoGrupo extends StatelessWidget {
   final bool isDisabled;
 
   const CardInfoGrupo({
+    required this.pk_grupo,
     super.key,
     required this.grupo,
     required this.cuatri,
@@ -58,6 +61,7 @@ class CardInfoGrupo extends StatelessWidget {
               ),
               const SizedBox(width: 16),
               Expanded(
+                flex: 4,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -123,19 +127,38 @@ class CardInfoGrupo extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 12),
-              Align(
-                alignment: Alignment.center,
-                child: IconButton(
-                  onPressed: onToggleStatus,
-                  icon: Icon(
-                    isDisabled ? Icons.arrow_circle_up_outlined : Icons.arrow_circle_down_outlined,
-                    color: isDisabled ? Colors.green[600] : Colors.red[600],
-                    size: 26,
-                  ),
-                  tooltip:
-                      isDisabled ? 'Habilitar grupo' : 'Deshabilitar grupo',
+              Expanded(
+                flex: 1,
+                child: Column(
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AsignarGrupoAlumno(
+                              pk_grupo: pk_grupo.toString(), 
+                            ),
+                          ),
+                        );
+                      },
+                      child: const Icon(
+                        Icons.add_circle, 
+                        size: 20,
+                        color: Colors.teal
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: onToggleStatus, 
+                      child: Icon(
+                        isDisabled ? Icons.arrow_circle_up_outlined : Icons.arrow_circle_down_outlined,
+                        color: isDisabled ? Colors.green[600] : Colors.red[600],
+                        size: 26,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
+              )
             ],
           ),
         ),
