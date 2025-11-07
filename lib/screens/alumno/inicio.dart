@@ -98,18 +98,17 @@ class _InicioAlumnosState extends State<InicioAlumnos> {
     }
 
     return GestureDetector(
-      onTap: eliminado
-          ? null
-          : () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DetalleGrupoAlumno(
-                    grupo: grupo,
-                  ),
-                ),
-              );
-            },
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetalleGrupoAlumno(
+              grupo: grupo,
+              esPasado: eliminado,
+            ),
+          ),
+        );
+      },
       child: Card(
         elevation: 3,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
