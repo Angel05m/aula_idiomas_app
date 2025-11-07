@@ -1,4 +1,5 @@
 import 'package:aula_idiomas_app/controllers/AuthController.dart';
+import 'package:aula_idiomas_app/screens/chat/inicio_chat.dart';
 import 'package:aula_idiomas_app/screens/docente/actividades.dart';
 import 'package:aula_idiomas_app/screens/docente/inicio.dart';
 import 'package:aula_idiomas_app/screens/docente/mis_grupos.dart';
@@ -20,6 +21,7 @@ class _MenuDocenteState extends State<MenuDocente> {
     InicioDocente(),
     MisGruposDocente(),
     ActividadesDocente(),
+    InicioChat(),
   ];
 
   final List<String> _titles = [
@@ -49,6 +51,24 @@ class _MenuDocenteState extends State<MenuDocente> {
         actions: [
           Row(
             children: [
+              // ICONO BOTON DE MENSAJE
+              IconButton(
+                // FUNCION
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => InicioChat(),
+                    ),
+                  );
+                },
+                // ICONO
+                icon: Icon(
+                  Icons.message,
+                  size: 30,
+                  color: Colors.black,
+                ),
+              ),
               Icon(Icons.notifications, size: 30, color: Colors.black),
               SizedBox(width: 5),
               PopupMenuButton<String>(
