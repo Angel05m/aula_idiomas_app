@@ -1,4 +1,5 @@
 import 'package:aula_idiomas_app/components/card_chat.dart';
+import 'package:aula_idiomas_app/components/input_buscador.dart';
 import 'package:aula_idiomas_app/screens/chat/lista_chat.dart';
 import 'package:flutter/material.dart';
 
@@ -29,17 +30,25 @@ class _InicioChatState extends State<InicioChat> {
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         // VISUALIZACION DEL CHAT
-        child: ListView(
-          // LISTADO DE LOS CHAT
+        child: Column(
           children: [
-            for  (int i = 1; i<10; i++)...[
-            CardChat(
-              nombre: 'Angel Ariel Salazar Medina',
-              mensaje: 'Hola, profesor, ¿Tiene un momento?',
-              hora: '09:00 p.m.',
+            InputBuscador(),
+            SizedBox(height: 15),
+            Expanded(
+              child: ListView(
+                // LISTADO DE LOS CHAT
+                children: [
+                  for  (int i = 1; i<10; i++)...[
+                  CardChat(
+                    nombre: 'Angel Ariel Salazar Medina',
+                    mensaje: 'Hola, profesor, ¿Tiene un momento?',
+                    hora: '09:00 p.m.',
+                  ),
+                  SizedBox(height: 6.0,)
+                  ]
+                ],
+              ),
             ),
-            SizedBox(height: 6.0,)
-            ]
           ],
         ),
       ),
