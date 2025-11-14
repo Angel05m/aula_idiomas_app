@@ -1,4 +1,5 @@
 import 'package:aula_idiomas_app/screens/alumno/perfil.dart';
+import 'package:aula_idiomas_app/screens/chat/inicio_chat.dart';
 import 'package:aula_idiomas_app/screens/coordinacion/inicio.dart';
 import 'package:aula_idiomas_app/screens/coordinacion/lista_grupos.dart';
 import 'package:aula_idiomas_app/screens/coordinacion/lista_alumnos.dart';
@@ -55,6 +56,21 @@ class _MenuCoordinacionState extends State<MenuCoordinacion> {
         actions: [
           Row(
             children: [
+              IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => InicioChat(),
+                    ),
+                  );
+                },
+                icon: Icon(
+                  Icons.message,
+                  size: 30,
+                  color: Colors.black,
+                ),
+              ),
               Icon(Icons.notifications, size: 30, color: Colors.black),
               SizedBox(width: 5),
               PopupMenuButton<String>(

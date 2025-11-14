@@ -1,7 +1,13 @@
+import 'dart:async';
+import 'package:aula_idiomas_app/controllers/ChatController.dart';
 import 'package:flutter/material.dart';
+import 'package:aula_idiomas_app/models/usuario.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Chatting extends StatefulWidget {
-  const Chatting({super.key});
+  final Usuario receptor;
+
+  const Chatting({super.key, required this.receptor});
 
   @override
   State<Chatting> createState() => _ChattingState();
@@ -9,15 +15,94 @@ class Chatting extends StatefulWidget {
 
 class _ChattingState extends State<Chatting> {
   final TextEditingController _messageController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+
+  List<dynamic> mensajes = [];
+  String myId = "";
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
+  Future<void> init() async {
+    final prefs = await SharedPreferences.getInstance();
+    myId = prefs.getInt("userId")?.toString() ?? "";
+
+    await cargarMensajes();
+
+    _timer = Timer.periodic(const Duration(seconds: 3), (_) {
+      cargarMensajes();
+    });
+  }
+
+  void scrollAbajo() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      }
+    });
+  }
+
+  Future<void> cargarMensajes() async {
+    final data = await ChatController.obtenerMensajes(widget.receptor.id!);
+
+    setState(() {
+      mensajes = data;
+      mensajes.sort((a, b) =>
+          a["created_at"].toString().compareTo(b["created_at"].toString()));
+    });
+
+    scrollAbajo();
+  }
+
+  Future<void> enviar() async {
+    final texto = _messageController.text.trim();
+    if (texto.isEmpty) return;
+
+    _messageController.clear();
+
+    setState(() {
+      mensajes.add({
+        "mensaje": texto,
+        "de_usuario": myId,
+        "para_usuario": widget.receptor.id.toString(),
+      });
+    });
+
+    scrollAbajo();
+
+    final ok = await ChatController.enviarMensaje(
+      paraUsuario: widget.receptor.id!,
+      mensaje: texto,
+    );
+
+    if (ok) {
+      cargarMensajes();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("No se pudo enviar el mensaje")),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        title: const Text(
-          'Angel Ariel Salazar Medina',
-          style: TextStyle(
+        title: Text(
+          "${widget.receptor.nombres} ${widget.receptor.apPaterno}",
+          style: const TextStyle(
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
             color: Colors.teal,
@@ -28,37 +113,31 @@ class _ChattingState extends State<Chatting> {
       ),
       body: Column(
         children: [
-          // LISTA DE MENSAJE
           Expanded(
-            child: ListView(
-              reverse: true,
-              padding: const EdgeInsets.all(10.0),
-              children: [
-                _Message('Hola, profesor, ¿tiene un momento?', true),
-                _Message('Claro, dime, ¿En qué puedo ayudarte?', false),
-                _Message(
-                  'Quería pedirle información sobre el proyecto final de la materia.',
-                  true,
-                ),
-                _Message(
-                  'Perfecto. ¿Qué aspecto del proyecto necesitas aclarar: la temática, el formato o la fecha de entrega?',
-                  false,
-                ),
-                _Message(
-                  'Principalmente sobre la fecha de entrega. No estoy seguro si es la próxima semana o la siguiente.',
-                  true,
-                ),
-                _Message(
-                  'La entrega es el viernes de la próxima semana. Te recomiendo empezar cuanto antes para revisar dudas conmigo antes de la entrega.',
-                  false,
-                ),
-              ],
-            ),
-          ),
+            child: mensajes.isEmpty
+                ? const Center(
+                    child: Text(
+                      "No hay mensajes aún",
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  )
+                : ListView.builder(
+                    controller: _scrollController,
+                    padding: const EdgeInsets.all(10),
+                    itemCount: mensajes.length,
+                    itemBuilder: (_, index) {
+                      final m = mensajes[index];
+                      final soyYo = m["de_usuario"].toString() == myId;
 
-          // APARTADO PARA ENVIAR MENSAJE
+                      return _Message(
+                        m["mensaje"].toString(),
+                        soyYo,
+                      );
+                    },
+                  ),
+          ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
             color: Colors.white,
             child: Row(
               children: [
@@ -69,12 +148,10 @@ class _ChattingState extends State<Chatting> {
                       hintText: 'Escribe un mensaje...',
                       filled: true,
                       fillColor: Colors.grey[200],
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25.0),
+                        borderRadius: BorderRadius.circular(25),
                         borderSide: BorderSide.none,
                       ),
                     ),
@@ -84,7 +161,7 @@ class _ChattingState extends State<Chatting> {
                 CircleAvatar(
                   backgroundColor: Colors.teal,
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: enviar,
                     icon: const Icon(Icons.send, color: Colors.white),
                   ),
                 ),
@@ -95,30 +172,22 @@ class _ChattingState extends State<Chatting> {
       ),
     );
   }
-
-  // MENSAJE TRUE = ENVIADO, FLASE = RECIBIDO
   Widget _Message(String text, bool isMe) {
     return Align(
       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
-        // MARGIN Y PADDING DEL MENSAJE
         constraints: BoxConstraints(
-          maxWidth:MediaQuery.of(context).size.width *0.8, //ESPACIADO
+          maxWidth: MediaQuery.of(context).size.width * 0.8,
         ),
-        margin: const EdgeInsets.symmetric(vertical: 7.0, horizontal: 12),
-        padding: const EdgeInsets.all(12.0),
+        margin: const EdgeInsets.symmetric(vertical: 7, horizontal: 12),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          // BORDER Y COLOR
           color: isMe ? Colors.teal.shade700 : Colors.white,
           borderRadius: BorderRadius.only(
             topLeft: const Radius.circular(12),
             topRight: const Radius.circular(12),
-            bottomLeft: isMe
-                ? const Radius.circular(12)
-                : const Radius.circular(0),
-            bottomRight: isMe
-                ? const Radius.circular(0)
-                : const Radius.circular(12),
+            bottomLeft: isMe ? const Radius.circular(12) : const Radius.circular(0),
+            bottomRight: isMe ? const Radius.circular(0) : const Radius.circular(12),
           ),
           boxShadow: [
             BoxShadow(
@@ -128,7 +197,6 @@ class _ChattingState extends State<Chatting> {
             ),
           ],
         ),
-        // TEXTO DEL MENSAJE
         child: Text(
           text,
           style: TextStyle(

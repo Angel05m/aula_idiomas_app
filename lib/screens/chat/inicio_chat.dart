@@ -1,5 +1,7 @@
 import 'package:aula_idiomas_app/components/card_chat.dart';
 import 'package:aula_idiomas_app/components/input_buscador.dart';
+import 'package:aula_idiomas_app/controllers/ChatController.dart';
+import 'package:aula_idiomas_app/models/usuario.dart';
 import 'package:aula_idiomas_app/screens/chat/lista_chat.dart';
 import 'package:flutter/material.dart';
 
@@ -11,12 +13,30 @@ class InicioChat extends StatefulWidget {
 }
 
 class _InicioChatState extends State<InicioChat> {
+  List<Usuario> contactos = [];
+  bool cargando = true;
+
+  @override
+  void initState() {
+    super.initState();
+    cargarContactos();
+  }
+
+  Future<void> cargarContactos() async {
+    final data = await ChatController.obtenerHistorial();
+
+    setState(() {
+      contactos = data["contactos"]!;
+      cargando = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-     return Scaffold(
+    return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Mensajeria',
+          'Mensajería',
           style: TextStyle(
             fontSize: 20.0,
             color: Colors.teal.shade600,
@@ -25,45 +45,48 @@ class _InicioChatState extends State<InicioChat> {
         ),
         backgroundColor: Colors.white,
         titleSpacing: 5.0,
+        elevation: 1,
       ),
       backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.all(15.0),
-        // VISUALIZACION DEL CHAT
-        child: Column(
-          children: [
-            InputBuscador(),
-            SizedBox(height: 15),
-            Expanded(
-              child: ListView(
-                // LISTADO DE LOS CHAT
+      body: cargando
+          ? Center(child: CircularProgressIndicator())
+          : Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
                 children: [
-                  for  (int i = 1; i<10; i++)...[
-                  CardChat(
-                    nombre: 'Angel Ariel Salazar Medina',
-                    mensaje: 'Hola, profesor, ¿Tiene un momento?',
-                    hora: '09:00 p.m.',
+                  Expanded(
+                    child: ListView.separated(
+                      itemCount: contactos.length,
+                      separatorBuilder: (_, __) => const SizedBox(height: 6),
+                      itemBuilder: (_, i) {
+                        final u = contactos[i];
+
+                        return CardChat(
+                          usuario: u,
+                          mensaje: "Ver mensajes...",
+                          hora: "",
+                        );
+                      },
+                    ),
                   ),
-                  SizedBox(height: 6.0,)
-                  ]
                 ],
               ),
             ),
-          ],
-        ),
-      ),
-      // BOTON FLOTANTE
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
+          final data = await ChatController.obtenerHistorial();
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => const ListaChat()),
+            MaterialPageRoute(
+              builder: (_) => ListaChat(usuarios: data["usuarios"]!),
+            ),
           );
         },
         backgroundColor: Colors.teal.shade600,
         child: const Icon(Icons.add, color: Colors.white),
         tooltip: 'Nuevo mensaje',
       ),
+
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
