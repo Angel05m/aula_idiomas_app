@@ -63,7 +63,11 @@ class _ListaDocenteState extends State<ListaDocente> {
               const SizedBox(height: 10),
               const Text(
                 'Docentes',
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 30,
+                  color: Colors.teal,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               Text(
                 'Añade, edita y gestiona la información de los docentes',
@@ -73,25 +77,44 @@ class _ListaDocenteState extends State<ListaDocente> {
                 ),
               ),
               const SizedBox(height: 20),
-
-              TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  hintText: 'Buscar docente por nombre o correo...',
-                  prefixIcon: const Icon(Icons.search, color: Colors.teal),
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                    borderSide: const BorderSide(width: 1.0),
+              Material(
+                elevation: 2.0,
+                borderRadius: BorderRadius.circular(12.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12.0),
+                  child: TextField(
+                    controller: _searchController,
+                    decoration: InputDecoration(
+                      hintText: 'Buscar docente por nombre o correo...',
+                      prefixIcon: const Icon(Icons.search, color: Colors.teal),
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        borderSide: const BorderSide(width: 1.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        borderSide: BorderSide(
+                          color: Colors.grey.shade300,
+                          width: 1.0,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        borderSide: const BorderSide(
+                          color: Colors.teal,
+                          width: 2.0,
+                        ),
+                      ),
+                    ),
+                    onSubmitted: (value) {
+                      listaDocenteController.searchDocentes(value.trim());
+                    },
                   ),
                 ),
-                onSubmitted: (value) {
-                  listaDocenteController.searchDocentes(value.trim());
-                },
               ),
-              const SizedBox(height: 20),
-
+              const SizedBox(height: 15),
               if (docentes.isEmpty)
                 const Center(
                   child: Padding(

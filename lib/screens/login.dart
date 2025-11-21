@@ -32,9 +32,11 @@ class _LoginState extends State<Login> {
               children: [
                 Column(
                   children: [
+                    // Image(image: Image.asset('assets/images/logo.png'), height: 50),
                     Text(
                       'Bienvenido de nuevo',
                       style: TextStyle(
+                        color: Colors.teal.shade700,
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,
                       ),
@@ -42,7 +44,7 @@ class _LoginState extends State<Login> {
                     Text(
                       'Por favor, inicia sesión para continuar con sus actividades.',
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 15.0, color: Colors.grey[600]),
+                      style: TextStyle(fontSize: 10.0, color: Colors.grey[600]),
                     ),
                   ],
                 ),

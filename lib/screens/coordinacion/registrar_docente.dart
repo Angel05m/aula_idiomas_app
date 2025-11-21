@@ -24,10 +24,15 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
       appBar: AppBar(
         title: Text(
           'Registrar Docente',
-          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 25,
+            color: Colors.teal.shade600,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         backgroundColor: Colors.white,
         centerTitle: true,
+        iconTheme: IconThemeData(color: Colors.teal.shade600),
       ),
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.grey.shade100,
@@ -40,12 +45,13 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
               padding: EdgeInsets.all(10.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [                
+                children: [
                   const SizedBox(height: 10),
                   Text(
                     'Nombres:',
                     style: TextStyle(
                       fontSize: 15.0,
+                      color: Colors.grey.shade600,
                       fontWeight: FontWeight.normal,
                     ),
                     textAlign: TextAlign.start,
@@ -55,15 +61,27 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
                     controller: nombresController,
                     decoration: InputDecoration(
                       hintText: 'Ej: Jesús Guadalupe',
+                      hintStyle: TextStyle(color: Colors.grey.shade400),
                       filled: true,
                       fillColor: Colors.white,
+
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
                         borderSide: BorderSide(width: 1.0),
                       ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        borderSide: BorderSide(
+                          color: Colors.grey.shade500,
+                          width: 1.0,
+                        ),
+                      ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
-                        borderSide: BorderSide(color: Colors.teal, width: 3.0),
+                        borderSide: BorderSide(
+                          color: Colors.teal.shade600,
+                          width: 3.0,
+                        ),
                       ),
                     ),
                   ),
@@ -72,6 +90,7 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
                     'Apellido Paterno:',
                     style: TextStyle(
                       fontSize: 15.0,
+                      color: Colors.grey.shade600,
                       fontWeight: FontWeight.normal,
                     ),
                   ),
@@ -80,11 +99,19 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
                     controller: apPaternoController,
                     decoration: InputDecoration(
                       hintText: 'Ej: López',
+                      hintStyle: TextStyle(color: Colors.grey.shade400),
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
                         borderSide: BorderSide(width: 1.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        borderSide: BorderSide(
+                          color: Colors.grey.shade500,
+                          width: 1.0,
+                        ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
@@ -97,6 +124,7 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
                     'Apellido Materno:',
                     style: TextStyle(
                       fontSize: 15.0,
+                      color: Colors.grey.shade600,
                       fontWeight: FontWeight.normal,
                     ),
                   ),
@@ -105,11 +133,19 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
                     controller: apMaternoController,
                     decoration: InputDecoration(
                       hintText: 'Ej: Hernández',
+                      hintStyle: TextStyle(color: Colors.grey.shade400),
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
                         borderSide: BorderSide(width: 1.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        borderSide: BorderSide(
+                          color: Colors.grey.shade500,
+                          width: 1.0,
+                        ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
@@ -122,6 +158,7 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
                     'Correo:',
                     style: TextStyle(
                       fontSize: 15.0,
+                      color: Colors.grey.shade600,
                       fontWeight: FontWeight.normal,
                     ),
                   ),
@@ -130,11 +167,19 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
                     controller: emailController,
                     decoration: InputDecoration(
                       hintText: 'Ej: correo@utescuinapa.com',
+                      hintStyle: TextStyle(color: Colors.grey.shade400),
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
                         borderSide: BorderSide(width: 1.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        borderSide: BorderSide(
+                          color: Colors.grey.shade500,
+                          width: 1.0,
+                        ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
@@ -162,7 +207,7 @@ class _RegistrarDocenteState extends State<RegistrarDocente> {
                               apPaterno,
                               apMaterno,
                               email,
-                              context
+                              context,
                             );
                           },
                     child: Text(

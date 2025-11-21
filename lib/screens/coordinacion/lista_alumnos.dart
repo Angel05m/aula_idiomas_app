@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:aula_idiomas_app/components/card_info_alumno.dart';
 import 'package:aula_idiomas_app/components/input_buscador.dart';
 import 'package:aula_idiomas_app/controllers/AlumnosController.dart';
@@ -15,8 +17,8 @@ class ListaAlumnos extends StatefulWidget {
 class _ListaAlumnosState extends State<ListaAlumnos> {
   final AlumnosController controller = Get.put(AlumnosController());
 
-  int? _selectedOptionC; 
-  String? _selectedOptionP; 
+  int? _selectedOptionC;
+  String? _selectedOptionP;
   String? _search;
 
   final List<String> _optionsP = ['10', '9', '8', '7', '6'];
@@ -40,10 +42,20 @@ class _ListaAlumnosState extends State<ListaAlumnos> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Alumnos', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
+                  const Text(
+                    'Alumnos',
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.teal,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   Text(
                     'Añade, edita y gestiona la información de los alumnos',
-                    style: TextStyle(fontWeight: FontWeight.w300, color: Colors.grey[700]),
+                    style: TextStyle(
+                      fontWeight: FontWeight.w300,
+                      color: Colors.grey[700],
+                    ),
                   ),
                 ],
               ),
@@ -68,28 +80,68 @@ class _ListaAlumnosState extends State<ListaAlumnos> {
                   flex: 2,
                   child: Obx(() {
                     final carrerasMap = controller.todasCarreras;
-                    return DropdownButtonFormField<int?>(
-                      value: _selectedOptionC,
-                      hint: const Text('Selecciona Carrera'),
-                      isExpanded: true,
-                      items: [
-                        const DropdownMenuItem<int?>(
-                          value: null,
-                          child: Text('Todos'),
+                    return Material(
+                      elevation: 3.0,
+                      borderRadius: BorderRadius.circular(12.0),
+                      child: DropdownButtonFormField<int?>(
+                        elevation: 8,
+                        borderRadius: BorderRadius.circular(12.0),
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 15.0,
+                            horizontal: 10.0,
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                            borderSide: BorderSide(
+                              color: Colors.grey.shade300,
+                              width: 1.0,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                            borderSide: BorderSide(
+                              color: Colors.grey.shade300,
+                              width: 1.0,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                            borderSide: const BorderSide(
+                              color: Colors.teal,
+                              width: 2.0,
+                            ),
+                          ),
                         ),
-                        ...carrerasMap.entries.map((entry) => DropdownMenuItem<int?>(
+                        value: _selectedOptionC,
+                        hint: const Text('Selecciona Carrera'),
+                        isExpanded: true,
+                        items: [
+                          const DropdownMenuItem<int?>(
+                            value: null,
+                            child: Text('Todos'),
+                          ),
+                          ...carrerasMap.entries.map(
+                            (entry) => DropdownMenuItem<int?>(
                               value: entry.key,
-                              child: Text(entry.value, overflow: TextOverflow.ellipsis),
-                            )),
-                      ],
-                      onChanged: (int? value) {
-                        setState(() => _selectedOptionC = value);
-                        controller.refresh(
-                          search: _search,
-                          carrera: _selectedOptionC?.toString(),
-                          promedio: _selectedOptionP,
-                        );
-                      },
+                              child: Text(
+                                entry.value,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ),
+                        ],
+                        onChanged: (int? value) {
+                          setState(() => _selectedOptionC = value);
+                          controller.refresh(
+                            search: _search,
+                            carrera: _selectedOptionC?.toString(),
+                            promedio: _selectedOptionP,
+                          );
+                        },
+                      ),
                     );
                   }),
                 ),
@@ -98,28 +150,65 @@ class _ListaAlumnosState extends State<ListaAlumnos> {
 
                 Flexible(
                   flex: 1,
-                  child: DropdownButtonFormField<String?>(
-                    value: _selectedOptionP,
-                    hint: const Text('Promedio'),
-                    isExpanded: true,
-                    items: [
-                      const DropdownMenuItem<String?>(
-                        value: null,
-                        child: Text('Todos'),
+                  child: Material(
+                    elevation: 3.0,
+                    borderRadius: BorderRadius.circular(12.0),
+                    child: DropdownButtonFormField<String?>(
+                      elevation: 8,
+                      borderRadius: BorderRadius.circular(12.0),
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 15.0,
+                          horizontal: 10.0,
+                        ),
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                          borderSide: BorderSide(
+                            color: Colors.grey.shade300,
+                            width: 1.0,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                          borderSide: BorderSide(
+                            color: Colors.grey.shade300,
+                            width: 1.0,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                          borderSide: const BorderSide(
+                            color: Colors.teal,
+                            width: 2.0,
+                          ),
+                        ),
                       ),
-                      ..._optionsP.map((value) => DropdownMenuItem<String?>(
+                      value: _selectedOptionP,
+                      hint: const Text('Promedio'),
+                      isExpanded: true,
+                      items: [
+                        const DropdownMenuItem<String?>(
+                          value: null,
+                          child: Text('Todos'),
+                        ),
+                        ..._optionsP.map(
+                          (value) => DropdownMenuItem<String?>(
                             value: value,
                             child: Text(value, overflow: TextOverflow.ellipsis),
-                          )),
-                    ],
-                    onChanged: (String? value) {
-                      setState(() => _selectedOptionP = value);
-                      controller.refresh(
-                        search: _search,
-                        carrera: _selectedOptionC?.toString(),
-                        promedio: _selectedOptionP,
-                      );
-                    },
+                          ),
+                        ),
+                      ],
+                      onChanged: (String? value) {
+                        setState(() => _selectedOptionP = value);
+                        controller.refresh(
+                          search: _search,
+                          carrera: _selectedOptionC?.toString(),
+                          promedio: _selectedOptionP,
+                        );
+                      },
+                    ),
                   ),
                 ),
               ],
@@ -129,11 +218,15 @@ class _ListaAlumnosState extends State<ListaAlumnos> {
             Expanded(
               child: Obx(() {
                 if (controller.isLoading.value) {
-                  return const Center(child: CircularProgressIndicator(color: Colors.teal));
+                  return const Center(
+                    child: CircularProgressIndicator(color: Colors.teal),
+                  );
                 }
 
                 if (controller.alumnos.isEmpty) {
-                  return const Center(child: Text('No hay alumnos registrados'));
+                  return const Center(
+                    child: Text('No hay alumnos registrados'),
+                  );
                 }
 
                 return ListView.separated(

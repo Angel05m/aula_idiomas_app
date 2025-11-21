@@ -149,8 +149,13 @@ class _RegistroAlumnoState extends State<RegistroAlumno> {
       appBar: AppBar(
         title: const Text(
           'Registrar Alumno',
-          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 25,
+            color: Colors.teal,
+            fontWeight: FontWeight.bold,
+          ),
         ),
+        iconTheme: IconThemeData(color: Colors.teal),
         backgroundColor: Colors.white,
         centerTitle: true,
       ),
@@ -173,7 +178,11 @@ class _RegistroAlumnoState extends State<RegistroAlumno> {
             const SizedBox(height: 10.0),
             const Text(
               'Grupo:',
-              style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.normal),
+              style: TextStyle(
+                fontSize: 15.0,
+                color: Color.fromARGB(184, 57, 57, 57),
+                fontWeight: FontWeight.normal,
+              ),
             ),
             const SizedBox(height: 5.0),
 
@@ -201,11 +210,22 @@ class _RegistroAlumnoState extends State<RegistroAlumno> {
                     hintText: 'Selecciona un Grupo',
                     filled: true,
                     fillColor: Colors.white,
+                    contentPadding: const EdgeInsets.symmetric(
+                      vertical: 15.0,
+                      horizontal: 10.0,
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12.0),
                       borderSide: const BorderSide(
                         width: 1.0,
                         color: Colors.grey,
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                      borderSide: BorderSide(
+                        color: Colors.grey.shade500,
+                        width: 1.0,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
@@ -264,17 +284,28 @@ class _RegistroAlumnoState extends State<RegistroAlumno> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: const TextStyle(fontSize: 15.0)),
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 15.0,
+              color: Color.fromARGB(184, 57, 57, 57),
+            ),
+          ),
           const SizedBox(height: 5.0),
           TextField(
             controller: controller,
             decoration: InputDecoration(
               hintText: hint,
+              hintStyle: TextStyle(color: Colors.grey.shade400),
               filled: true,
               fillColor: Colors.white,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12.0),
                 borderSide: const BorderSide(width: 1.0),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12.0),
+                borderSide: BorderSide(color: Colors.grey.shade500, width: 1.0),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12.0),
