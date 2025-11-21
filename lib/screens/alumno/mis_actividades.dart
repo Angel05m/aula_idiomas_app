@@ -2,7 +2,9 @@ import 'package:aula_idiomas_app/controllers/MisActividadesController.dart';
 import 'package:aula_idiomas_app/screens/alumno/responder_actividad.dart';
 import 'package:aula_idiomas_app/screens/alumno/detalle_entrega_alumno.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MisActividadesAlumno extends StatefulWidget {
   const MisActividadesAlumno({super.key});
@@ -179,6 +181,30 @@ class _MisActividadesAlumnoState extends State<MisActividadesAlumno> {
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
+              Text("Si en tu panel de inicio tienes actividades pendientes, verifica en la web."),
+              const SizedBox(height: 10),
+              ElevatedButton.icon(
+                icon: const Icon(Icons.open_in_browser),
+                label: const Text("Ir a la web"),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.teal,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 20, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                onPressed: () async {
+                  final webUrl = dotenv.env['WEB_URL'];
+                  if (webUrl != null && webUrl.isNotEmpty) {
+                    await launchUrl(
+                      Uri.parse(webUrl),
+                      mode: LaunchMode.externalApplication,
+                    );
+                  }
+                }
+              ),
               _buildSeccion(
                 'Pendientes (${pendientes.length})',
                 pendientes,
