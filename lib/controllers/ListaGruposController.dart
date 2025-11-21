@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/grupo_materia.dart';
@@ -19,7 +20,7 @@ class ListaGruposController extends ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('userToken') ?? '';
-      final url = Uri.parse('http://127.0.0.1:8000/api/coordinacion/lista-grupos');
+      final url = Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_LISTA_GRUPOS']}');
       final response = await http.get(
         url,
         headers: {
@@ -63,7 +64,7 @@ class ListaGruposController extends ChangeNotifier {
       final token = prefs.getString('userToken') ?? '';
 
       final url = Uri.parse(
-        'http://127.0.0.1:8000/api/coordinacion/grupo/$id/${isDisabled ? 'habilitar' : 'deshabilitar'}',
+        '${dotenv.env['API_URL']}${dotenv.env['API_CAMBIAR_ESTATUS']}/$id/${isDisabled ? 'habilitar' : 'deshabilitar'}',
       );
 
       final response = await http.put(

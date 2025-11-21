@@ -1,5 +1,6 @@
 import 'package:aula_idiomas_app/screens/alumno/detalle_entrega_alumno.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -35,7 +36,7 @@ class _DetalleGrupoAlumnoState extends State<DetalleGrupoAlumno> {
     final userId = prefs.getInt('userId');
 
     final url = Uri.parse(
-      'http://127.0.0.1:8000/api/alumno/actividades-grupo/${widget.grupo['pk_grupo']}/$userId',
+      '${dotenv.env['API_URL']}${dotenv.env['API_ACTIVIDADES_GRUPO']}/${widget.grupo['pk_grupo']}/$userId',
     );
 
     final response = await http.get(

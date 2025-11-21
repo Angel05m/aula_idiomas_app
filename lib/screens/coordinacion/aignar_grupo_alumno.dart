@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,7 +34,7 @@ class _AsignarGrupoAlumnoState extends State<AsignarGrupoAlumno> {
 
     try {
       final res = await http.get(
-        Uri.parse('http://127.0.0.1:8000/api/coordinacion/alumnos'),
+        Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_OBTENER_ALUMNOS']}'),
         headers: {
           "Accept": "application/json",
           "Authorization": "Bearer $token",
@@ -101,7 +102,7 @@ class _AsignarGrupoAlumnoState extends State<AsignarGrupoAlumno> {
     final token = prefs.getString('userToken') ?? '';
 
     final res = await http.post(
-      Uri.parse('http://127.0.0.1:8000/api/coordinacion/grupo/asignar'),
+      Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_ASIGNAR_GRUPO']}'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",

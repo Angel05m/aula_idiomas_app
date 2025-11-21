@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,7 +36,7 @@ class ListaDocenteController extends GetxController {
       final token = prefs.getString('userToken') ?? '';
 
       final url = Uri.parse(
-        'http://127.0.0.1:8000/api/coordinacion/lista-docente?page=${currentPage.value}&search=${searchQuery.value}',
+        '${dotenv.env['API_URL']}${dotenv.env['API_LISTA_DOCENTES']}?page=${currentPage.value}&search=${searchQuery.value}',
       );
 
       final response = await http.get(

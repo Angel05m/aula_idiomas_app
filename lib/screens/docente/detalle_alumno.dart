@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:aula_idiomas_app/screens/docente/detalle_actividad.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,7 +32,7 @@ class _DetalleAlumnoState extends State<DetalleAlumno> {
 
     try {
       final res = await http.get(
-        Uri.parse('http://127.0.0.1:8000/api/docente/detalle-alumno/${widget.pkAlumno}'),
+        Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_DETALLE_ALUMNO']}/${widget.pkAlumno}'),
         headers: {
           "Accept": "application/json",
           "Authorization": "Bearer $token",

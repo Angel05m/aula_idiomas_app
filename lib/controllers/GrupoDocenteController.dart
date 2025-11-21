@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/grupo_materia.dart';
@@ -20,7 +21,7 @@ class GrupoDocenteController extends ChangeNotifier {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('userToken') ?? '';
       final id = prefs.getInt('userId')?.toString() ?? '';
-      final url = Uri.parse('http://127.0.0.1:8000/api/docente/grupos?pk_docente=$id');
+      final url = Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_CARGAR_GRUPOS']}=$id');
       final response = await http.get(
         url,
         headers: {

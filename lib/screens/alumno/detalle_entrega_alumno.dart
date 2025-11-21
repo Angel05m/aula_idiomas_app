@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,7 +31,7 @@ class _DetalleEntregaAlumnoState extends State<DetalleEntregaAlumno> {
     final token = prefs.getString('userToken') ?? '';
     final userId = prefs.getInt('userId');
     final url = Uri.parse(
-      'http://127.0.0.1:8000/api/alumno/entrega/${widget.fkActividad}/$userId',
+      '${dotenv.env['API_URL']}${dotenv.env['API_CARGAR_ENTREGA']}/${widget.fkActividad}/$userId',
     );
 
     final response = await http.get(

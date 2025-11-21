@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:aula_idiomas_app/controllers/GrupoCoordinadorController.dart';
 import 'package:aula_idiomas_app/controllers/ListaGruposController.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -52,7 +53,7 @@ class _RegistrarGrupoState extends State<RegistrarGrupo> {
       final token = prefs.getString('userToken') ?? '';
 
       final response = await http.get(
-        Uri.parse('http://127.0.0.1:8000/api/coordinacion/form-grupo'),
+        Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_DATA_GRUPO']}'),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token",

@@ -3,9 +3,11 @@ import 'package:aula_idiomas_app/components/menu_cor.dart';
 import 'package:aula_idiomas_app/components/menu_doc.dart';
 import 'package:aula_idiomas_app/screens/login.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 

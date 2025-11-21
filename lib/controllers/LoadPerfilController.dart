@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -37,7 +38,7 @@ class LoadPerfilController extends GetxController {
       }
 
       final response = await http.get(
-        Uri.parse('http://127.0.0.1:8000/api/user'),
+        Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_USUARIO']}'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
