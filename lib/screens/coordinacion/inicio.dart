@@ -39,10 +39,11 @@ class _InicioCoordinacionState extends State<InicioCoordinacion> {
 
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('userToken') ?? '';
+    final userId = prefs.getInt('userId') ?? 0;
 
     try {
       final res = await http.get(
-        Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_INICIO_CORD']}'),
+        Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_INICIO_CORD']}/$userId'),
         headers: {
           "Accept": "application/json",
           "Authorization": "Bearer $token",
