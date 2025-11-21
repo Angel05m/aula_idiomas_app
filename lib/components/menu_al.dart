@@ -113,10 +113,10 @@ class _MenuAlumnoState extends State<MenuAlumno> {
             icon: Icon(Icons.assignment, size: 30),
             label: 'Mis Actividades',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.short_text, size: 30),
-            label: 'Progreso',
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.short_text, size: 30),
+          //   label: 'Progreso',
+          // ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.teal[300],
