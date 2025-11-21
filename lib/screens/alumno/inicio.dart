@@ -1,5 +1,6 @@
 import 'package:aula_idiomas_app/components/card-button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -35,7 +36,7 @@ class _InicioAlumnosState extends State<InicioAlumnos> {
 
     try {
       final res = await http.get(
-        Uri.parse('http://127.0.0.1:8000/api/alumno/inicio/$userId'),
+        Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_ALUMNO_INICIO']}/$userId'),
         headers: {
           "Accept": "application/json",
           "Authorization": "Bearer $token",

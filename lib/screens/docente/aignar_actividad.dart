@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:date_field/date_field.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -36,7 +37,7 @@ class _AsignarActividadDocenteState extends State<AsignarActividadDocente> {
 
     try {
       final res = await http.get(
-        Uri.parse('http://127.0.0.1:8000/api/docente/grupos-actividad'),
+        Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_OBTENER_GRUPOS']}'),
         headers: {
           "Accept": "application/json",
           "Authorization": "Bearer $token",
@@ -81,7 +82,7 @@ class _AsignarActividadDocenteState extends State<AsignarActividadDocente> {
     final token = prefs.getString('userToken') ?? '';
 
     final res = await http.post(
-      Uri.parse('http://127.0.0.1:8000/api/docente/asignar-actividad'),
+      Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_ASIGNAR_ACTIVIDAD']}'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",

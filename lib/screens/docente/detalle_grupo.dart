@@ -1,6 +1,7 @@
 import 'package:aula_idiomas_app/screens/docente/detalle_actividad.dart';
 import 'package:aula_idiomas_app/screens/docente/detalle_alumno.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,7 +36,7 @@ class _DetalleGrupoScreenState extends State<DetalleGrupoScreen>
     try {
       final res = await http.get(
         Uri.parse(
-            'http://127.0.0.1:8000/api/docente/detalle-grupo/${widget.pkGrupo}'),
+            '${dotenv.env['API_URL']}${dotenv.env['API_DETALLE_GRUPO']}/${widget.pkGrupo}'),
         headers: {
           "Accept": "application/json",
           "Authorization": "Bearer $token",

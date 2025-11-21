@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,11 +24,9 @@ class ListaActividadesController extends GetxController {
         'page': page.toString(),
       };
 
-      final uri = Uri.http(
-        '127.0.0.1:8000',
-        '/api/docente/actividades',
-        queryParams,
-      );
+      final baseUrl = "${dotenv.env['API_URL']}${dotenv.env['API_CARGAR_ACTIVIDADES']}";
+
+      final uri = Uri.parse(baseUrl).replace(queryParameters: queryParams);
 
       final response = await http.get(
         uri,
@@ -63,7 +62,7 @@ class ListaActividadesController extends GetxController {
       final token = prefs.getString('userToken') ?? '';
 
       final response = await http.delete(
-        Uri.parse('http://127.0.0.1:8000/api/docente/actividad/deshabilitar/$id'),
+        Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_DESHABILITAR_ACTIVIDAD']}/$id'),
         headers: {
           'Authorization': 'Bearer $token',
           'Accept': 'application/json',
@@ -90,7 +89,7 @@ class ListaActividadesController extends GetxController {
       final token = prefs.getString('userToken') ?? '';
 
       final response = await http.put(
-        Uri.parse('http://127.0.0.1:8000/api/docente/actividad/habilitar/$id'),
+        Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_HABILITAR_ACTIVIDAD']}/$id'),
         headers: {
           'Authorization': 'Bearer $token',
           'Accept': 'application/json',

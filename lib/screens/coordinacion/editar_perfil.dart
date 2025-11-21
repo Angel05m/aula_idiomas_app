@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:aula_idiomas_app/controllers/LoadPerfilController.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -56,7 +57,7 @@ class _EditarPerfilCordinadorState extends State<EditarPerfilCordinador> {
       final userId = loadPerfilController.userData.value?['pk_usuario'];
 
       final response = await http.put(
-        Uri.parse('http://127.0.0.1:8000/api/perfil-editar/$userId'),
+        Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_EDITAR_PERFIL']}/$userId'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',

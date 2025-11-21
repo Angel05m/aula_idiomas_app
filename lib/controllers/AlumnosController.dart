@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,11 +32,9 @@ class AlumnosController extends GetxController {
         'page': page.toString(),
       };
 
-      final uri = Uri.http(
-        '127.0.0.1:8000',
-        '/api/coordinacion/lista-alumnos',
-        queryParams,
-      );
+      final uri = Uri.parse(
+        "${dotenv.env['API_URL']}${dotenv.env['API_LISTA_ALUMNOS']}",
+      ).replace(queryParameters: queryParams);
 
       final response = await http.get(
         uri,
@@ -97,7 +96,7 @@ class AlumnosController extends GetxController {
       final token = prefs.getString('userToken') ?? '';
 
       final response = await http.delete(
-        Uri.parse('http://127.0.0.1:8000/api/coordinacion/alumno/eliminar/$idAlumno'),
+        Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_DESHABILITAR_ALUMNO']}/$idAlumno'),
         headers: {
           'Authorization': 'Bearer $token',
           'Accept': 'application/json',
@@ -144,7 +143,7 @@ class AlumnosController extends GetxController {
       final token = prefs.getString('userToken') ?? '';
 
       final response = await http.put(
-        Uri.parse('http://127.0.0.1:8000/api/coordinacion/alumno/restaurar/$idAlumno'),
+        Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_HABILITAR_ALUMNO']}/$idAlumno'),
         headers: {
           'Authorization': 'Bearer $token',
           'Accept': 'application/json',

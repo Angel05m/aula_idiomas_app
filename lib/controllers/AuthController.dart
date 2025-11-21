@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
@@ -20,7 +21,7 @@ class AuthController extends GetxController {
 
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     clientId: kIsWeb
-        ? '226147543177-r63get0uoqjpkk6t8k6p8jbmds9jq7fa.apps.googleusercontent.com'
+        ? '${dotenv.env['API_GOOGLE_KEY']}'
         : null,
     scopes: ['email'],
   );
@@ -39,7 +40,7 @@ class AuthController extends GetxController {
 
     isLoadingLogin.value = true;
     try {
-      var url = Uri.parse('http://127.0.0.1:8000/api/login');
+      var url = Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_LOGIN']}');
       var response = await http.post(
         url,
         body: {'matricula': matricula, 'password': password},
@@ -105,7 +106,7 @@ class AuthController extends GetxController {
       final email = googleUser.email;
 
       final response = await http.post(
-        Uri.parse('http://127.0.0.1:8000/api/login-google'),
+        Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_LOGIN_GOOGLE']}'),
         body: {'email': email},
       );
 
@@ -186,7 +187,7 @@ class AuthController extends GetxController {
 
     try {
       final response = await http.post(
-        Uri.parse('http://127.0.0.1:8000/api/logout'),
+        Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_LOGOUT']}'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',

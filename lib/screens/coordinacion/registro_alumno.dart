@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:aula_idiomas_app/controllers/AlumnosController.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -69,7 +70,7 @@ class _RegistroAlumnoState extends State<RegistroAlumno> {
     if (token == null) throw Exception('Token no encontrado');
 
     final response = await http.get(
-      Uri.parse('http://127.0.0.1:8000/api/coordinacion/formulario-alumno'),
+      Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_CREAR_ALUMNO']}'),
       headers: {'Accept': 'application/json', 'Authorization': 'Bearer $token'},
     );
 
@@ -108,7 +109,7 @@ class _RegistroAlumnoState extends State<RegistroAlumno> {
     };
 
     final response = await http.post(
-      Uri.parse('http://127.0.0.1:8000/api/coordinacion/alumno/guardar'),
+      Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_GUARDAR_ALUMNO']}'),
       headers: {'Accept': 'application/json', 'Authorization': 'Bearer $token'},
       body: body,
     );

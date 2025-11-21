@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -23,8 +24,10 @@ class ActividadController {
         "preguntas": preguntas,
       };
 
+      String urlAPI = "${dotenv.env['API_URL']}${dotenv.env['API_GUARDAR_ACTIVIDAD']}";
+
       final response = await http.post(
-        Uri.parse('http://127.0.0.1:8000/api/docente/guardar-actividad-preguntas'),
+        Uri.parse(urlAPI),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token", 
