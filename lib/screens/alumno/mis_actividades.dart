@@ -39,6 +39,13 @@ class _MisActividadesAlumnoState extends State<MisActividadesAlumno> {
     }
   }
 
+  Future<void> abrirWeb(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
   Widget _buildSeccion(String titulo, List<dynamic> lista, Color color) {
     return Card(
       color: Colors.white,
@@ -80,6 +87,9 @@ class _MisActividadesAlumnoState extends State<MisActividadesAlumno> {
                         .format(DateTime.parse(fechaFin))
                     : 'Sin fecha límite';
 
+                final tipo = act['tipo']?.toString().toLowerCase() ?? '';
+                final actividadId = act['pk_actividad'];
+
                 return AnimatedContainer(
                   duration: const Duration(milliseconds: 250),
                   margin: const EdgeInsets.symmetric(vertical: 4),
@@ -117,7 +127,38 @@ class _MisActividadesAlumnoState extends State<MisActividadesAlumno> {
                     ),
                     trailing: Icon(Icons.arrow_forward_ios,
                         size: 18, color: color),
-                    onTap: () {
+                    onTap: () async {
+                      final tipo = act['tipo']?.toString().toLowerCase() ?? '';
+                      final actividadId = act['pk_actividad'];
+                      if (tipo == 'pdf' || tipo == 'audio' || tipo == 'auditiva') {
+                        final urlWeb = "${dotenv.env['WEB_URL']}";
+
+                        showDialog(
+                          context: context,
+                          builder: (_) => AlertDialog(
+                            title: const Text("Actividad disponible en la Web"),
+                            content: const Text(
+                              "Esta actividad es tipo PDF o auditiva.\n"
+                              "Para ver el detalle completo debes abrirla desde la página web.",
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text("Cancelar"),
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  abrirWeb(urlWeb);
+                                },
+                                child: const Text("Ir a la Web"),
+                              ),
+                            ],
+                          ),
+                        );
+
+                        return;
+                      }
                       if (titulo.contains('Pendientes')) {
                         Navigator.push(
                           context,
@@ -125,23 +166,25 @@ class _MisActividadesAlumnoState extends State<MisActividadesAlumno> {
                             builder: (context) => ResponderActividad(actividad: act),
                           ),
                         );
-                      } else if (titulo.contains('Entregadas')) {
+                        return;
+                      }
+                      if (titulo.contains('Entregadas')) {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => DetalleEntregaAlumno(fkActividad: act['pk_actividad']),
+                            builder: (context) =>
+                                DetalleEntregaAlumno(fkActividad: actividadId),
                           ),
                         );
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Esta actividad ya no se puede entregar.'),
-                            backgroundColor: Colors.redAccent,
-                          ),
-                        );
+                        return;
                       }
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Esta actividad ya no se puede entregar.'),
+                          backgroundColor: Colors.redAccent,
+                        ),
+                      );
                     },
-
                   ),
                 );
               }).toList(),
@@ -181,30 +224,6 @@ class _MisActividadesAlumnoState extends State<MisActividadesAlumno> {
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              Text("Si en tu panel de inicio tienes actividades pendientes, verifica en la web."),
-              const SizedBox(height: 10),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.open_in_browser),
-                label: const Text("Ir a la web"),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.teal,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 20, vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                onPressed: () async {
-                  final webUrl = dotenv.env['WEB_URL'];
-                  if (webUrl != null && webUrl.isNotEmpty) {
-                    await launchUrl(
-                      Uri.parse(webUrl),
-                      mode: LaunchMode.externalApplication,
-                    );
-                  }
-                }
-              ),
               _buildSeccion(
                 'Pendientes (${pendientes.length})',
                 pendientes,
