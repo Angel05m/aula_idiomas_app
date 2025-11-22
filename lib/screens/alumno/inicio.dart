@@ -17,6 +17,9 @@ class _InicioAlumnosState extends State<InicioAlumnos> {
   bool cargando = true;
   List grupos = [];
 
+  String ultimoMensajeTexto = '';
+  String ultimoMensajeUsuario = '';
+
   int totalPendientes = 0;
   int totalEntregadas = 0;
   int totalNoEntregadas = 0;
@@ -70,6 +73,17 @@ class _InicioAlumnosState extends State<InicioAlumnos> {
           totalPendientes = pendientes;
           totalEntregadas = entregadas;
           totalNoEntregadas = noEntregadas;
+
+          final ultimo = data['ultimoMensaje'];
+          if (ultimo != null) {
+            ultimoMensajeTexto = ultimo['mensaje'] ?? '';
+            final deUsuario = ultimo['de_usuario'];
+            if (deUsuario != null) {
+              ultimoMensajeUsuario =
+                  '${deUsuario['nombres']} ${deUsuario['ap_paterno'] ?? ''}';
+            }
+          }
+
           cargando = false;
         });
       } else {
@@ -222,6 +236,43 @@ class _InicioAlumnosState extends State<InicioAlumnos> {
                       ),
                     ],
                   ),
+                  const SizedBox(height: 25),
+                  const Text(
+                    "Último mensaje recibido: ",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    )
+                  ),
+                  const SizedBox(height: 10),
+                  if (ultimoMensajeTexto.isNotEmpty)
+                    Card(
+                      elevation: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "$ultimoMensajeUsuario dice...",
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              '"$ultimoMensajeTexto"',
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  else
+                    const Text("No hay mensajes recientes"),
                   const SizedBox(height: 25),
                   const Text(
                     "Mis grupos:",
