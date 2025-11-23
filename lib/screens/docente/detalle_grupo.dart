@@ -5,6 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DetalleGrupoScreen extends StatefulWidget {
   final int pkGrupo;
@@ -70,11 +71,32 @@ class _DetalleGrupoScreenState extends State<DetalleGrupoScreen>
     }
   }
 
+  Future<void> abrirWeb() async {
+    final url = dotenv.env['WEB_URL'];
+
+    if (url == null || url.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("WEB_URL no está definida")),
+      );
+      return;
+    }
+
+    final Uri uri = Uri.parse(url);
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("No se pudo abrir la URL")),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-                title: Text(
+        title: Text(
           '${grupoData?['cuatrimestre']?['num_cuatri'] ?? ''} '
           '${grupoData?['nombre'] ?? ''} '
           '${grupoData?['carrera']?['abreviatura'] ?? ''} '
@@ -110,7 +132,7 @@ class _DetalleGrupoScreenState extends State<DetalleGrupoScreen>
                       child: ListTile(
                         leading: const Icon(Icons.person, color: Colors.teal),
                         title: Text(
-                            '${alumno['nombres'] ?? '-'} ${alumno['ap_paterno'] ?? '-'} ${alumno['ap_materno'] ?? '-'}'),
+                            '${alumno['nombres'] ?? ''} ${alumno['ap_paterno'] ?? ''} ${alumno['ap_materno'] ?? ''}'),
                         subtitle: Text('Matrícula: ${alumno['matricula'] ?? '-'}'),
                         onTap: () {
                           Navigator.push(
@@ -126,12 +148,12 @@ class _DetalleGrupoScreenState extends State<DetalleGrupoScreen>
                     );
                   },
                 ),
-
                 ListView.builder(
                   padding: const EdgeInsets.all(16),
                   itemCount: grupoData?['actividades']?.length ?? 0,
                   itemBuilder: (context, index) {
                     final act = grupoData!['actividades'][index];
+                    final tipo = act['tipo']?.toString().toLowerCase() ?? '';
 
                     final fechaInicio = act['pivot']?['fecha_inicio'] ?? '-';
                     final fechaFin = act['pivot']?['fecha_fin'] ?? '-';
@@ -141,8 +163,33 @@ class _DetalleGrupoScreenState extends State<DetalleGrupoScreen>
                       child: ListTile(
                         leading: const Icon(Icons.event, color: Colors.teal),
                         title: Text(act['nom_actividad'] ?? 'Sin título'),
-                        subtitle: Text('Tipo: ${act['tipo'] ?? '-'}\nInicio: $fechaInicio\nFin: $fechaFin'),
+                        subtitle: Text(
+                            'Tipo: ${act['tipo'] ?? '-'}\nInicio: $fechaInicio\nFin: $fechaFin'),
                         onTap: () {
+                          if (tipo == 'pdf' || tipo == 'auditiva' || tipo == 'audio') {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: const Text("Contenido no disponible"),
+                                content: const Text(
+                                    "Para visualizar actividades de tipo PDF o auditiva, por favor ingrese desde la plataforma web."),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text("Cerrar"),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      abrirWeb();
+                                    },
+                                    child: const Text("Ir a la Web"),
+                                  ),
+                                ],
+                              ),
+                            );
+                            return;
+                          }
                           Navigator.push(
                             context,
                             MaterialPageRoute(

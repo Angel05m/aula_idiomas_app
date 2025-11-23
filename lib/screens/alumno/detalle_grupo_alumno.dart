@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DetalleGrupoAlumno extends StatefulWidget {
   final Map grupo;
@@ -58,6 +59,13 @@ class _DetalleGrupoAlumnoState extends State<DetalleGrupoAlumno> {
     }
   }
 
+  Future<void> abrirWeb(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
   Widget _buildSeccion(String titulo, List lista, Color color) {
     return Card(
       elevation: 3,
@@ -99,6 +107,8 @@ class _DetalleGrupoAlumnoState extends State<DetalleGrupoAlumno> {
                         .format(DateTime.parse(fechaFin))
                     : 'Sin fecha límite';
 
+                final actividadId = act['pk_actividad'];
+
                 return Container(
                   margin: const EdgeInsets.symmetric(vertical: 4),
                   decoration: BoxDecoration(
@@ -127,31 +137,39 @@ class _DetalleGrupoAlumnoState extends State<DetalleGrupoAlumno> {
                       nombre,
                       style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                     ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Fecha límite: $fechaFormatted',
-                          style: const TextStyle(color: Colors.grey, fontSize: 13),
-                        ),
-                        if (act['calificacion'] != null)
-                          Text(
-                            'Calificación: ${act['calificacion']}',
-                            style: TextStyle(
-                              color: Colors.teal.shade700,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                      ],
+                    subtitle: Text(
+                      'Fecha límite: $fechaFormatted',
+                      style: const TextStyle(color: Colors.grey, fontSize: 13),
                     ),
                     trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(
-                        builder: (_) => DetalleEntregaAlumno(fkActividad: act['pk_actividad']),
-                      ));
+                      final urlWeb = "${dotenv.env['WEB_URL']}";
+
+                      showDialog(
+                        context: context,
+                        builder: (_) => AlertDialog(
+                          title: const Text("Abrir en la Web"),
+                          content: const Text(
+                            "Esta actividad debe verse en la plataforma web.\n"
+                            "¿Deseas abrirla ahora?",
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text("Cancelar"),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                abrirWeb(urlWeb);
+                              },
+                              child: const Text("Ir a la Web"),
+                            ),
+                          ],
+                        ),
+                      );
                     },
                   ),
-
                 );
               }).toList(),
       ),

@@ -61,7 +61,7 @@ class _MenuAlumnoState extends State<MenuAlumno> {
                   color: Colors.black,
                 ),
               ),
-              Icon(Icons.notifications, size: 30, color: Colors.black),
+              // Icon(Icons.notifications, size: 30, color: Colors.black),
               SizedBox(width: 5),
               PopupMenuButton<String>(
                 icon: Icon(Icons.more_vert, size: 30, color: Colors.black),
@@ -113,10 +113,10 @@ class _MenuAlumnoState extends State<MenuAlumno> {
             icon: Icon(Icons.assignment, size: 30),
             label: 'Mis Actividades',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.short_text, size: 30),
-            label: 'Progreso',
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.short_text, size: 30),
+          //   label: 'Progreso',
+          // ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.teal[300],

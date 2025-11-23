@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AuthController extends GetxController {
   var isLoadingLogin = false.obs;
   var isLoadingGoogle = false.obs;
+  var isLoadingRecovery = false.obs;
 
   var hasError = false.obs;
   var userData = Rxn<Map<String, dynamic>>();
@@ -221,6 +222,58 @@ class AuthController extends GetxController {
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
+    }
+  }
+
+  Future<void> recovery(String matricula, context) async {
+    if (matricula.isEmpty) {
+      Get.snackbar(
+        'Campos requeridos',
+        'Ingresa matrícula',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      return;
+    }
+
+    isLoadingRecovery.value = true;
+    try {
+      var url = Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_RECOVERY']}');
+      var response = await http.post(
+        url,
+        body: {'matricula': matricula},
+      );
+
+      var data = jsonDecode(response.body);
+
+      if (response.statusCode == 200 && data['success'] == true) {
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Tu petición ha sido enviada a coordinación. Espera su respuesta.'),
+            backgroundColor: Colors.teal,
+          ),
+        );
+
+        Get.offNamed('/login');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Ocurrió un error insperado.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Ocurrió un error insperado: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      isLoadingRecovery.value = false;
     }
   }
 }

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DetalleAlumno extends StatefulWidget {
   final int pkAlumno;
@@ -66,6 +67,47 @@ class _DetalleAlumnoState extends State<DetalleAlumno> {
     }
   }
 
+  void mostrarAlertaSoloWeb(int idActividad) {
+    final webUrl = dotenv.env['WEB_URL'] ?? '';
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Disponible solo en la Web'),
+          content: const Text(
+            'Esta actividad solo puede visualizarse en la plataforma Web.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cerrar'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+                abrirActividadEnWeb(webUrl, idActividad);
+              },
+              child: const Text('Ir a la Web'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void abrirActividadEnWeb(String baseUrl, int idActividad) async {
+    final url = "$baseUrl/actividad/$idActividad";
+
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No se pudo abrir la URL')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (cargando) {
@@ -107,7 +149,8 @@ class _DetalleAlumnoState extends State<DetalleAlumno> {
             Text('Grupo',
                 style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.teal)),
             const SizedBox(height: 8),
-            Text('${grupo['cuatrimestre']?['num_cuatri'] ?? '-'} ${grupo['nombre'] ?? '-'} ${grupo['carrera']?['abreviatura'] ?? '-'} ${grupo['año'] ?? '-'}'),
+            Text('${grupo['cuatrimestre']?['num_cuatri'] ?? '-'} ${grupo['nombre'] ?? '-'} '
+                '${grupo['carrera']?['abreviatura'] ?? '-'} ${grupo['año'] ?? '-'}'),
             Text('${grupo['carrera']?['nombre'] ?? '-'}'),
             const SizedBox(height: 16),
             Text('Actividades',
@@ -119,6 +162,8 @@ class _DetalleAlumnoState extends State<DetalleAlumno> {
                 itemBuilder: (context, index) {
                   final act = actividades[index];
                   final entregado = act['entregado'] ?? false;
+                  final tipo = act['tipo']?.toString().toLowerCase() ?? '';
+
                   return Card(
                     margin: const EdgeInsets.symmetric(vertical: 6),
                     child: ListTile(
@@ -129,6 +174,10 @@ class _DetalleAlumnoState extends State<DetalleAlumno> {
                       title: Text(act['nom_actividad'] ?? '-'),
                       subtitle: Text(entregado ? 'Entregado' : 'Pendiente'),
                       onTap: () {
+                        if (tipo == "pdf" || tipo == "auditiva" || tipo.contains("oral")) {
+                          mostrarAlertaSoloWeb(act['pk_actividad']);
+                          return;
+                        }
                         Navigator.push(
                           context,
                           MaterialPageRoute(

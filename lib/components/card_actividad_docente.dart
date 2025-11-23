@@ -152,12 +152,12 @@ class CardActividadDocente extends StatelessWidget {
                     },
                     child: const Icon(Icons.add_circle, size: 20),
                   ),
-                  TextButton(
-                    onPressed: () {
-                      // Lógica de editar actividad
-                    },
-                    child: const Icon(Icons.edit, color: Colors.teal, size: 20),
-                  ),
+                  // TextButton(
+                  //   onPressed: () {
+                  //     // Lógica de editar actividad
+                  //   },
+                  //   child: const Icon(Icons.edit, color: Colors.teal, size: 20),
+                  // ),
                   TextButton(
                     onPressed: onToggleActive,
                     child: Icon(

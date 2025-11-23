@@ -104,13 +104,13 @@ class _InicioDocenteState extends State<InicioDocente> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Text(
-                      'Docente, Melissa Sas Perez',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w300,
-                        color: Colors.grey[700],
-                      ),
-                    ),
+                    // Text(
+                    //   'Docente, Melissa Sas Perez',
+                    //   style: TextStyle(
+                    //     fontWeight: FontWeight.w300,
+                    //     color: Colors.grey[700],
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
