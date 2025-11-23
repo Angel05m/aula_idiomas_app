@@ -34,10 +34,11 @@ class _AsignarActividadDocenteState extends State<AsignarActividadDocente> {
 
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('userToken') ?? '';
+      final id = prefs.getInt('userId')?.toString() ?? '';
 
     try {
       final res = await http.get(
-        Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_OBTENER_GRUPOS']}'),
+        Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_OBTENER_GRUPOS']}/$id'),
         headers: {
           "Accept": "application/json",
           "Authorization": "Bearer $token",

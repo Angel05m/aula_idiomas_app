@@ -69,7 +69,7 @@ class _MenuDocenteState extends State<MenuDocente> {
                   color: Colors.black,
                 ),
               ),
-              Icon(Icons.notifications, size: 30, color: Colors.black),
+              // Icon(Icons.notifications, size: 30, color: Colors.black),
               SizedBox(width: 5),
               PopupMenuButton<String>(
                 icon: Icon(Icons.more_vert, size: 30, color: Colors.black),

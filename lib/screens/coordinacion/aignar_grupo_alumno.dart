@@ -15,9 +15,12 @@ class AsignarGrupoAlumno extends StatefulWidget {
 }
 
 class _AsignarGrupoAlumnoState extends State<AsignarGrupoAlumno> {
-  List alumnos = [];
-  List alumnosFiltrados = [];
-  List seleccionados = [];
+  Map<String, List> grupos = {};
+  Map<String, List> gruposFiltrados = {};
+  List<int> seleccionados = [];
+
+  Map<String, bool> grupoSeleccionado = {};
+
   bool cargando = true;
 
   @override
@@ -34,7 +37,7 @@ class _AsignarGrupoAlumnoState extends State<AsignarGrupoAlumno> {
 
     try {
       final res = await http.get(
-        Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_OBTENER_ALUMNOS']}'),
+        Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_OBTENER_ALUMNOS_POR_GRUPOS']}'),
         headers: {
           "Accept": "application/json",
           "Authorization": "Bearer $token",
@@ -43,9 +46,20 @@ class _AsignarGrupoAlumnoState extends State<AsignarGrupoAlumno> {
 
       if (res.statusCode == 200) {
         final data = jsonDecode(res.body);
+
+        final Map<String, List> g = Map<String, List>.from(data['data']);
+
+        g.forEach((grupo, alumnos) {
+          grupoSeleccionado[grupo] = false;
+
+          for (var alumno in alumnos) {
+            seleccionados.remove(alumno['pk_usuario']);
+          }
+        });
+
         setState(() {
-          alumnos = data['data'];
-          alumnosFiltrados = alumnos;
+          grupos = g;
+          gruposFiltrados = Map.from(g);
           cargando = false;
         });
       } else {
@@ -69,31 +83,87 @@ class _AsignarGrupoAlumnoState extends State<AsignarGrupoAlumno> {
   }
 
   void filtrarAlumnos(String texto) {
-    setState(() {
-      alumnosFiltrados = alumnos.where((alumno) {
-        final nombreCompleto =
-            "${alumno['usuario']['nombres']} ${alumno['usuario']['ap_paterno']} ${alumno['usuario']['ap_materno'] ?? ''}"
-                .toLowerCase();
+    if (texto.isEmpty) {
+      setState(() => gruposFiltrados = Map.from(grupos));
+      return;
+    }
 
-        String grupoActual = "";
-        if (alumno['grupos'] != null && alumno['grupos'].isNotEmpty) {
-          final grupo = alumno['grupos'][0]['grupo'];
-          final carrera = grupo['carrera'];
-          grupoActual =
-              "${grupo['fk_cuatrimestre']}${grupo['nombre']}${carrera['abreviatura']} ${grupo['año']}"
-                  .toLowerCase();
-        }
+    final filtro = texto.toLowerCase();
+    final Map<String, List> resultado = {};
 
-        final filtro = texto.toLowerCase();
-        return nombreCompleto.contains(filtro) || grupoActual.contains(filtro);
+    grupos.forEach((grupoNombre, alumnosGrupo) {
+      final alumnosFiltrados = alumnosGrupo.where((alumno) {
+        final nombre = "${alumno['nombres']} ${alumno['ap_paterno']} ${alumno['ap_materno'] ?? ''}"
+            .toLowerCase();
+
+        return nombre.contains(filtro) || grupoNombre.toLowerCase().contains(filtro);
       }).toList();
+
+      if (alumnosFiltrados.isNotEmpty) {
+        resultado[grupoNombre] = alumnosFiltrados;
+      }
     });
+
+    setState(() => gruposFiltrados = resultado);
+  }
+
+  void seleccionarGrupo(String grupo, bool valor) {
+    final alumnos = grupos[grupo] ?? [];
+
+    setState(() {
+      grupoSeleccionado[grupo] = valor;
+
+      for (var al in alumnos) {
+        final id = al['pk_usuario'];
+
+        if (valor) {
+          if (!seleccionados.contains(id)) {
+            seleccionados.add(id);
+          }
+        } else {
+          seleccionados.remove(id);
+        }
+      }
+    });
+  }
+
+  Widget buildAlumnoCard(Map alumno, String grupoNombre) {
+    final id = alumno['pk_usuario'];
+    final isSelected = seleccionados.contains(id);
+
+    return Card(
+      elevation: 2,
+      margin: const EdgeInsets.symmetric(vertical: 5),
+      child: CheckboxListTile(
+        activeColor: Colors.teal,
+        value: isSelected,
+        contentPadding: const EdgeInsets.all(12),
+        title: Text(
+          "${alumno['nombres']} ${alumno['ap_paterno']} ${alumno['ap_materno'] ?? ''}",
+          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.teal),
+        ),
+        onChanged: (v) {
+          setState(() {
+            if (v == true) {
+              seleccionados.add(id);
+            } else {
+              seleccionados.remove(id);
+            }
+
+            final alumnosGrupo = grupos[grupoNombre]!;
+            final todos = alumnosGrupo.every((a) => seleccionados.contains(a['pk_usuario']));
+
+            grupoSeleccionado[grupoNombre] = todos;
+          });
+        },
+      ),
+    );
   }
 
   Future<void> asignarGrupo() async {
     if (seleccionados.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Completa todos los campos.")),
+        const SnackBar(content: Text("Selecciona al menos un alumno.")),
       );
       return;
     }
@@ -116,128 +186,78 @@ class _AsignarGrupoAlumnoState extends State<AsignarGrupoAlumno> {
     if (res.statusCode == 200) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Grupo asignado correctamente.'),
-          backgroundColor: Colors.teal,
-        ),
+            content: Text('Grupo asignado correctamente.'),
+            backgroundColor: Colors.teal),
       );
       Navigator.pop(context);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Error al asignar el grupo.'),
-          backgroundColor: Colors.red,
-        ),
+        const SnackBar(content: Text('Error al asignar el grupo.'), backgroundColor: Colors.red),
       );
     }
-  }
-
-  Widget buildAlumnosCard(Map alumno) {
-    final isSelected = seleccionados.contains(alumno['fk_usuario']);
-
-    String grupoActual = "Sin grupo asignado";
-    if (alumno['grupos'] != null && alumno['grupos'].isNotEmpty) {
-      final grupo = alumno['grupos'][0]['grupo'];
-      final carrera = grupo['carrera'];
-      grupoActual =
-          "${grupo['fk_cuatrimestre']}${grupo['nombre']}${carrera['abreviatura']} ${grupo['año']}";
-    }
-
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      elevation: 2,
-      margin: const EdgeInsets.symmetric(vertical: 6),
-      child: CheckboxListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        activeColor: Colors.teal,
-        checkColor: Colors.white,
-        value: isSelected,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "${alumno['usuario']['nombres']} ${alumno['usuario']['ap_paterno']} ${alumno['usuario']['ap_materno'] ?? ''}",
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.teal,
-                fontSize: 16,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              grupoActual,
-              style: TextStyle(
-                color: grupoActual == "Sin grupo asignado"
-                    ? Colors.grey
-                    : Colors.black87,
-                fontSize: 13,
-              ),
-            ),
-          ],
-        ),
-        onChanged: (val) {
-          setState(() {
-            if (val == true) {
-              seleccionados.add(alumno['fk_usuario']);
-            } else {
-              seleccionados.remove(alumno['fk_usuario']);
-            }
-          });
-        },
-      ),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Asignar Grupo",
-          style: TextStyle(color: Colors.black),
-        ),
+        title: const Text("Asignar Grupo", style: TextStyle(color: Colors.black)),
         backgroundColor: Colors.white,
         iconTheme: const IconThemeData(color: Colors.black),
-        centerTitle: true,
-        elevation: 1,
       ),
-      backgroundColor: Colors.grey.shade100,
       body: cargando
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator(color: Colors.teal))
           : SingleChildScrollView(
               padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Selecciona los alumnos:",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: Colors.black,
-                    ),
-                  ),
+                  const Text("Busca alumnos:", style: TextStyle(fontSize: 16)),
                   const SizedBox(height: 8),
-
                   InputBuscador(onChanged: filtrarAlumnos),
-                  const SizedBox(height: 16),
-
-                  ...alumnosFiltrados.map((g) => buildAlumnosCard(g)).toList(),
                   const SizedBox(height: 20),
 
-                  ElevatedButton.icon(
+                  ...gruposFiltrados.entries.map((entry) {
+                    final grupoNombre = entry.key;
+                    final alumnos = entry.value;
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '$grupoNombre',
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold, color: Colors.teal),
+                        ),
+
+                        CheckboxListTile(
+                          value: grupoSeleccionado[grupoNombre] ?? false,
+                          title: const Text("Seleccionar todo el grupo"),
+                          activeColor: Colors.teal,
+                          onChanged: (v) => seleccionarGrupo(grupoNombre, v ?? false),
+                        ),
+
+                        alumnos.isNotEmpty
+                            ? Column(
+                                children: alumnos
+                                    .map((al) => buildAlumnoCard(al, grupoNombre))
+                                    .toList(),
+                              )
+                            : const Text("Sin alumnos"),
+
+                        const SizedBox(height: 20),
+                      ],
+                    );
+                  }).toList(),
+
+                  ElevatedButton(
                     onPressed: asignarGrupo,
-                    icon: const Icon(Icons.save, color: Colors.white),
-                    label: const Text(
-                      "Guardar asignación",
-                      style: TextStyle(color: Colors.white),
-                    ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.teal,
                       minimumSize: const Size(double.infinity, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
                     ),
+                    child:
+                        const Text("Guardar asignación", style: TextStyle(color: Colors.white)),
                   ),
                 ],
               ),

@@ -62,17 +62,23 @@ class _CrearActividadDocenteState extends State<CrearActividadDocente> {
                   SizedBox(height: 10),
                   DropdownButtonFormField<String>(
                     value: _selectedTipoActividad,
-                    items: _tiposActividad.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+                    items: _tiposActividad.map((e) {
+                      final bool habilitado = e == 'Preguntas';
+                      return DropdownMenuItem(
+                        value: habilitado ? e : null,
+                        enabled: habilitado,
+                        child: Text(
+                          e,
+                          style: TextStyle(
+                            color: habilitado ? Colors.black : Colors.grey,
+                          ),
+                        ),
+                      );
+                    }).toList(),
                     onChanged: (val) => setState(() => _selectedTipoActividad = val),
                     decoration: InputDecoration(
                       hintText: 'Selecciona tipo de actividad',
-                      filled: true,
-                      fillColor: Colors.white,
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.teal, width: 2),
-                      ),
                     ),
                   ),
                   SizedBox(height: 10),
