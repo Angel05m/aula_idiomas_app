@@ -27,7 +27,7 @@ class CardActividadDocente extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 3.0,
-      margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 0),
+      // margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       color: Colors.white,
       child: Container(
@@ -49,53 +49,50 @@ class CardActividadDocente extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 5),
-                  Row(
+                  Column(
                     children: [
-                      Expanded(
-                        child: Row(
-                          children: [
-                            const Text(
-                              'Codigo:',
-                              style: TextStyle(
-                                fontSize: 12.0,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.teal,
-                              ),
+                      Row(
+                        children: [
+                          Text(
+                            'Codigo:',
+                            style: TextStyle(
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.teal,
                             ),
-                            const SizedBox(width: 4),
-                            Text(
-                              codigo,
-                              style: const TextStyle(
-                                fontSize: 12.0,
-                                fontWeight: FontWeight.w300,
-                                color: Colors.teal,
-                              ),
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            codigo,
+                            style: const TextStyle(
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.w300,
+                              color: Colors.teal,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                      Expanded(
-                        child: Row(
-                          children: [
-                            const Text(
-                              'Fecha:',
-                              style: TextStyle(
-                                fontSize: 12.0,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.teal,
-                              ),
+
+                      Row(
+                        children: [
+                          Text(
+                            'Fecha:',
+                            style: TextStyle(
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.teal,
                             ),
-                            const SizedBox(width: 4),
-                            Text(
-                              fecha,
-                              style: const TextStyle(
-                                fontSize: 12.0,
-                                fontWeight: FontWeight.w300,
-                                color: Colors.teal,
-                              ),
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            fecha,
+                            style: const TextStyle(
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.w300,
+                              color: Colors.teal,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -148,7 +145,7 @@ class CardActividadDocente extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => AsignarActividadDocente(
-                            pk_actividad: pk_actividad.toString(), 
+                            pk_actividad: pk_actividad.toString(),
                           ),
                         ),
                       );

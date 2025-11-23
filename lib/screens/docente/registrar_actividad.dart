@@ -16,7 +16,11 @@ class _CrearActividadDocenteState extends State<CrearActividadDocente> {
   final TextEditingController _descripcionController = TextEditingController();
 
   String? _selectedTipoActividad;
-  final List<String> _tiposActividad = ['Preguntas', 'Carga de PDF', 'Auditiva y Oral'];
+  final List<String> _tiposActividad = [
+    'Preguntas',
+    'Carga de PDF',
+    'Auditiva y Oral',
+  ];
 
   List<PreguntaWidget> preguntas = [];
 
@@ -24,7 +28,16 @@ class _CrearActividadDocenteState extends State<CrearActividadDocente> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Crear nueva actividad', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+        title: Text(
+          'Crear nueva actividad',
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.teal,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        iconTheme: const IconThemeData(color: Colors.teal),
+
         backgroundColor: Colors.white,
         centerTitle: true,
         foregroundColor: Colors.black,
@@ -45,14 +58,19 @@ class _CrearActividadDocenteState extends State<CrearActividadDocente> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Título de la actividad:'),
+                  Text(
+                    'Título de la actividad:',
+                    style: TextStyle(color: Color.fromARGB(184, 57, 57, 57)),
+                  ),
                   SizedBox(height: 5),
                   TextField(
                     controller: _tituloController,
                     cursorColor: Colors.teal,
                     decoration: InputDecoration(
                       hintText: 'Ej: Simple past vs Past Continuous',
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(color: Colors.teal, width: 2),
@@ -62,13 +80,18 @@ class _CrearActividadDocenteState extends State<CrearActividadDocente> {
                   SizedBox(height: 10),
                   DropdownButtonFormField<String>(
                     value: _selectedTipoActividad,
-                    items: _tiposActividad.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
-                    onChanged: (val) => setState(() => _selectedTipoActividad = val),
+                    items: _tiposActividad
+                        .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                        .toList(),
+                    onChanged: (val) =>
+                        setState(() => _selectedTipoActividad = val),
                     decoration: InputDecoration(
                       hintText: 'Selecciona tipo de actividad',
                       filled: true,
                       fillColor: Colors.white,
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(color: Colors.teal, width: 2),
@@ -76,7 +99,10 @@ class _CrearActividadDocenteState extends State<CrearActividadDocente> {
                     ),
                   ),
                   SizedBox(height: 10),
-                  Text('Descripción:'),
+                  Text(
+                    'Descripción:',
+                    style: TextStyle(color: Color.fromARGB(184, 57, 57, 57)),
+                  ),
                   SizedBox(height: 5),
                   TextField(
                     controller: _descripcionController,
@@ -84,7 +110,9 @@ class _CrearActividadDocenteState extends State<CrearActividadDocente> {
                     maxLines: 4,
                     decoration: InputDecoration(
                       hintText: 'Descripción de la actividad',
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(color: Colors.teal, width: 2),
@@ -95,7 +123,10 @@ class _CrearActividadDocenteState extends State<CrearActividadDocente> {
               ),
             ),
             SizedBox(height: 20),
-            Text('Preguntas agregadas', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+            Text(
+              'Preguntas agregadas',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            ),
             SizedBox(height: 10),
             preguntas.isEmpty
                 ? Container(
@@ -105,10 +136,20 @@ class _CrearActividadDocenteState extends State<CrearActividadDocente> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.quiz_outlined, size: 60, color: Colors.grey.shade400),
+                        Icon(
+                          Icons.quiz_outlined,
+                          size: 60,
+                          color: Colors.grey.shade400,
+                        ),
                         SizedBox(height: 10),
-                        Text('No hay preguntas agregadas aún', style: TextStyle(color: Colors.grey.shade600)),
-                        Text('Presiona el botón + para agregar una', style: TextStyle(color: Colors.teal)),
+                        Text(
+                          'No hay preguntas agregadas aún',
+                          style: TextStyle(color: Colors.grey.shade600),
+                        ),
+                        Text(
+                          'Presiona el botón + para agregar una',
+                          style: TextStyle(color: Colors.teal),
+                        ),
                       ],
                     ),
                   )
@@ -120,7 +161,10 @@ class _CrearActividadDocenteState extends State<CrearActividadDocente> {
                 minimumSize: Size(double.infinity, 50),
               ),
               onPressed: _guardarActividad,
-              child: Text('Guardar Actividad', style: TextStyle(color: Colors.white)),
+              child: Text(
+                'Guardar Actividad',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ],
         ),
@@ -144,13 +188,19 @@ class _CrearActividadDocenteState extends State<CrearActividadDocente> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Tipos de pregunta', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              Text(
+                'Tipos de pregunta',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
               SizedBox(height: 20),
               ListTile(
                 leading: Icon(Icons.check_box, color: Colors.teal),
                 title: Text('Opción múltiple'),
                 onTap: () {
-                  setState(() => preguntas.add(PreguntaWidget(tipo: 'opcion_multiple')));
+                  setState(
+                    () =>
+                        preguntas.add(PreguntaWidget(tipo: 'opcion_multiple')),
+                  );
                   Navigator.pop(context);
                 },
               ),
@@ -159,7 +209,9 @@ class _CrearActividadDocenteState extends State<CrearActividadDocente> {
                 leading: Icon(Icons.text_fields, color: Colors.blue),
                 title: Text('Respuesta abierta'),
                 onTap: () {
-                  setState(() => preguntas.add(PreguntaWidget(tipo: 'abierta')));
+                  setState(
+                    () => preguntas.add(PreguntaWidget(tipo: 'abierta')),
+                  );
                   Navigator.pop(context);
                 },
               ),
@@ -168,7 +220,10 @@ class _CrearActividadDocenteState extends State<CrearActividadDocente> {
                 leading: Icon(Icons.done, color: Colors.deepPurple),
                 title: Text('Verdadero o Falso'),
                 onTap: () {
-                  setState(() => preguntas.add(PreguntaWidget(tipo: 'verdadero_falso')));
+                  setState(
+                    () =>
+                        preguntas.add(PreguntaWidget(tipo: 'verdadero_falso')),
+                  );
                   Navigator.pop(context);
                 },
               ),
@@ -180,12 +235,18 @@ class _CrearActividadDocenteState extends State<CrearActividadDocente> {
   }
 
   void _guardarActividad() async {
-    if (_tituloController.text.isEmpty || _descripcionController.text.isEmpty || _selectedTipoActividad == null) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Completa todos los campos')));
+    if (_tituloController.text.isEmpty ||
+        _descripcionController.text.isEmpty ||
+        _selectedTipoActividad == null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Completa todos los campos')));
       return;
     }
 
-    List<Map<String, dynamic>> preguntasJson = preguntas.map((p) => p.toJson()).toList();
+    List<Map<String, dynamic>> preguntasJson = preguntas
+        .map((p) => p.toJson())
+        .toList();
 
     final respuesta = await _controller.guardarActividad(
       titulo: _tituloController.text,
@@ -196,15 +257,17 @@ class _CrearActividadDocenteState extends State<CrearActividadDocente> {
 
     if (respuesta['success']) {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Actividad guardada exitosamente!'),
-            backgroundColor: Colors.teal,
-          ),
-        );
+        const SnackBar(
+          content: Text('Actividad guardada exitosamente!'),
+          backgroundColor: Colors.teal,
+        ),
+      );
 
-        Navigator.pop(Get.context!, true);
+      Navigator.pop(Get.context!, true);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(respuesta['message'])));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(respuesta['message'])));
     }
   }
 }
@@ -236,20 +299,20 @@ class PreguntaWidget extends StatefulWidget {
             'C': opcionesControllers['C']!.text,
             'D': opcionesControllers['D']!.text,
           },
-          'respuesta_correcta': respuestaCorrecta ?? 'A'
+          'respuesta_correcta': respuestaCorrecta ?? 'A',
         };
       case 'abierta':
         return {
           'tipo': tipo,
           'titulo': tituloController.text,
-          'descripcion': descripcionController.text
+          'descripcion': descripcionController.text,
         };
       case 'verdadero_falso':
         return {
           'tipo': tipo,
           'titulo': tituloController.text,
           'descripcion': descripcionController.text,
-          'respuesta_correcta': respuestaCorrecta ?? 'Verdadero'
+          'respuesta_correcta': respuestaCorrecta ?? 'Verdadero',
         };
       default:
         return {};
@@ -277,14 +340,20 @@ class _PreguntaWidgetState extends State<PreguntaWidget> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('${widget.tipo[0].toUpperCase()}${widget.tipo.substring(1)}', style: TextStyle(fontWeight: FontWeight.bold)),
+              Text(
+                '${widget.tipo[0].toUpperCase()}${widget.tipo.substring(1)}',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               IconButton(
                 icon: Icon(Icons.close, color: Colors.red.shade400),
                 onPressed: () {
-                  final parentState = context.findAncestorStateOfType<_CrearActividadDocenteState>();
-                  parentState?.setState(() => parentState.preguntas.remove(widget));
+                  final parentState = context
+                      .findAncestorStateOfType<_CrearActividadDocenteState>();
+                  parentState?.setState(
+                    () => parentState.preguntas.remove(widget),
+                  );
                 },
-              )
+              ),
             ],
           ),
           SizedBox(height: 10),
@@ -292,7 +361,9 @@ class _PreguntaWidgetState extends State<PreguntaWidget> {
             controller: widget.tituloController,
             decoration: InputDecoration(
               hintText: 'Título de la pregunta',
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(color: Colors.teal, width: 2),
@@ -305,7 +376,9 @@ class _PreguntaWidgetState extends State<PreguntaWidget> {
             maxLines: 3,
             decoration: InputDecoration(
               hintText: 'Descripción de la pregunta',
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(color: Colors.teal, width: 2),
@@ -321,7 +394,9 @@ class _PreguntaWidgetState extends State<PreguntaWidget> {
                   controller: widget.opcionesControllers[letra],
                   decoration: InputDecoration(
                     labelText: 'Opción $letra',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(color: Colors.teal, width: 2),
@@ -332,11 +407,19 @@ class _PreguntaWidgetState extends State<PreguntaWidget> {
             }),
             DropdownButtonFormField<String>(
               value: widget.respuestaCorrecta,
-              items: ['A', 'B', 'C', 'D'].map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
-              onChanged: (val) => setState(() => widget.respuestaCorrecta = val),
+              items: [
+                'A',
+                'B',
+                'C',
+                'D',
+              ].map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+              onChanged: (val) =>
+                  setState(() => widget.respuestaCorrecta = val),
               decoration: InputDecoration(
                 hintText: 'Respuesta correcta',
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(color: Colors.teal, width: 2),
@@ -348,11 +431,17 @@ class _PreguntaWidgetState extends State<PreguntaWidget> {
             SizedBox(height: 10),
             DropdownButtonFormField<String>(
               value: widget.respuestaCorrecta,
-              items: ['Verdadero', 'Falso'].map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
-              onChanged: (val) => setState(() => widget.respuestaCorrecta = val),
+              items: [
+                'Verdadero',
+                'Falso',
+              ].map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+              onChanged: (val) =>
+                  setState(() => widget.respuestaCorrecta = val),
               decoration: InputDecoration(
                 hintText: 'Selecciona opción correcta',
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(color: Colors.teal, width: 2),

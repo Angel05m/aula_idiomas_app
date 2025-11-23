@@ -100,6 +100,7 @@ class _InicioDocenteState extends State<InicioDocente> {
                       'Bienvenido/a',
                       style: TextStyle(
                         fontSize: 30,
+                        color: Colors.teal.shade600,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

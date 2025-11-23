@@ -33,6 +33,7 @@ class _MisGruposDocenteState extends State<MisGruposDocente> {
                         'Grupos',
                         style: TextStyle(
                           fontSize: 30,
+                          color: Colors.teal,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
