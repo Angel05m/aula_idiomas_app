@@ -23,6 +23,25 @@ class _ListaGruposState extends State<ListaGrupos> {
     listaGruposController.fetchGrupos();
   }
 
+  void _mostrarAlertaGrupoDeshabilitado(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Grupo deshabilitado'),
+          content: const Text(
+              'Este grupo está deshabilitado, por lo que no es posible ver su información.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Aceptar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
@@ -103,11 +122,15 @@ class _ListaGruposState extends State<ListaGrupos> {
                           carrera: g.carrera.nombre,
                           isDisabled: isDisabled,
                           onTap: () {
+                            if (isDisabled) {
+                              _mostrarAlertaGrupoDeshabilitado(context);
+                              return;
+                            }
+
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) =>
-                                    DetalleGrupoScreen(pkGrupo: g.pkGrupo),
+                                builder: (_) => DetalleGrupoScreen(pkGrupo: g.pkGrupo),
                               ),
                             );
                           },
