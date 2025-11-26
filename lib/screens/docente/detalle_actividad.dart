@@ -37,7 +37,9 @@ class _DetalleActividadState extends State<DetalleActividad> {
 
     try {
       final res = await http.get(
-        Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_OBTENER_DETALLE_ACTIVIDAD']}/${widget.pkActividad}'),
+        Uri.parse(
+          '${dotenv.env['API_URL']}${dotenv.env['API_OBTENER_DETALLE_ACTIVIDAD']}/${widget.pkActividad}',
+        ),
         headers: {
           "Accept": "application/json",
           "Authorization": "Bearer $token",
@@ -55,20 +57,24 @@ class _DetalleActividadState extends State<DetalleActividad> {
         } else {
           setState(() => cargando = false);
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(data['message'] ?? 'Error al cargar entregas')),
+            SnackBar(
+              content: Text(data['message'] ?? 'Error al cargar entregas'),
+            ),
           );
         }
       } else {
         setState(() => cargando = false);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Error al obtener detalles de la actividad")),
+          const SnackBar(
+            content: Text("Error al obtener detalles de la actividad"),
+          ),
         );
       }
     } catch (e) {
       setState(() => cargando = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error de conexión: $e")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error de conexión: $e")));
     }
   }
 
@@ -90,7 +96,11 @@ class _DetalleActividadState extends State<DetalleActividad> {
                 children: [
                   const Text(
                     'Entregas realizadas',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.teal),
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.teal,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   entregas.isEmpty
@@ -98,10 +108,19 @@ class _DetalleActividadState extends State<DetalleActividad> {
                       : Column(
                           children: entregas.map((entrega) {
                             return Card(
+                              color: Colors.white,
+                              elevation: 3.0,
                               margin: const EdgeInsets.symmetric(vertical: 6),
                               child: ListTile(
-                                leading: const Icon(Icons.check_circle, color: Colors.green),
-                                title: Text(entrega['nombre_completo'] ?? 'Alumno desconocido'),
+                                leading: const Icon(
+                                  Icons.check_circle,
+                                  color: Colors.green,
+                                ),
+                                title: Text(
+                                  entrega['nombre_completo'] ??
+                                      'Alumno desconocido',
+                                      style: TextStyle(color: Colors.teal),
+                                ),
                                 subtitle: Text(
                                   'Fecha de entrega: ${_formatearFecha(entrega['respuestas'] != null && entrega['respuestas'].isNotEmpty ? entrega['respuestas'][0]['created_at'] : null)}',
                                 ),
@@ -109,10 +128,14 @@ class _DetalleActividadState extends State<DetalleActividad> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => DetalleEntregaAlumno(
-                                        nombreAlumno: entrega['nombre_completo'] ?? 'Alumno desconocido',
-                                        respuestas: entrega['respuestas'] ?? [],
-                                      ),
+                                      builder: (context) =>
+                                          DetalleEntregaAlumno(
+                                            nombreAlumno:
+                                                entrega['nombre_completo'] ??
+                                                'Alumno desconocido',
+                                            respuestas:
+                                                entrega['respuestas'] ?? [],
+                                          ),
                                     ),
                                   );
                                 },
@@ -123,7 +146,11 @@ class _DetalleActividadState extends State<DetalleActividad> {
                   const SizedBox(height: 20),
                   const Text(
                     'Alumnos sin entrega',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.teal),
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.teal,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   noEntregados.isEmpty
@@ -131,11 +158,23 @@ class _DetalleActividadState extends State<DetalleActividad> {
                       : Column(
                           children: noEntregados.map((alumno) {
                             return Card(
+                              color: Colors.white,
+                              elevation: 3.0,
                               margin: const EdgeInsets.symmetric(vertical: 6),
                               child: ListTile(
-                                leading: const Icon(Icons.person_outline, color: Colors.grey),
-                                title: Text(alumno['nombre_completo'] ?? 'Alumno desconocido'),
-                                subtitle: const Text('No ha entregado aún'),
+                                leading: const Icon(
+                                  Icons.person_outline,
+                                  color: Colors.grey,
+                                ),
+                                title: Text(
+                                  alumno['nombre_completo'] ??
+                                      'Alumno desconocido',
+                                  style: TextStyle(color: Colors.teal),
+                                ),
+                                subtitle: const Text(
+                                  'No ha entregado aún',
+                                  style: TextStyle(color: Color.fromARGB(255, 79, 78, 78)),
+                                ),
                               ),
                             );
                           }).toList(),
@@ -156,4 +195,3 @@ String _formatearFecha(String? fechaIso) {
     return '-';
   }
 }
-

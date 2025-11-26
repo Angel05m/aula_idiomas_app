@@ -65,7 +65,7 @@ class _ActividadesDocenteState extends State<ActividadesDocente> {
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.0),
                     borderSide: BorderSide(
-                      color: Colors.grey.shade500,
+                      color: Colors.grey.shade200,
                       width: 1.0,
                     ),
                   ),
@@ -107,7 +107,7 @@ class _ActividadesDocenteState extends State<ActividadesDocente> {
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.0),
                     borderSide: BorderSide(
-                      color: Colors.grey.shade300,
+                      color: Colors.grey.shade200,
                       width: 1.0,
                     ),
                   ),

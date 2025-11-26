@@ -23,14 +23,13 @@ class ResponderActividad extends StatelessWidget {
         : 'Sin fecha límite';
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 1,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.teal),
         title: const Text(
           "Responder actividad",
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.teal),
         ),
         centerTitle: true,
       ),
@@ -55,7 +54,7 @@ class ResponderActividad extends StatelessWidget {
             const SizedBox(height: 20),
             Text(
               descripcion,
-              style: const TextStyle(fontSize: 16, color: Colors.black87),
+              style: const TextStyle(fontSize: 16, color: Color.fromARGB(255, 62, 62, 62)),
             ),
             const SizedBox(height: 40),
             Center(

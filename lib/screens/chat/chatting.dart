@@ -109,7 +109,8 @@ class _ChattingState extends State<Chatting> {
           ),
         ),
         backgroundColor: Colors.white,
-        elevation: 1,
+        iconTheme: IconThemeData(color: Colors.teal),
+        surfaceTintColor: Colors.white,
       ),
       body: Column(
         children: [

@@ -29,7 +29,9 @@ class _FormularioRespuestaState extends State<FormularioRespuesta> {
     try {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('userToken') ?? '';
-      final url = Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_RESPONDER_ACTIVIDAD']}/${widget.idActividad}');
+      final url = Uri.parse(
+        '${dotenv.env['API_URL']}${dotenv.env['API_RESPONDER_ACTIVIDAD']}/${widget.idActividad}',
+      );
       final response = await http.get(
         url,
         headers: {
@@ -40,7 +42,7 @@ class _FormularioRespuestaState extends State<FormularioRespuesta> {
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        final act = data['actividad']; 
+        final act = data['actividad'];
 
         setState(() {
           actividad = act;
@@ -62,11 +64,10 @@ class _FormularioRespuestaState extends State<FormularioRespuesta> {
     final token = prefs.getString('userToken') ?? '';
     final userId = prefs.getInt('userId');
 
-    final List<Map<String, dynamic>> listaRespuestas = respuestas.entries.map((e) {
-      return {
-        'fk_pregunta': e.key,
-        'respuesta': e.value.toString(),
-      };
+    final List<Map<String, dynamic>> listaRespuestas = respuestas.entries.map((
+      e,
+    ) {
+      return {'fk_pregunta': e.key, 'respuesta': e.value.toString()};
     }).toList();
 
     final body = {
@@ -76,13 +77,17 @@ class _FormularioRespuestaState extends State<FormularioRespuesta> {
     };
 
     print("📦 Enviando:");
-    print(jsonEncode({
-      'fk_actividad': widget.idActividad,
-      'fk_alumno': userId,
-      'respuestas': listaRespuestas,
-    }));
+    print(
+      jsonEncode({
+        'fk_actividad': widget.idActividad,
+        'fk_alumno': userId,
+        'respuestas': listaRespuestas,
+      }),
+    );
 
-    final url = Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_RESPONDER']}');
+    final url = Uri.parse(
+      '${dotenv.env['API_URL']}${dotenv.env['API_RESPONDER']}',
+    );
     final response = await http.post(
       url,
       headers: {
@@ -97,13 +102,16 @@ class _FormularioRespuestaState extends State<FormularioRespuesta> {
       final data = json.decode(response.body);
       if (data['success'] == true) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Respuestas enviadas correctamente"), backgroundColor: Colors.teal,),
+          const SnackBar(
+            content: Text("Respuestas enviadas correctamente"),
+            backgroundColor: Colors.teal,
+          ),
         );
         Navigator.pop(context);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("${data['message']}")),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("${data['message']}")));
       }
     } else {
       print('Error: ${response.body}');
@@ -113,13 +121,10 @@ class _FormularioRespuestaState extends State<FormularioRespuesta> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     if (cargando) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     if (actividad == null) {
@@ -130,7 +135,12 @@ class _FormularioRespuestaState extends State<FormularioRespuesta> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(actividad!['nom_actividad'] ?? 'Responder actividad'),
+        title: Text(
+          actividad!['nom_actividad'] ?? 'Responder actividad',
+          style: TextStyle(color: Colors.teal),
+        ),
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.teal),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
@@ -152,7 +162,10 @@ class _FormularioRespuestaState extends State<FormularioRespuesta> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.teal,
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 14),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 30,
+                    vertical: 14,
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -230,6 +243,5 @@ class _FormularioRespuestaState extends State<FormularioRespuesta> {
         ),
       );
     }).toList();
-}
-
+  }
 }

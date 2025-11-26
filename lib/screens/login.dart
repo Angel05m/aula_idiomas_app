@@ -33,11 +33,11 @@ class _LoginState extends State<Login> {
               children: [
                 Column(
                   children: [
-                    // Image(image: Image.asset('assets/images/logo.png'), height: 50),
+                    Image.asset('images/logo.png', width: 200, height: 200,),
                     Text(
                       'Bienvenido de nuevo',
                       style: TextStyle(
-                        color: Colors.teal.shade700,
+                        color: Colors.teal.shade500,
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,
                       ),

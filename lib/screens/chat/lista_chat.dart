@@ -58,6 +58,8 @@ class _ListaChatState extends State<ListaChat> {
           ),
         ),
         backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.teal),
+        surfaceTintColor: Colors.white,
       ),
 
       body: Padding(

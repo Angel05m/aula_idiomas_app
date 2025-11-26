@@ -76,12 +76,13 @@ class _DetalleEntregaAlumnoState extends State<DetalleEntregaAlumno> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
-        title: const Text("Detalle de entrega"),
+        title: const Text("Detalle de entrega", style: TextStyle(color: Colors.teal),),
         backgroundColor: Colors.white,
-        elevation: 2,
         centerTitle: true,
+        iconTheme: IconThemeData(color: Colors.teal),
+        surfaceTintColor: Colors.white,
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator(color: Colors.teal))
@@ -97,7 +98,8 @@ class _DetalleEntregaAlumnoState extends State<DetalleEntregaAlumno> {
                   child: Column(
                     children: [
                       Card(
-                        elevation: 5,
+                        color: Colors.white,
+                        elevation: 3,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
@@ -105,6 +107,8 @@ class _DetalleEntregaAlumnoState extends State<DetalleEntregaAlumno> {
                         child: Padding(
                           padding: const EdgeInsets.all(20),
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
                                 getEstadoIcon(),

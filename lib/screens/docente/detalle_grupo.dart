@@ -37,7 +37,8 @@ class _DetalleGrupoScreenState extends State<DetalleGrupoScreen>
     try {
       final res = await http.get(
         Uri.parse(
-            '${dotenv.env['API_URL']}${dotenv.env['API_DETALLE_GRUPO']}/${widget.pkGrupo}'),
+          '${dotenv.env['API_URL']}${dotenv.env['API_DETALLE_GRUPO']}/${widget.pkGrupo}',
+        ),
         headers: {
           "Accept": "application/json",
           "Authorization": "Bearer $token",
@@ -54,7 +55,9 @@ class _DetalleGrupoScreenState extends State<DetalleGrupoScreen>
         } else {
           setState(() => cargando = false);
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(data['message'] ?? 'Error al cargar el grupo')),
+            SnackBar(
+              content: Text(data['message'] ?? 'Error al cargar el grupo'),
+            ),
           );
         }
       } else {
@@ -65,9 +68,9 @@ class _DetalleGrupoScreenState extends State<DetalleGrupoScreen>
       }
     } catch (e) {
       setState(() => cargando = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error de conexión: $e")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error de conexión: $e")));
     }
   }
 
@@ -75,9 +78,9 @@ class _DetalleGrupoScreenState extends State<DetalleGrupoScreen>
     final url = dotenv.env['WEB_URL'];
 
     if (url == null || url.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("WEB_URL no está definida")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("WEB_URL no está definida")));
       return;
     }
 
@@ -86,9 +89,9 @@ class _DetalleGrupoScreenState extends State<DetalleGrupoScreen>
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("No se pudo abrir la URL")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("No se pudo abrir la URL")));
     }
   }
 
@@ -128,18 +131,26 @@ class _DetalleGrupoScreenState extends State<DetalleGrupoScreen>
                   itemBuilder: (context, index) {
                     final alumno = grupoData!['alumnos'][index]['usuario'];
                     return Card(
+                      color: Colors.white,
                       margin: const EdgeInsets.symmetric(vertical: 6),
+                      elevation: 3,
                       child: ListTile(
                         leading: const Icon(Icons.person, color: Colors.teal),
                         title: Text(
-                            '${alumno['nombres'] ?? ''} ${alumno['ap_paterno'] ?? ''} ${alumno['ap_materno'] ?? ''}'),
-                        subtitle: Text('Matrícula: ${alumno['matricula'] ?? '-'}'),
+                          '${alumno['nombres'] ?? ''} ${alumno['ap_paterno'] ?? ''} ${alumno['ap_materno'] ?? ''}',
+                          style: TextStyle(color: Colors.teal.shade500),
+                        ),
+                        subtitle: Text(
+                          'Matrícula: ${alumno['matricula'] ?? '-'}',
+                          style: TextStyle(color: Colors.grey.shade500),
+                        ),
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => DetalleAlumno(
-                                pkAlumno: grupoData!['alumnos'][index]['pk_alumno'],
+                                pkAlumno:
+                                    grupoData!['alumnos'][index]['pk_alumno'],
                               ),
                             ),
                           );
@@ -159,20 +170,30 @@ class _DetalleGrupoScreenState extends State<DetalleGrupoScreen>
                     final fechaFin = act['pivot']?['fecha_fin'] ?? '-';
 
                     return Card(
+                      color: Colors.white,
+                      elevation: 3.0,
                       margin: const EdgeInsets.symmetric(vertical: 6),
                       child: ListTile(
                         leading: const Icon(Icons.event, color: Colors.teal),
-                        title: Text(act['nom_actividad'] ?? 'Sin título'),
+                        title: Text(
+                          act['nom_actividad'] ?? 'Sin título',
+                          style: TextStyle(color: Colors.teal),
+                        ),
                         subtitle: Text(
-                            'Tipo: ${act['tipo'] ?? '-'}\nInicio: $fechaInicio\nFin: $fechaFin'),
+                          'Tipo: ${act['tipo'] ?? '-'}\nInicio: $fechaInicio\nFin: $fechaFin',
+                          style: TextStyle(color: Colors.grey.shade500),
+                        ),
                         onTap: () {
-                          if (tipo == 'pdf' || tipo == 'auditiva' || tipo == 'audio') {
+                          if (tipo == 'pdf' ||
+                              tipo == 'auditiva' ||
+                              tipo == 'audio') {
                             showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
                                 title: const Text("Contenido no disponible"),
                                 content: const Text(
-                                    "Para visualizar actividades de tipo PDF o auditiva, por favor ingrese desde la plataforma web."),
+                                  "Para visualizar actividades de tipo PDF o auditiva, por favor ingrese desde la plataforma web.",
+                                ),
                                 actions: [
                                   TextButton(
                                     onPressed: () => Navigator.pop(context),

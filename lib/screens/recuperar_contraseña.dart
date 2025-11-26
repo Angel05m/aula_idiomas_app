@@ -37,12 +37,14 @@ class _RecuperarContrasenaState extends State<RecuperarContrasena> {
                       style: TextStyle(
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,
+                        color: Colors.teal,
                       ),
+                      textAlign: TextAlign.center,
                     ),
                     Text(
                       'Por favor, ingresa tu matrícula para recuperar tu contraseña.',
-                      textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 15.0, color: Colors.grey[600]),
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),
@@ -81,11 +83,9 @@ class _RecuperarContrasenaState extends State<RecuperarContrasena> {
                   alignment: Alignment.centerLeft,
                   child: TextButton(
                     onPressed: () {
-                     Navigator.push(
+                      Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => Login(),
-                        ),
+                        MaterialPageRoute(builder: (context) => Login()),
                       );
                     },
                     child: Text(
@@ -111,10 +111,7 @@ class _RecuperarContrasenaState extends State<RecuperarContrasena> {
                             : () {
                                 String matricula = matriculaController.text
                                     .trim();
-                                authController.recovery(
-                                  matricula,
-                                  context,
-                                );
+                                authController.recovery(matricula, context);
                               },
                         child: authController.isLoadingRecovery.value
                             ? SizedBox(
