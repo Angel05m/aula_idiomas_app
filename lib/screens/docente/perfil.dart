@@ -15,10 +15,11 @@ class PerfilDocente extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           'Perfil Docente',
-          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.teal),
         ),
         backgroundColor: Colors.white,
         centerTitle: true,
+        iconTheme: const IconThemeData(color: Colors.teal),
       ),
       backgroundColor: Colors.grey[100],
       body: Obx(() {

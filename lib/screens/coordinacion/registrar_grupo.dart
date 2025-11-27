@@ -9,10 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class RegistrarGrupo extends StatefulWidget {
   final ListaGruposController listaGruposController;
 
-  const RegistrarGrupo({
-    super.key,
-    required this.listaGruposController,
-  });
+  const RegistrarGrupo({super.key, required this.listaGruposController});
 
   @override
   State<RegistrarGrupo> createState() => _RegistrarGrupoState();
@@ -33,7 +30,17 @@ class _RegistrarGrupoState extends State<RegistrarGrupo> {
 
   final List<String> _optionsGrupo = ['A', 'B', 'C', 'D', 'F'];
   final List<String> _optionsCuatri = [
-    '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    '10',
+    '11',
   ];
 
   late GrupoCoordinadorController _controller;
@@ -126,10 +133,15 @@ class _RegistrarGrupoState extends State<RegistrarGrupo> {
       appBar: AppBar(
         title: const Text(
           'Registrar Grupo',
-          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 25,
+            color: Colors.teal,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         backgroundColor: Colors.white,
         centerTitle: true,
+        iconTheme: const IconThemeData(color: Colors.teal),
       ),
       backgroundColor: Colors.grey.shade100,
       body: SingleChildScrollView(
@@ -173,7 +185,8 @@ class _RegistrarGrupoState extends State<RegistrarGrupo> {
               displayField: null,
               idField: 'pk_usuario',
               customDisplay: (d) =>
-                  '${d['nombres'] ?? ''} ${d['ap_paterno'] ?? ''} ${d['ap_materno'] ?? ''}'.trim(),
+                  '${d['nombres'] ?? ''} ${d['ap_paterno'] ?? ''} ${d['ap_materno'] ?? ''}'
+                      .trim(),
               onChanged: (val) => setState(() => _selectedOptionDocente = val),
             ),
             const SizedBox(height: 10.0),
@@ -187,7 +200,11 @@ class _RegistrarGrupoState extends State<RegistrarGrupo> {
             const SizedBox(height: 10.0),
             const Text(
               'Año:',
-              style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.normal),
+              style: TextStyle(
+                fontSize: 15.0,
+                color: Color.fromARGB(184, 57, 57, 57),
+                fontWeight: FontWeight.normal,
+              ),
             ),
             const SizedBox(height: 5.0),
             TextField(
@@ -224,7 +241,13 @@ class _RegistrarGrupoState extends State<RegistrarGrupo> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontSize: 15.0)),
+        Text(
+          label,
+          style: const TextStyle(
+            color: Color.fromARGB(184, 57, 57, 57),
+            fontSize: 15.0,
+          ),
+        ),
         const SizedBox(height: 5.0),
         DropdownButtonFormField<String>(
           isExpanded: true,
@@ -252,7 +275,13 @@ class _RegistrarGrupoState extends State<RegistrarGrupo> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontSize: 15.0)),
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 15.0,
+            color: Color.fromARGB(184, 57, 57, 57),
+          ),
+        ),
         const SizedBox(height: 5.0),
         DropdownButtonFormField<String>(
           isExpanded: true,
@@ -277,11 +306,17 @@ class _RegistrarGrupoState extends State<RegistrarGrupo> {
 InputDecoration _inputDecoration(String hint) {
   return InputDecoration(
     hintText: hint,
+    hintStyle: const TextStyle(color: Colors.grey),
     filled: true,
     fillColor: Colors.white,
+    prefixIconColor: Colors.teal,
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12.0),
       borderSide: const BorderSide(width: 1.0, color: Colors.grey),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12.0),
+      borderSide: BorderSide(color: Colors.grey.shade500, width: 1.0),
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12.0),

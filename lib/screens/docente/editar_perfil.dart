@@ -38,7 +38,10 @@ class _EditarPerfilDocenteState extends State<EditarPerfilDocente> {
     final apMaterno = apMaternoController.text.trim();
     final email = correoController.text.trim();
 
-    if (nombres.isEmpty || apPaterno.isEmpty || apMaterno.isEmpty || email.isEmpty) {
+    if (nombres.isEmpty ||
+        apPaterno.isEmpty ||
+        apMaterno.isEmpty ||
+        email.isEmpty) {
       Get.snackbar(
         'Error',
         'Todos los campos son obligatorios',
@@ -57,7 +60,9 @@ class _EditarPerfilDocenteState extends State<EditarPerfilDocente> {
       final userId = loadPerfilController.userData.value?['pk_usuario'];
 
       final response = await http.put(
-        Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_EDITAR_PERFIL']}/$userId'),
+        Uri.parse(
+          '${dotenv.env['API_URL']}${dotenv.env['API_EDITAR_PERFIL']}/$userId',
+        ),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -105,27 +110,40 @@ class _EditarPerfilDocenteState extends State<EditarPerfilDocente> {
       appBar: AppBar(
         title: const Text(
           'Editar Perfil',
-          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+            color: Colors.teal,
+          ),
         ),
         backgroundColor: Colors.white,
         centerTitle: true,
+        iconTheme: IconThemeData(color: Colors.teal),
       ),
       backgroundColor: Colors.grey[100],
       body: Obx(() {
         if (loadPerfilController.isLoadingPerfil.value) {
-          return const Center(child: CircularProgressIndicator(color: Colors.teal));
+          return const Center(
+            child: CircularProgressIndicator(color: Colors.teal),
+          );
         }
 
         if (loadPerfilController.hasError.value) {
-          return const Center(child: Text('Ocurrió un error al cargar los datos'));
+          return const Center(
+            child: Text('Ocurrió un error al cargar los datos'),
+          );
         }
 
         final data = loadPerfilController.userData.value;
         if (data != null) {
-          if (nombresController.text.isEmpty) nombresController.text = data['nombres'] ?? '';
-          if (apPaternoController.text.isEmpty) apPaternoController.text = data['ap_paterno'] ?? '';
-          if (apMaternoController.text.isEmpty) apMaternoController.text = data['ap_materno'] ?? '';
-          if (correoController.text.isEmpty) correoController.text = data['email'] ?? '';
+          if (nombresController.text.isEmpty)
+            nombresController.text = data['nombres'] ?? '';
+          if (apPaternoController.text.isEmpty)
+            apPaternoController.text = data['ap_paterno'] ?? '';
+          if (apMaternoController.text.isEmpty)
+            apMaternoController.text = data['ap_materno'] ?? '';
+          if (correoController.text.isEmpty)
+            correoController.text = data['email'] ?? '';
         }
 
         return SingleChildScrollView(
@@ -141,16 +159,21 @@ class _EditarPerfilDocenteState extends State<EditarPerfilDocente> {
               const SizedBox(height: 10),
               _buildTextField('Correo', correoController, isEmail: true),
               const SizedBox(height: 20),
-              Obx(() => ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.teal,
-                      minimumSize: const Size(double.infinity, 50),
-                    ),
-                    onPressed: isUpdating.value ? null : updatePerfil,
-                    child: isUpdating.value
-                        ? const CircularProgressIndicator(color: Colors.white)
-                        : const Text('Actualizar Información', style: TextStyle(color: Colors.white, fontSize: 15)),
-                  )),
+              Obx(
+                () => ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.teal,
+                    minimumSize: const Size(double.infinity, 50),
+                  ),
+                  onPressed: isUpdating.value ? null : updatePerfil,
+                  child: isUpdating.value
+                      ? const CircularProgressIndicator(color: Colors.white)
+                      : const Text(
+                          'Actualizar Información',
+                          style: TextStyle(color: Colors.white, fontSize: 15),
+                        ),
+                ),
+              ),
             ],
           ),
         );
@@ -158,7 +181,11 @@ class _EditarPerfilDocenteState extends State<EditarPerfilDocente> {
     );
   }
 
-  Widget _buildTextField(String label, TextEditingController controller, {bool isEmail = false}) {
+  Widget _buildTextField(
+    String label,
+    TextEditingController controller, {
+    bool isEmail = false,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -166,11 +193,20 @@ class _EditarPerfilDocenteState extends State<EditarPerfilDocente> {
         const SizedBox(height: 5),
         TextField(
           controller: controller,
-          keyboardType: isEmail ? TextInputType.emailAddress : TextInputType.text,
+          keyboardType: isEmail
+              ? TextInputType.emailAddress
+              : TextInputType.text,
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.white,
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(width: 1.0),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12.0),
+              borderSide: BorderSide(color: Colors.grey.shade500, width: 1.0),
+            ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: const BorderSide(color: Colors.teal, width: 3),

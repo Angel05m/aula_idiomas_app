@@ -33,7 +33,9 @@ class _DetalleAlumnoState extends State<DetalleAlumno> {
 
     try {
       final res = await http.get(
-        Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_DETALLE_ALUMNO']}/${widget.pkAlumno}'),
+        Uri.parse(
+          '${dotenv.env['API_URL']}${dotenv.env['API_DETALLE_ALUMNO']}/${widget.pkAlumno}',
+        ),
         headers: {
           "Accept": "application/json",
           "Authorization": "Bearer $token",
@@ -50,7 +52,9 @@ class _DetalleAlumnoState extends State<DetalleAlumno> {
         } else {
           setState(() => cargando = false);
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(data['message'] ?? 'Error al cargar el alumno')),
+            SnackBar(
+              content: Text(data['message'] ?? 'Error al cargar el alumno'),
+            ),
           );
         }
       } else {
@@ -61,9 +65,9 @@ class _DetalleAlumnoState extends State<DetalleAlumno> {
       }
     } catch (e) {
       setState(() => cargando = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error de conexión: $e")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error de conexión: $e")));
     }
   }
 
@@ -102,9 +106,9 @@ class _DetalleAlumnoState extends State<DetalleAlumno> {
     if (await canLaunchUrl(Uri.parse(url))) {
       await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('No se pudo abrir la URL')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('No se pudo abrir la URL')));
     }
   }
 
@@ -141,20 +145,47 @@ class _DetalleAlumnoState extends State<DetalleAlumno> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Información personal',
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.teal)),
+            Text(
+              'Información personal',
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.teal,
+              ),
+            ),
             const SizedBox(height: 8),
-            Text('Matrícula: ${alumno['matricula'] ?? '-'}'),
+            Text(
+              'Matrícula: ${alumno['matricula'] ?? '-'}',
+              style: TextStyle(color: Colors.grey.shade600),
+            ),
             const SizedBox(height: 16),
-            Text('Grupo',
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.teal)),
+            Text(
+              'Grupo',
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.teal,
+              ),
+            ),
             const SizedBox(height: 8),
-            Text('${grupo['cuatrimestre']?['num_cuatri'] ?? '-'} ${grupo['nombre'] ?? '-'} '
-                '${grupo['carrera']?['abreviatura'] ?? '-'} ${grupo['año'] ?? '-'}'),
-            Text('${grupo['carrera']?['nombre'] ?? '-'}'),
+            Text(
+              '${grupo['cuatrimestre']?['num_cuatri'] ?? '-'} ${grupo['nombre'] ?? '-'} '
+              '${grupo['carrera']?['abreviatura'] ?? '-'} ${grupo['año'] ?? '-'}',
+              style: TextStyle(color: Colors.grey.shade600),
+            ),
+            Text(
+              '${grupo['carrera']?['nombre'] ?? '-'}',
+              style: TextStyle(color: Colors.grey.shade600),
+            ),
             const SizedBox(height: 16),
-            Text('Actividades',
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.teal)),
+            Text(
+              'Actividades',
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.teal,
+              ),
+            ),
             const SizedBox(height: 8),
             Expanded(
               child: ListView.builder(
@@ -165,16 +196,26 @@ class _DetalleAlumnoState extends State<DetalleAlumno> {
                   final tipo = act['tipo']?.toString().toLowerCase() ?? '';
 
                   return Card(
+                    color: Colors.white,
+                    elevation: 3.0,
                     margin: const EdgeInsets.symmetric(vertical: 6),
                     child: ListTile(
                       leading: Icon(
                         entregado ? Icons.check_circle : Icons.cancel,
                         color: entregado ? Colors.green : Colors.red,
                       ),
-                      title: Text(act['nom_actividad'] ?? '-'),
-                      subtitle: Text(entregado ? 'Entregado' : 'Pendiente'),
+                      title: Text(
+                        act['nom_actividad'] ?? '-',
+                        style: TextStyle(color: Colors.teal),
+                      ),
+                      subtitle: Text(
+                        entregado ? 'Entregado' : 'Pendiente',
+                        style: TextStyle(color: Colors.grey.shade600),
+                      ),
                       onTap: () {
-                        if (tipo == "pdf" || tipo == "auditiva" || tipo.contains("oral")) {
+                        if (tipo == "pdf" ||
+                            tipo == "auditiva" ||
+                            tipo.contains("oral")) {
                           mostrarAlertaSoloWeb(act['pk_actividad']);
                           return;
                         }

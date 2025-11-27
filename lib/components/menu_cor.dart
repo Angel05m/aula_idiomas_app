@@ -50,7 +50,7 @@ class _MenuCoordinacionState extends State<MenuCoordinacion> {
         automaticallyImplyLeading: false,
         title: Text(
           _titles[_selectedIndex],
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.teal.shade700, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.white,
         actions: [
@@ -68,13 +68,13 @@ class _MenuCoordinacionState extends State<MenuCoordinacion> {
                 icon: Icon(
                   Icons.message,
                   size: 30,
-                  color: Colors.black,
+                  color: Colors.grey.shade600,
                 ),
               ),
               // Icon(Icons.notifications, size: 30, color: Colors.black),
               SizedBox(width: 5),
               PopupMenuButton<String>(
-                icon: Icon(Icons.more_vert, size: 30, color: Colors.black),
+                icon: Icon(Icons.more_vert, size: 30, color: Colors.grey.shade600),
                 onSelected: (String resultado) {
                   switch (resultado) {
                     case 'Perfil':

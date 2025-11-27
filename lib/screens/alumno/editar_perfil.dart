@@ -14,10 +14,12 @@ class _EditarPerfilAlumnoState extends State<EditarPerfilAlumno> {
       appBar: AppBar(
         title: Text(
           'Editar perfil alumno',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.teal),
         ),
         backgroundColor: Colors.white,
         centerTitle: true,
+        iconTheme: IconThemeData(color: Colors.teal),
+        surfaceTintColor: Colors.white,
       ),
       backgroundColor: Colors.grey.shade100,
       body: SingleChildScrollView(
@@ -41,6 +43,7 @@ class _EditarPerfilAlumnoState extends State<EditarPerfilAlumno> {
                       style: TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
+                        color: Colors.teal
                       ),
                     ),
                     Text(
@@ -48,6 +51,7 @@ class _EditarPerfilAlumnoState extends State<EditarPerfilAlumno> {
                       style: TextStyle(
                         fontSize: 15.0,
                         fontWeight: FontWeight.normal,
+                        color: Colors.grey.shade500
                       ),
                       textAlign: TextAlign.start,
                     ),

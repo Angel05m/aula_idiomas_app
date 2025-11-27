@@ -34,11 +34,13 @@ class _AsignarActividadDocenteState extends State<AsignarActividadDocente> {
 
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('userToken') ?? '';
-      final id = prefs.getInt('userId')?.toString() ?? '';
+    final id = prefs.getInt('userId')?.toString() ?? '';
 
     try {
       final res = await http.get(
-        Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_OBTENER_GRUPOS']}/$id'),
+        Uri.parse(
+          '${dotenv.env['API_URL']}${dotenv.env['API_OBTENER_GRUPOS']}/$id',
+        ),
         headers: {
           "Accept": "application/json",
           "Authorization": "Bearer $token",
@@ -54,7 +56,9 @@ class _AsignarActividadDocenteState extends State<AsignarActividadDocente> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error ${res.statusCode}: no se pudieron obtener los grupos'),
+            content: Text(
+              'Error ${res.statusCode}: no se pudieron obtener los grupos',
+            ),
             backgroundColor: Colors.red,
           ),
         );
@@ -83,7 +87,9 @@ class _AsignarActividadDocenteState extends State<AsignarActividadDocente> {
     final token = prefs.getString('userToken') ?? '';
 
     final res = await http.post(
-      Uri.parse('${dotenv.env['API_URL']}${dotenv.env['API_ASIGNAR_ACTIVIDAD']}'),
+      Uri.parse(
+        '${dotenv.env['API_URL']}${dotenv.env['API_ASIGNAR_ACTIVIDAD']}',
+      ),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -119,6 +125,7 @@ class _AsignarActividadDocenteState extends State<AsignarActividadDocente> {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       elevation: 2,
+      color: Colors.white,
       margin: const EdgeInsets.symmetric(vertical: 6),
       child: CheckboxListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -155,12 +162,11 @@ class _AsignarActividadDocenteState extends State<AsignarActividadDocente> {
       appBar: AppBar(
         title: const Text(
           "Asignar Actividad",
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.teal),
         ),
         backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.teal),
         centerTitle: true,
-        elevation: 1,
       ),
       backgroundColor: Colors.grey.shade100,
       body: cargando
@@ -175,7 +181,7 @@ class _AsignarActividadDocenteState extends State<AsignarActividadDocente> {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
-                      color: Colors.black,
+                      color: Color.fromARGB(255, 84, 83, 83),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -186,15 +192,33 @@ class _AsignarActividadDocenteState extends State<AsignarActividadDocente> {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
-                      color: Colors.black,
+                      color: Color.fromARGB(255, 84, 83, 83),
                     ),
                   ),
                   const SizedBox(height: 6),
                   DateTimeFormField(
                     decoration: InputDecoration(
+                      hintStyle: TextStyle(color: Colors.grey.shade400),
+                      filled: true,
+                      fillColor: Colors.white,
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8)),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                       suffixIcon: const Icon(Icons.event, color: Colors.teal),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        borderSide: BorderSide(
+                          color: Colors.grey.shade400,
+                          width: 1.0,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        borderSide: const BorderSide(
+                          color: Colors.teal,
+                          width: 3.0,
+                        ),
+                      ),
                     ),
                     firstDate: DateTime(2020),
                     lastDate: DateTime(2100),
@@ -208,15 +232,33 @@ class _AsignarActividadDocenteState extends State<AsignarActividadDocente> {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
-                      color: Colors.black,
+                      color: Color.fromARGB(255, 84, 83, 83),
                     ),
                   ),
                   const SizedBox(height: 6),
                   DateTimeFormField(
                     decoration: InputDecoration(
+                      hintStyle: TextStyle(color: Colors.grey.shade400),
+                      filled: true,
+                      fillColor: Colors.white,
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8)),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                       suffixIcon: const Icon(Icons.event, color: Colors.teal),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        borderSide: BorderSide(
+                          color: Colors.grey.shade400,
+                          width: 1.0,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        borderSide: const BorderSide(
+                          color: Colors.teal,
+                          width: 3.0,
+                        ),
+                      ),
                     ),
                     firstDate: DateTime(2020),
                     lastDate: DateTime(2100),

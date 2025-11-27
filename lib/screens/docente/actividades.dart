@@ -37,66 +37,131 @@ class _ActividadesDocenteState extends State<ActividadesDocente> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const [
-                  Text('Actividades', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
+                  Text(
+                    'Actividades',
+                    style: TextStyle(fontSize: 30, color: Colors.teal, fontWeight: FontWeight.bold),
+                  ),
                   Text('Añade, edita y gestiona las actividades'),
                 ],
               ),
             ),
             const SizedBox(height: 20),
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'Buscar actividad...',
-                prefixIcon: const Icon(Icons.search, color: Colors.teal),
-                filled: true,
-                fillColor: Colors.white,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.0),
-                  borderSide: const BorderSide(width: 1.0, color: Colors.grey),
+            Material(
+              elevation: 3.0,
+              borderRadius: BorderRadius.circular(12.0),
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: 'Buscar actividad...',
+                  prefixIcon: const Icon(Icons.search, color: Colors.teal),
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    borderSide: const BorderSide(
+                      width: 1.0,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    borderSide: BorderSide(
+                      color: Colors.grey.shade200,
+                      width: 1.0,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    borderSide: const BorderSide(
+                      color: Colors.teal,
+                      width: 3.0,
+                    ),
+                  ),
                 ),
+                onChanged: (value) {
+                  _search = value.trim();
+                  controller.refresh(search: _search, tipo: _tipo);
+                },
               ),
-              onChanged: (value) {
-                _search = value.trim();
-                controller.refresh(search: _search, tipo: _tipo);
-              },
             ),
+
             const SizedBox(height: 13),
 
-            DropdownButtonFormField<String?>(
-              value: _tipo,
-              hint: const Text('Filtrar por tipo'),
-              isExpanded: true,
-              items: [
-                const DropdownMenuItem<String?>(
-                  value: null,
-                  child: Text('Todos'),
+            Material(
+              elevation: 3.0,
+              borderRadius: BorderRadius.circular(12.0),
+              child: DropdownButtonFormField<String?>(
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: 15.0,
+                    horizontal: 10.0,
+                  ),
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    borderSide: BorderSide(
+                      color: Colors.grey.shade300,
+                      width: 1.0,
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    borderSide: BorderSide(
+                      color: Colors.grey.shade200,
+                      width: 1.0,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    borderSide: const BorderSide(
+                      color: Colors.teal,
+                      width: 2.0,
+                    ),
+                  ),
                 ),
-                ..._tipos.map((value) => DropdownMenuItem<String?>(
+                value: _tipo,
+                hint: const Text('Filtrar por tipo'),
+                isExpanded: true,
+                items: [
+                  const DropdownMenuItem<String?>(
+                    value: null,
+                    child: Text('Todos'),
+                  ),
+                  ..._tipos.map(
+                    (value) => DropdownMenuItem<String?>(
                       value: value,
                       child: Text(
                         value == 'preguntas'
                             ? 'Preguntas'
                             : value == 'pdf'
-                                ? 'Carga de PDF'
-                                : 'Auditiva y Oral',
+                            ? 'Carga de PDF'
+                            : 'Auditiva y Oral',
                         overflow: TextOverflow.ellipsis,
                       ),
-                    )),
-              ],
-              onChanged: (value) {
-                setState(() => _tipo = value);
-                controller.refresh(search: _search, tipo: _tipo);
-              },
+                    ),
+                  ),
+                ],
+                onChanged: (value) {
+                  setState(() => _tipo = value);
+                  controller.refresh(search: _search, tipo: _tipo);
+                },
+              ),
             ),
+
             const SizedBox(height: 13),
 
             Expanded(
               child: Obx(() {
                 if (controller.isLoading.value) {
-                  return const Center(child: CircularProgressIndicator(color: Colors.teal));
+                  return const Center(
+                    child: CircularProgressIndicator(color: Colors.teal),
+                  );
                 }
 
                 if (controller.actividades.isEmpty) {
-                  return const Center(child: Text('No hay actividades registradas'));
+                  return const Center(
+                    child: Text('No hay actividades registradas'),
+                  );
                 }
 
                 return ListView.separated(
@@ -114,15 +179,21 @@ class _ActividadesDocenteState extends State<ActividadesDocente> {
                       tipo: actividad['tipo'] == 'preguntas'
                           ? 'Preguntas'
                           : actividad['tipo'] == 'pdf'
-                              ? 'Carga de PDF'
-                              : 'Auditiva y Oral',
+                          ? 'Carga de PDF'
+                          : 'Auditiva y Oral',
                       descripcion: actividad['descripcion'] ?? '',
                       isActive: isActive,
                       onToggleActive: () async {
                         if (isActive) {
-                          await controller.deshabilitarActividad(actividad['pk_actividad'], context);
+                          await controller.deshabilitarActividad(
+                            actividad['pk_actividad'],
+                            context,
+                          );
                         } else {
-                          await controller.habilitarActividad(actividad['pk_actividad'], context);
+                          await controller.habilitarActividad(
+                            actividad['pk_actividad'],
+                            context,
+                          );
                         }
                       },
                     );

@@ -98,6 +98,7 @@ class _InicioCoordinacionState extends State<InicioCoordinacion> {
                     Text(
                       'Bienvenido/a',
                       style: TextStyle(
+                        color: Colors.teal.shade700,
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
                       ),

@@ -29,6 +29,7 @@ class DetalleEntregaAlumno extends StatelessWidget {
                 final esCorrecta = r['es_correcta'] == 1 || r['es_correcta'] == true;
 
                 return Card(
+                  color: Colors.teal.shade50,
                   margin: const EdgeInsets.symmetric(vertical: 8),
                   elevation: 3,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -37,6 +38,7 @@ class DetalleEntregaAlumno extends StatelessWidget {
                     child: Column(
                       children: respuestas.map((r) {
                         return Card(
+                          color: Colors.white,
                           child: ListTile(
                             title: Text(r['pregunta'] ?? 'Pregunta desconocida'),
                             subtitle: Text(r['respuesta'] ?? ''),
