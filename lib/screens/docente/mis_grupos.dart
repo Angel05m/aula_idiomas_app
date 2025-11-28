@@ -80,19 +80,20 @@ class _MisGruposDocenteState extends State<MisGruposDocente> {
                     }
 
                     return Column(
-                      children: controller.grupos.map((g) {
+                      children: controller.grupos
+                          .where((g) => g.grupo != null) // <- FILTRA LOS NULL
+                          .map((g) {
                         return CardInfoGrupoDocente(
-                          grupo:
-                              '${g.grupo.fkCuatrimestre} ${g.grupo.nombre} ${g.grupo.carrera.abreviatura} ${g.grupo.anio}',
-                          cuatri: 'Cuatrimestre: ${g.grupo.fkCuatrimestre}',
-                          anio: 'Año escolar: ${g.grupo.anio}',
-                          carrera: g.grupo.carrera.nombre,
+                          grupo: '${g.grupo!.fkCuatrimestre} ${g.grupo!.nombre} ${g.grupo!.carrera.abreviatura} ${g.grupo!.anio}',
+                          cuatri: 'Cuatrimestre: ${g.grupo!.fkCuatrimestre}',
+                          anio: 'Año escolar: ${g.grupo!.anio}',
+                          carrera: g.grupo!.carrera.nombre,
                           materia: g.materia.nombre,
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => DetalleGrupoScreen(pkGrupo: g.grupo.pkGrupo),
+                                builder: (_) => DetalleGrupoScreen(pkGrupo: g.grupo!.pkGrupo),
                               ),
                             );
                           },

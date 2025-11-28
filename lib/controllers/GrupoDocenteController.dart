@@ -51,8 +51,10 @@ class GrupoDocenteController extends ChangeNotifier {
       _filteredGrupos = _grupos;
     } else {
       _filteredGrupos = _grupos.where((g) {
-        final grupoText =
-            '${g.grupo.fkCuatrimestre} ${g.grupo.nombre} ${g.grupo.carrera.abreviatura} ${g.grupo.anio}';
+        final grupoObj = g.grupo;
+        final grupoText = grupoObj == null
+            ? ''
+            : '${grupoObj.fkCuatrimestre} ${grupoObj.nombre} ${grupoObj.carrera.abreviatura} ${grupoObj.anio}';
         final materiaText = g.materia.nombre;
         return grupoText.toLowerCase().contains(query.toLowerCase()) ||
             materiaText.toLowerCase().contains(query.toLowerCase());

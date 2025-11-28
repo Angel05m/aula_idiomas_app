@@ -2,7 +2,7 @@ import 'dart:convert';
 
 class GrupoMateria {
   final int pkGrupoMateria;
-  final Grupo grupo;
+  final Grupo? grupo;
   final Materia materia;
 
   GrupoMateria({
@@ -14,7 +14,7 @@ class GrupoMateria {
   factory GrupoMateria.fromJson(Map<String, dynamic> json) {
     return GrupoMateria(
       pkGrupoMateria: json['pk_grupo_materia'],
-      grupo: Grupo.fromJson(json['grupo']),
+      grupo: json['grupo'] != null ? Grupo.fromJson(json['grupo']) : null,
       materia: Materia.fromJson(json['materia']),
     );
   }

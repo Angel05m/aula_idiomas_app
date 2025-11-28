@@ -50,7 +50,7 @@ class LoadPerfilAlumnoController extends GetxController {
       if (response.statusCode == 200 && data['success'] == true) {
         final usuario = data['usuario'];
         final nombreCompleto =
-            '${usuario['nombres']} ${usuario['ap_paterno']} ${usuario['ap_materno']}';
+            '${usuario['nombres']} ${usuario['ap_paterno']}';
 
         userData.value = {
           'nombre': nombreCompleto,
