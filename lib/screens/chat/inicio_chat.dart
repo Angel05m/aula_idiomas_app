@@ -44,10 +44,10 @@ class _InicioChatState extends State<InicioChat> {
           ),
         ),
         backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.teal),
         titleSpacing: 5.0,
-        elevation: 1,
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey.shade100,
       body: cargando
           ? Center(child: CircularProgressIndicator())
           : Padding(

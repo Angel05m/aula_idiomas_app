@@ -100,6 +100,7 @@ class _InicioDocenteState extends State<InicioDocente> {
                       'Bienvenido/a',
                       style: TextStyle(
                         fontSize: 30,
+                        color: Colors.teal.shade600,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -171,6 +172,8 @@ class _InicioDocenteState extends State<InicioDocente> {
               if (ultimoMensajeTexto.isNotEmpty)
                 Card(
                   elevation: 2,
+                  color: Colors.white,
+                  margin: const EdgeInsets.symmetric(vertical: 10.0),
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Column(

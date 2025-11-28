@@ -63,6 +63,7 @@ class _ListaGruposState extends State<ListaGrupos> {
                         'Grupos',
                         style: TextStyle(
                           fontSize: 30,
+                          color: Colors.teal,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

@@ -208,16 +208,10 @@ class _MisActividadesAlumnoState extends State<MisActividadesAlumno> {
     final noEntregadas = actividades?['no_entregadas'] ?? [];
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 1,
-        centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.teal),
-      ),
+      backgroundColor: Colors.grey.shade100,
       body: RefreshIndicator(
         onRefresh: cargarDatos,
-        color: Colors.white,
+        color: Colors.grey.shade100,
         backgroundColor: Colors.teal,
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),

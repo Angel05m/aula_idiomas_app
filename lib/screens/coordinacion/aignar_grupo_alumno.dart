@@ -133,6 +133,7 @@ class _AsignarGrupoAlumnoState extends State<AsignarGrupoAlumno> {
 
     return Card(
       elevation: 2,
+      color: Colors.white,
       margin: const EdgeInsets.symmetric(vertical: 5),
       child: CheckboxListTile(
         activeColor: Colors.teal,
@@ -201,10 +202,11 @@ class _AsignarGrupoAlumnoState extends State<AsignarGrupoAlumno> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Asignar Grupo", style: TextStyle(color: Colors.black)),
+        title: const Text("Asignar Grupo", style: TextStyle(color: Colors.teal)),
         backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.teal),
       ),
+      backgroundColor: Colors.grey.shade100,
       body: cargando
           ? const Center(child: CircularProgressIndicator(color: Colors.teal))
           : SingleChildScrollView(
@@ -212,7 +214,7 @@ class _AsignarGrupoAlumnoState extends State<AsignarGrupoAlumno> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text("Busca alumnos:", style: TextStyle(fontSize: 16)),
+                  const Text("Busca alumnos:", style: TextStyle(fontSize: 16, color: Color.fromARGB(255, 27, 27, 27))),
                   const SizedBox(height: 8),
                   InputBuscador(onChanged: filtrarAlumnos),
                   const SizedBox(height: 20),
@@ -232,7 +234,7 @@ class _AsignarGrupoAlumnoState extends State<AsignarGrupoAlumno> {
 
                         CheckboxListTile(
                           value: grupoSeleccionado[grupoNombre] ?? false,
-                          title: const Text("Seleccionar todo el grupo"),
+                          title: const Text("Seleccionar todo el grupo", style: TextStyle(color: Color.fromARGB(255, 84, 83, 83)),),
                           activeColor: Colors.teal,
                           onChanged: (v) => seleccionarGrupo(grupoNombre, v ?? false),
                         ),

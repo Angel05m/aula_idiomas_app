@@ -174,11 +174,6 @@ class _InicioAlumnosState extends State<InicioAlumnos> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(color: Colors.black),
-        elevation: 1,
-      ),
       body: cargando
           ? const Center(child: CircularProgressIndicator(color: Colors.teal))
           : SingleChildScrollView(
@@ -191,6 +186,7 @@ class _InicioAlumnosState extends State<InicioAlumnos> {
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
+                      color: Colors.teal
                     ),
                   ),
                   const Text(
@@ -248,6 +244,7 @@ class _InicioAlumnosState extends State<InicioAlumnos> {
                   const SizedBox(height: 10),
                   if (ultimoMensajeTexto.isNotEmpty)
                     Card(
+                      color: Colors.white,
                       elevation: 2,
                       child: Padding(
                         padding: const EdgeInsets.all(12.0),
